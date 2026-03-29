@@ -39,6 +39,7 @@ import authRoutes from './routes/auth.routes.js';
 import adminRoutes from './routes/admin.routes.js';
 import hrRoutes from './routes/hr.routes.js';
 import managerRoutes from './routes/manager.routes.js';
+import expertRoutes from './routes/expert.routes.js';
 import aiRoutes from './routes/ai.routes.js';
 import cookieParser from 'cookie-parser';
 
@@ -47,6 +48,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/hr', hrRoutes);
 app.use('/api/manager', managerRoutes);
+app.use('/api/expert', expertRoutes);
 app.use('/api/ai', aiRoutes);
 
 // Global Error Handler

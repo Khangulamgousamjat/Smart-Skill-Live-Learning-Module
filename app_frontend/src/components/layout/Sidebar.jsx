@@ -40,10 +40,9 @@ const NAV_CONFIG = {
   ],
   expert: [
     { id: 'overview',      label: 'Overview',          icon: LayoutDashboard, path: '/dashboard' },
-    { id: 'lectures',      label: 'My Lectures',       icon: Video,           path: '/dashboard/lectures' },
+    { id: 'lectures',      label: 'My Lectures',       icon: Video,           path: '/dashboard/expert-lectures' },
     { id: 'resources',     label: 'Resources',         icon: UploadCloud,     path: '/dashboard/resources' },
     { id: 'qna',           label: 'Q&A Dashboard',     icon: MessageSquare,   path: '/dashboard/qna' },
-    { id: 'skills',        label: 'Skill Coverage',    icon: BookOpen,        path: '/dashboard/skills' },
   ],
   student: [
     { id: 'overview',      label: 'My Dashboard',      icon: LayoutDashboard, path: '/dashboard' },

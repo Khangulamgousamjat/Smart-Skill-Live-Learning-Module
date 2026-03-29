@@ -17,10 +17,15 @@ import PendingApprovalPage from './pages/auth/PendingApprovalPage';
 
 // Role-Specific Dashboard Pages
 import { SuperAdminDashboard } from './pages/dashboard/SuperAdminDashboard';
-import { HRAdminDashboard } from './pages/dashboard/HRAdminDashboard';
-import { ManagerDashboard } from './pages/dashboard/ManagerDashboard';
+import HRAdminDashboard from './pages/dashboard/HRAdminDashboard';
+import ManagerDashboard from './pages/dashboard/ManagerDashboard';
 import { ExpertDashboard } from './pages/dashboard/ExpertDashboard';
 import { StudentDashboard } from './pages/dashboard/StudentDashboard';
+
+// Expert Tools
+import ExpertMyLecturesPage from './pages/expert/ExpertMyLecturesPage';
+import ExpertResourcesPage from './pages/expert/ExpertResourcesPage';
+import ExpertQnAPage from './pages/expert/ExpertQnAPage';
 
 // Student Pages (Phase 3)
 import SkillsPage       from './pages/student/SkillsPage';
@@ -144,9 +149,11 @@ const DashboardShell = () => {
             <Route path="team"          element={<TeamPage />} />
             <Route path="evaluations"   element={<EvaluationsPage />} />
             <Route path="manager-projects" element={<ManagerProjectsPage />} />
-            <Route path="messages"      element={<ComingSoon title="Messages" />} />
-            <Route path="resources"     element={<ComingSoon title="Resources" />} />
-            <Route path="qna"           element={<ComingSoon title="Q&A Dashboard" />} />
+
+            {/* EXPERT routes */}
+            <Route path="expert-lectures" element={<ExpertMyLecturesPage />} />
+            <Route path="resources"     element={<ExpertResourcesPage />} />
+            <Route path="qna"           element={<ExpertQnAPage />} />
 
 
             <Route path="*"             element={<Navigate to="/dashboard" replace />} />

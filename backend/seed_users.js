@@ -5,6 +5,7 @@ async function run() {
   try {
     const hrHash = await bcrypt.hash('HrAdmin@12', 10);
     const manHash = await bcrypt.hash('Manager@12', 10);
+    const expertHashed = await bcrypt.hash('Expert@12', 10);
 
     await pool.query(
       "INSERT INTO users (full_name, email, password_hash, role, is_email_verified, account_status) VALUES ('HR Manager', 'hr@nrcinnovatex.com', $1, 'hr_admin', true, 'active') ON CONFLICT (email) DO NOTHING",
@@ -16,7 +17,12 @@ async function run() {
       [manHash]
     );
 
-    console.log('Dummy HR and Manager users created successfully.');
+    await pool.query(
+      "INSERT INTO users (full_name, email, password_hash, role, is_email_verified, account_status) VALUES ('Professor Oak', 'expert@nrcinnovatex.com', $1, 'expert', true, 'active') ON CONFLICT (email) DO NOTHING",
+      [expertHashed]
+    );
+
+    console.log('Dummy HR, Manager, and Expert users created successfully.');
   } catch (error) {
     console.error('Error creating users:', error);
   } finally {
