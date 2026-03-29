@@ -6,6 +6,7 @@ import { AppProvider, useAppContext } from './context/AppContext';
 import { Sidebar } from './components/layout/Sidebar';
 import { AllModals } from './components/modals/AllModals';
 import { Chatbot } from './components/chatbot/Chatbot';
+import { CommandPalette } from './components/ui/CommandPalette';
 import { ProtectedRoute } from './components/layout/ProtectedRoute';
 
 // Auth Pages
@@ -164,6 +165,7 @@ const DashboardShell = () => {
       </div>
 
       <AllModals />
+      <CommandPalette />
       {showChatbot && <Chatbot />}
     </div>
   );

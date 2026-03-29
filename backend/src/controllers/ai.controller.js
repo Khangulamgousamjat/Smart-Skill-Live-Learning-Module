@@ -132,3 +132,64 @@ export const generateGenericResponse = async (req, res) => {
         res.status(500).json({ success: false, message: 'Failed to generate response.' });
     }
 };
+
+// ─── POST /api/ai/search ──────────────────────────────────────────
+export const searchUniversally = async (req, res) => {
+    const { query } = req.body;
+    const { role } = req.user;
+
+    try {
+        // 1. Search Database for Users
+        const userResults = await pool.query(`
+            SELECT id, full_name, role, email 
+            FROM users 
+            WHERE full_name ILIKE $1 
+            LIMIT 5
+        `, [`%${query}%`]);
+
+        // 2. Search Database for Projects
+        const projectResults = await pool.query(`
+            SELECT id, title, description 
+            FROM projects 
+            WHERE title ILIKE $1 
+            LIMIT 5
+        `, [`%${query}%`]);
+
+        // 3. Ask Gemini for Navigation Assistance
+        const navPrompt = `
+           A user with the role of "${role}" is searching for: "${query}" 
+           Identify if they are trying to find a specific page.
+           Pages available for ${role}:
+           - Dashboard/Overview
+           - Skills Radar
+           - Projects / Kanban
+           - Lectures / Sessions
+           - Certificates / Achievements
+           - Messages / Chat
+           
+           If they are asking a question like "how do I view my certs?", point them to the page. 
+           Otherwise, provide a 1-sentence helpful tip about using the platform.
+           Format: {"navigationRecommendation": "Page Name", "tip": "tip text"}
+        `;
+
+        const response = await ai.models.generateContent({
+            model: MODEL_NAME,
+            contents: navPrompt,
+            config: { responseMimeType: "application/json" }
+        });
+
+        const aiRef = JSON.parse(response.text);
+
+        res.json({
+            success: true,
+            data: {
+                users: userResults.rows,
+                projects: projectResults.rows,
+                ai: aiRef
+            }
+        });
+    } catch (error) {
+        console.error('Search error:', error);
+        res.status(500).json({ success: false, message: 'Search failed.' });
+    }
+};

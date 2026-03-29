@@ -3,7 +3,8 @@ import {
   generateSkillGapAnalysis,
   generateLecturePrep,
   generateProjectFeedback,
-  generateGenericResponse
+  generateGenericResponse,
+  searchUniversally
 } from '../controllers/ai.controller.js';
 import { verifyToken } from '../middleware/auth.middleware.js';
 
@@ -15,5 +16,6 @@ router.get('/skill-gap/:internId', generateSkillGapAnalysis);
 router.post('/lecture-prep', generateLecturePrep);
 router.post('/review-project', generateProjectFeedback);
 router.post('/ask', generateGenericResponse);
+router.post('/search', searchUniversally);
 
 export default router;
