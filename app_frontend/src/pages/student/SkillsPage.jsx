@@ -1,0 +1,255 @@
+import React, { useState } from 'react';
+import {
+  Radar, RadarChart, PolarGrid, PolarAngleAxis,
+  ResponsiveContainer, Tooltip
+} from 'recharts';
+import { useAppContext } from '../../context/AppContext';
+import { CheckCircle2, AlertTriangle, Target, Zap, MessageSquare, Loader2 } from 'lucide-react';
+import { skillGaps } from '../../data/mockData';
+
+// ─── Mini Skill Chat Panel ────────────────────────────────────────
+const SkillChatPanel = ({ skill, t, isDarkMode }) => {
+  const { skillChats, skillChatInputs, setSkillChatInputs, handleSkillChatSubmit } = useAppContext();
+  const chat = skillChats[skill.id] || { messages: [], loading: false };
+
+  return (
+    <div className={`mt-3 rounded-xl overflow-hidden border ${t.border}`}>
+      <div className={`px-3 py-2 text-xs font-bold flex items-center gap-1.5 ${isDarkMode ? 'bg-white/5 text-slate-400' : 'bg-gray-50 text-gray-500'}`}>
+        <MessageSquare className="w-3 h-3" /> Ask AI about {skill.name}
+      </div>
+      <div className={`p-2 max-h-32 overflow-y-auto space-y-1.5 ${isDarkMode ? 'bg-black/10' : 'bg-gray-50/50'}`}>
+        {chat.messages.length === 0 && (
+          <p className={`text-xs text-center py-2 ${t.textMuted}`}>Ask any doubt about this skill…</p>
+        )}
+        {chat.messages.map((m, i) => (
+          <div key={i} className={`text-xs px-2 py-1.5 rounded-lg max-w-[90%] ${
+            m.role === 'user'
+              ? 'ml-auto bg-blue-500/20 text-blue-200'
+              : `${isDarkMode ? 'bg-white/5 text-slate-300' : 'bg-white text-gray-700'} border ${t.border}`
+          }`}>
+            {m.text}
+          </div>
+        ))}
+        {chat.loading && (
+          <div className="flex items-center gap-1 text-xs text-slate-400 px-2">
+            <Loader2 className="w-3 h-3 animate-spin" /> Thinking…
+          </div>
+        )}
+      </div>
+      <form
+        onSubmit={(e) => handleSkillChatSubmit(e, skill)}
+        className={`flex gap-1 p-2 border-t ${t.border}`}
+      >
+        <input
+          value={skillChatInputs[skill.id] || ''}
+          onChange={(e) => setSkillChatInputs(prev => ({ ...prev, [skill.id]: e.target.value }))}
+          placeholder="Ask a question…"
+          className={`flex-1 text-xs px-2 py-1.5 rounded-lg border ${t.input} outline-none`}
+        />
+        <button
+          type="submit"
+          className="text-xs px-2 py-1.5 bg-blue-500 text-white rounded-lg hover:bg-blue-400 transition-colors font-semibold"
+        >
+          Ask
+        </button>
+      </form>
+    </div>
+  );
+};
+
+// ─── Single Skill Gap Card ────────────────────────────────────────
+const SkillGapCard = ({ skill, t, isDarkMode }) => {
+  const [chatOpen, setChatOpen] = useState(false);
+  const pct = Math.round((skill.current / skill.required) * 100);
+  const isMet = skill.current >= skill.required;
+  const gap = skill.required - skill.current;
+
+  return (
+    <div className={`p-5 rounded-2xl glare-hover ${t.card}`}>
+      <div className="flex justify-between items-start mb-3">
+        <div>
+          <h3 className={`font-semibold text-sm ${t.textMain}`}>{skill.name}</h3>
+          <p className={`text-xs mt-0.5 ${t.textMuted}`}>
+            {isMet ? 'Target met 🎉' : `${gap}% gap remaining`}
+          </p>
+        </div>
+        {isMet
+          ? <CheckCircle2 className="w-5 h-5 text-emerald-500 flex-shrink-0" />
+          : <AlertTriangle className="w-5 h-5 text-amber-500 flex-shrink-0" />
+        }
+      </div>
+
+      {/* Progress bar */}
+      <div className={`w-full h-2 rounded-full mb-2 ${isDarkMode ? 'bg-white/10' : 'bg-gray-100'}`}>
+        <div
+          className={`h-2 rounded-full transition-all duration-700 ${isMet ? 'bg-emerald-500' : 'bg-amber-500'}`}
+          style={{ width: `${Math.min(pct, 100)}%` }}
+        />
+      </div>
+
+      <div className={`flex justify-between text-xs ${t.textMuted} mb-3`}>
+        <span>Current: <strong className={t.textMain}>{skill.current}%</strong></span>
+        <span>Target: <strong className={t.textMain}>{skill.required}%</strong></span>
+      </div>
+
+      <button
+        onClick={() => setChatOpen(v => !v)}
+        className={`w-full flex items-center justify-center gap-1.5 text-xs py-1.5 rounded-lg font-semibold transition-colors border ${
+          isDarkMode ? 'border-white/10 text-slate-400 hover:bg-white/5' : 'border-gray-200 text-gray-500 hover:bg-gray-50'
+        }`}
+      >
+        <MessageSquare className="w-3 h-3" />
+        {chatOpen ? 'Hide AI Chat' : 'Ask AI Mentor'}
+      </button>
+
+      {chatOpen && <SkillChatPanel skill={skill} t={t} isDarkMode={isDarkMode} />}
+    </div>
+  );
+};
+
+// ─── Main Skills Page ─────────────────────────────────────────────
+const SkillsPage = () => {
+  const { t, isDarkMode, user } = useAppContext();
+  const [aiLoading, setAiLoading] = useState(false);
+  const [aiAnalysis, setAiAnalysis] = useState('');
+
+  const generateAIAnalysis = async () => {
+    try {
+      setAiLoading(true);
+      // Wait a moment for dynamic effect, or hit an endpoint.
+      // E.g.: const res = await api.get(`/ai/skill-gap/${user.id}`);
+      // For now, if API works, we'll try hitting it
+      const { default: api } = await import('../../api/axios');
+      const res = await api.get(`/ai/skill-gap/${user.id}`);
+      
+      if (res.data.success) {
+        setAiAnalysis(res.data.data.analysis);
+      }
+    } catch (err) {
+      console.error(err);
+      setAiAnalysis("Your current skillset shows strong foundational knowledge, but lacks some depth in advanced topics. Focusing on consistent practice in your gap areas will significantly improve your overall mastery.");
+    } finally {
+      setAiLoading(false);
+    }
+  };
+
+  const radarData = skillGaps.map(s => ({
+    subject: s.name.split(' ')[0],
+    current: s.current,
+    required: s.required,
+    fullName: s.name,
+  }));
+
+  const avgCurrent = Math.round(skillGaps.reduce((a, s) => a + s.current, 0) / skillGaps.length);
+  const avgRequired = Math.round(skillGaps.reduce((a, s) => a + s.required, 0) / skillGaps.length);
+  const metCount = skillGaps.filter(s => s.current >= s.required).length;
+
+  return (
+    <div className="space-y-6 animate-fade-in">
+      {/* Header */}
+      <div className="flex justify-between items-center">
+        <div>
+          <h2 className={`text-2xl font-bold font-sora ${t.textMain}`}>Skill Radar</h2>
+          <p className={t.textMuted}>Track your progress against required skill levels.</p>
+        </div>
+        <div className={`flex gap-3`}>
+          <button 
+            onClick={generateAIAnalysis}
+            disabled={aiLoading}
+            className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-bold transition-all shadow-lg active:scale-95 ${
+              aiLoading ? 'bg-amber-500/50 cursor-not-allowed' : 'bg-amber-500 hover:bg-amber-400'
+            } text-white`}
+          >
+            {aiLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Zap className="w-4 h-4" />}
+            {aiLoading ? 'Analyzing...' : 'AI Analysis'}
+          </button>
+          <div className={`px-4 py-2 rounded-xl text-center flex items-center justify-center ${isDarkMode ? 'bg-white/5 border border-white/10' : 'bg-gray-50 border border-gray-100'}`}>
+            <span className="text-xl font-black mr-2" style={{ color: '#F4A100' }}>{avgCurrent}%</span>
+            <span className={`text-xs ${t.textMuted}`}>Avg Level</span>
+          </div>
+        </div>
+      </div>
+
+      {/* AI Analysis Result */}
+      {aiAnalysis && (
+        <div className={`p-6 rounded-2xl border ${isDarkMode ? 'bg-amber-500/10 border-amber-500/20' : 'bg-amber-50 border-amber-200'} animate-fade-in`}>
+           <h3 className={`font-bold flex items-center gap-2 mb-2 ${isDarkMode ? 'text-amber-400' : 'text-amber-600'}`}>
+             <span className="w-2 h-2 rounded-full bg-amber-500 animate-pulse" />
+             AI Mentor Analysis
+           </h3>
+           <p className={`text-sm leading-relaxed ${isDarkMode ? 'text-white/80' : 'text-gray-700'}`}>
+             {aiAnalysis}
+           </p>
+        </div>
+      )}
+
+      {/* Radar Chart */}
+      <div className={`p-6 rounded-2xl ${t.card}`}>
+        <h3 className={`font-semibold mb-4 flex items-center gap-2 ${t.textMain}`}>
+          <Target className="w-5 h-5" style={{ color: '#F4A100' }} />
+          Skill Coverage Map
+        </h3>
+        <ResponsiveContainer width="100%" height={280}>
+          <RadarChart data={radarData}>
+            <PolarGrid stroke={isDarkMode ? 'rgba(255,255,255,0.08)' : '#e5e7eb'} />
+            <PolarAngleAxis
+              dataKey="subject"
+              tick={{ fill: isDarkMode ? '#94a3b8' : '#6b7280', fontSize: 12, fontWeight: 600 }}
+            />
+            <Tooltip
+              formatter={(v, name) => [`${v}%`, name === 'current' ? 'Your Level' : 'Required']}
+              contentStyle={{
+                background: isDarkMode ? '#1e293b' : '#fff',
+                border: isDarkMode ? '1px solid rgba(255,255,255,0.1)' : '1px solid #e2e8f0',
+                borderRadius: '12px',
+                color: isDarkMode ? '#f1f5f9' : '#0f172a',
+              }}
+            />
+            <Radar
+              name="required"
+              dataKey="required"
+              stroke="#334155"
+              fill="#334155"
+              fillOpacity={isDarkMode ? 0.15 : 0.08}
+              strokeDasharray="4 4"
+            />
+            <Radar
+              name="current"
+              dataKey="current"
+              stroke="#F4A100"
+              fill="#F4A100"
+              fillOpacity={0.25}
+              strokeWidth={2}
+              dot={{ r: 4, fill: '#F4A100' }}
+            />
+          </RadarChart>
+        </ResponsiveContainer>
+        <div className="flex gap-4 justify-center mt-2">
+          <div className="flex items-center gap-1.5 text-xs text-slate-400">
+            <div className="w-4 h-0.5 bg-amber-500 rounded" />
+            Your Level
+          </div>
+          <div className="flex items-center gap-1.5 text-xs text-slate-400">
+            <div className="w-4 h-0.5 bg-slate-500 rounded border-dashed border-b" />
+            Required Level
+          </div>
+        </div>
+      </div>
+
+      {/* Skill Gap Cards */}
+      <div>
+        <h3 className={`font-semibold mb-4 flex items-center gap-2 ${t.textMain}`}>
+          <Zap className="w-5 h-5 text-amber-500" />
+          Individual Skill Breakdown
+        </h3>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          {skillGaps.map(skill => (
+            <SkillGapCard key={skill.id} skill={skill} t={t} isDarkMode={isDarkMode} />
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default SkillsPage;
