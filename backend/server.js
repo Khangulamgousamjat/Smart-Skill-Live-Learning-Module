@@ -4,11 +4,15 @@ import app from './src/app.js';
 import { db } from './src/config/db.js';
 import redisClient from './src/config/redis.js';
 import { seedAdmin } from './src/seeders/adminSeeder.js';
+import { initializeSocket } from './src/config/socket.js';
 
 dotenv.config();
 
 const PORT = process.env.PORT || 5000;
 const server = http.createServer(app);
+
+// Attach Socket.io to the HTTP Server
+initializeSocket(server);
 
 const startServer = async () => {
   try {

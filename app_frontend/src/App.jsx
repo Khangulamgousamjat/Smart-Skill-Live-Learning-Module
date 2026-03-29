@@ -21,6 +21,7 @@ import HRAdminDashboard from './pages/dashboard/HRAdminDashboard';
 import ManagerDashboard from './pages/dashboard/ManagerDashboard';
 import { ExpertDashboard } from './pages/dashboard/ExpertDashboard';
 import { StudentDashboard } from './pages/dashboard/StudentDashboard';
+import MessagesPage from './pages/dashboard/MessagesPage';
 
 // Expert Tools
 import ExpertMyLecturesPage from './pages/expert/ExpertMyLecturesPage';
@@ -149,6 +150,7 @@ const DashboardShell = () => {
             <Route path="team"          element={<TeamPage />} />
             <Route path="evaluations"   element={<EvaluationsPage />} />
             <Route path="manager-projects" element={<ManagerProjectsPage />} />
+            <Route path="messages"      element={<MessagesPage />} />
 
             {/* EXPERT routes */}
             <Route path="expert-lectures" element={<ExpertMyLecturesPage />} />

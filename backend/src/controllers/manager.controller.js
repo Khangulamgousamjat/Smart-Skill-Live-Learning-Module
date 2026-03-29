@@ -1,6 +1,11 @@
 import pool from '../config/db.js';
+import { notifyUser } from '../config/socket.js';
 
 // ─── GET /api/manager/team ─────────────────────────────────────────
+
+// ... skipping other functions for brevity ...
+
+
 export const getMyTeam = async (req, res) => {
   const managerId = req.user.id;
   try {
@@ -68,6 +73,14 @@ export const assignProject = async (req, res) => {
        RETURNING *`,
       [project_id, intern_id, managerId]
     );
+
+    // Trigger Real-Time Notification
+    notifyUser(intern_id, 'receive_notification', {
+      type: 'PROJECT_ASSIGNED',
+      message: 'You have been assigned a new project by your manager.',
+      projectId: project_id
+    });
+
     res.status(201).json({ success: true, data: result.rows[0] });
   } catch (err) {
     console.error(err);
