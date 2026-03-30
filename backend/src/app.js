@@ -18,16 +18,32 @@ import projectsRoutes from './routes/projects.routes.js';
 import certificateRoutes from './routes/certificate.routes.js';
 import evaluationRoutes from './routes/evaluation.routes.js';
 import aiRoutes from './routes/ai.routes.js';
+import departmentRoutes from './routes/departments.routes.js';
 
 const app = express();
 
 // CORS — MUST come before routes
+const allowedOrigins = [
+  'http://localhost:5173',
+  'http://localhost:3000',
+  process.env.CLIENT_URL,
+  'https://smart-skill-live-learning-module.vercel.app',
+].filter(Boolean);
+
 app.use(cors({
-  origin: process.env.CLIENT_URL || 'http://localhost:5173',
+  origin: function (origin, callback) {
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    }
+    return callback(null, true); // allow all in dev/production fallback for debugging
+  },
   credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
+  methods: ['GET','POST','PUT','PATCH','DELETE','OPTIONS'],
+  allowedHeaders: ['Content-Type','Authorization'],
 }));
+
+app.options('*', cors());
 
 app.use(helmet());
 app.use(morgan('dev'));
@@ -47,6 +63,7 @@ app.use('/api/projects', projectsRoutes);
 app.use('/api/certificates', certificateRoutes);
 app.use('/api/evaluations', evaluationRoutes);
 app.use('/api/ai', aiRoutes);
+app.use('/api/departments', departmentRoutes);
 
 // Health check
 app.get('/api/health', (req, res) => {
