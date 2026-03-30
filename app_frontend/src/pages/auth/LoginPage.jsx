@@ -22,15 +22,22 @@ const LoginPage = () => {
         dispatch(loginSuccess(res.data.data));
         toast.success(`Welcome back, ${res.data.data.user.full_name}!`);
         
-        // Role based redirect can happen here
-        navigate('/dashboard');
+        // Role-based redirect
+        const roleRedirect = {
+          student: '/student/dashboard',
+          manager: '/manager/dashboard',
+          hr_admin: '/hr/dashboard',
+          expert: '/expert/dashboard',
+          super_admin: '/admin/dashboard'
+        };
+        navigate(roleRedirect[res.data.data.user.role] || '/login');
       }
     } catch (error) {
       if (error.response?.data?.account_status === 'pending_email') {
-         navigate('/verify-email', { state: { email } });
-         toast.error(error.response.data.message);
+        navigate('/auth/verify-email', { state: { email } });
+        toast.error(error.response.data.message);
       } else if (error.response?.data?.account_status === 'pending_approval') {
-         navigate('/pending-approval');
+        navigate('/auth/pending');
       } else {
          toast.error(error.response?.data?.message || 'Login failed');
       }
@@ -93,7 +100,7 @@ const LoginPage = () => {
                 />
               </div>
               <div className="flex justify-end mt-2">
-                <Link to="/forgot-password" className="text-xs text-amber-500 hover:text-amber-400 font-medium transition-colors">
+                <Link to="/auth/forgot-password" title="Click to reset password" className="text-xs text-amber-500 hover:text-amber-400 font-medium transition-colors">
                   Forgot password?
                 </Link>
               </div>
@@ -116,13 +123,13 @@ const LoginPage = () => {
           <div className="mt-8 pt-6 border-t border-white/10 text-center space-y-3 relative z-10">
             <p className="text-sm text-slate-400">
               New Intern?{' '}
-              <Link to="/register/student" className="font-semibold text-white hover:text-amber-400 transition-colors">
+              <Link to="/auth/register/student" className="font-semibold text-white hover:text-amber-400 transition-colors">
                 Register here
               </Link>
             </p>
             <p className="text-sm text-slate-400">
               Staff Member?{' '}
-              <Link to="/register/staff" className="font-semibold text-white hover:text-amber-400 transition-colors">
+              <Link to="/auth/register/staff" className="font-semibold text-white hover:text-amber-400 transition-colors">
                 Request access
               </Link>
             </p>
