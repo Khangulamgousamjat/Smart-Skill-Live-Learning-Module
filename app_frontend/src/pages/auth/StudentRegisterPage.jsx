@@ -24,8 +24,8 @@ export default function StudentRegisterPage() {
       } catch (err) {
         // Mock fallback if api fails on public route
         setDepartments([
-          { id: 1, name: 'Computer Science' },
-          { id: 2, name: 'Mechanical Engineering' }
+          { id: '00000000-0000-0000-0000-000000000000', name: 'Computer Science' },
+          { id: '11111111-1111-1111-1111-111111111111', name: 'Mechanical Engineering' }
         ]);
       }
     };

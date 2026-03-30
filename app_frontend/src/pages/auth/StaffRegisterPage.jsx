@@ -24,7 +24,10 @@ export default function StaffRegisterPage() {
         const res = await axiosInstance.get('/admin/departments'); 
         setDepartments(res.data.data || []);
       } catch (err) {
-        setDepartments([{ id: 1, name: 'Computer Science' }, { id: 2, name: 'Human Resources' }]);
+        setDepartments([
+          { id: '00000000-0000-0000-0000-000000000000', name: 'Computer Science' },
+          { id: '22222222-2222-2222-2222-222222222222', name: 'Human Resources' }
+        ]);
       }
     };
     fetchDepts();

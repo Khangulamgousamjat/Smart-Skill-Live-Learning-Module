@@ -18,7 +18,12 @@ const generateTokens = (id) => {
 
 export const registerStudent = async (req, res, next) => {
   try {
-    const { full_name, email, password, department_id, phone } = req.body;
+    let { full_name, email, password, department_id, phone } = req.body;
+    
+    // Ensure department_id is null if it's an empty string to avoid UUID errors
+    if (!department_id || department_id === '') {
+      department_id = null;
+    }
     
     // Check if user exists
     const existing = await db.query('SELECT id FROM users WHERE email = $1', [email]);
@@ -60,7 +65,12 @@ export const registerStudent = async (req, res, next) => {
 
 export const registerStaff = async (req, res, next) => {
   try {
-    const { full_name, email, password, requested_role, department_id, employee_id, reason } = req.body;
+    let { full_name, email, password, requested_role, department_id, employee_id, reason } = req.body;
+    
+    // Ensure department_id is null if it's an empty string to avoid UUID errors
+    if (!department_id || department_id === '') {
+      department_id = null;
+    }
     
     // Validate role
     if (!['manager', 'hr_admin', 'expert'].includes(requested_role)) {
