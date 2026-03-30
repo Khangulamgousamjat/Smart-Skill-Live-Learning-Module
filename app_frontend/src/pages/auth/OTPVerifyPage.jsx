@@ -1,137 +1,147 @@
-import React, { useState, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
-import { useNavigate, useLocation } from 'react-router-dom';
-import { loginSuccess } from '../../store/slices/authSlice';
-import api from '../../api/axios';
+import { useState, useRef, useEffect } from 'react';
+import { useLocation, useNavigate, Link } from 'react-router-dom';
+import axiosInstance from '../../api/axios';
 import toast from 'react-hot-toast';
-import { MailCheck, ArrowRight, Loader2, RefreshCw } from 'lucide-react';
 
-const OTPVerifyPage = () => {
+export default function OTPVerifyPage() {
   const [otp, setOtp] = useState(['', '', '', '', '', '']);
   const [loading, setLoading] = useState(false);
-  const [resendLoading, setResendLoading] = useState(false);
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
+  const [timeLeft, setTimeLeft] = useState(60);
+  const inputRefs = useRef([]);
   const location = useLocation();
-  const email = location.state?.email || '';
+  const navigate = useNavigate();
+
+  const email = location.state?.email;
 
   useEffect(() => {
     if (!email) {
-      toast.error('Email not provided');
-      navigate('/login');
+      toast.error('Session expired. Please register again.');
+      navigate('/auth/register/student');
     }
   }, [email, navigate]);
 
-  const handleChange = (element, index) => {
-    if (isNaN(element.value)) return false;
+  useEffect(() => {
+    if (timeLeft > 0) {
+      const timerId = setTimeout(() => setTimeLeft(timeLeft - 1), 1000);
+      return () => clearTimeout(timerId);
+    }
+  }, [timeLeft]);
 
-    setOtp([...otp.map((d, idx) => (idx === index ? element.value : d))]);
+  const handleChange = (index, e) => {
+    const value = e.target.value;
+    if (isNaN(value)) return;
+    const newOtp = [...otp];
+    newOtp[index] = value.substring(value.length - 1);
+    setOtp(newOtp);
 
-    // Focus next input
-    if (element.nextSibling && element.value !== '') {
-      element.nextSibling.focus();
+    // Auto focus next
+    if (value && index < 5) {
+      inputRefs.current[index + 1].focus();
+    }
+    
+    // Auto submit when full
+    if (newOtp.every(digit => digit !== '')) {
+      handleSubmit(newOtp.join(''));
     }
   };
 
-  const handleVerify = async (e) => {
-    e.preventDefault();
-    const otpCode = otp.join('');
-    if (otpCode.length !== 6) return toast.error('Please enter 6-digit OTP');
+  const handleKeyDown = (index, e) => {
+    if (e.key === 'Backspace' && !otp[index] && index > 0) {
+      inputRefs.current[index - 1].focus();
+    }
+  };
+
+  const handleSubmit = async (completeOtp) => {
+    const otpString = typeof completeOtp === 'string' ? completeOtp : otp.join('');
+    if (otpString.length < 6) return toast.error('Please enter complete OTP');
 
     setLoading(true);
     try {
-      const res = await api.post('/auth/verify-email', { email, otp: otpCode });
-      if (res.data.success) {
-        toast.success(res.data.message);
-        dispatch(loginSuccess(res.data.data));
-        navigate('/dashboard');
+      const res = await axiosInstance.post('/auth/verify-email', { email, otp: otpString });
+      toast.success('Email verified successfully!');
+      
+      // Auto login after verification (handle token if backend sends it)
+      if (res.data?.data?.accessToken) {
+        // Redux action would normally go here if we had dispatch
+        navigate('/login'); // For safety, redirect to login
+      } else {
+        navigate('/login');
       }
-    } catch (error) {
-      toast.error(error.response?.data?.message || 'Verification failed');
+    } catch (err) {
+      toast.error(err.response?.data?.message || 'Invalid OTP');
     } finally {
       setLoading(false);
     }
   };
 
   const handleResend = async () => {
-    setResendLoading(true);
     try {
-      const res = await api.post('/auth/resend-otp', { email });
-      toast.success(res.data.message);
-    } catch (error) {
-      toast.error(error.response?.data?.message || 'Resend failed');
-    } finally {
-      setResendLoading(false);
+      await axiosInstance.post('/auth/resend-otp', { email });
+      toast.success('OTP resent to your email');
+      setTimeLeft(60);
+      setOtp(['', '', '', '', '', '']);
+      inputRefs.current[0].focus();
+    } catch (err) {
+      toast.error(err.response?.data?.message || 'Failed to resend OTP');
     }
   };
 
   return (
-    <div className="min-h-screen bg-slate-900 text-white flex items-center justify-center p-4 relative overflow-hidden">
-      {/* Abstract Background Elements */}
-      <div className="absolute top-[20%] right-[20%] w-64 h-64 bg-emerald-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob"></div>
+    <div className="min-h-screen flex items-center justify-center bg-[var(--color-bg)] px-4">
+      <div className="w-full max-w-md bg-[var(--color-surface)] border border-[var(--color-border)] rounded-2xl shadow-xl p-8 text-center">
+        
+        <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl mb-4 bg-green-500/10 text-green-500">
+           <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+           </svg>
+        </div>
 
-      <div className="w-full max-w-md relative z-10">
-        <div className="bg-white/5 backdrop-blur-2xl border border-white/10 rounded-2xl shadow-2xl p-8 text-center glare-hover">
-          <div className="w-16 h-16 bg-emerald-500/10 rounded-full flex items-center justify-center mx-auto mb-6 border border-emerald-500/20">
-            <MailCheck className="h-8 w-8 text-emerald-500" />
-          </div>
+        <h1 className="text-xl font-bold font-sora text-[var(--color-text-primary)] leading-tight mb-2">Check your email</h1>
+        <p className="text-[var(--color-text-muted)] text-sm mb-8">
+          We sent a 6-digit verification code to <br/>
+          <span className="font-semibold text-[var(--color-primary)]">{email}</span>
+        </p>
 
-          <h2 className="text-2xl font-bold mb-2 font-sora">Verify Your Email</h2>
-          <p className="text-slate-400 text-sm mb-8">
-            We've sent a 6-digit verification code to
-            <br />
-            <span className="text-white font-medium">{email}</span>
-          </p>
-          
-          <form onSubmit={handleVerify} className="space-y-6 relative z-10">
-            <div className="flex justify-center gap-2 sm:gap-3">
-              {otp.map((data, index) => {
-                return (
-                  <input
-                    className="w-10 h-10 sm:w-12 sm:h-12 text-center text-xl font-bold bg-slate-800 border border-white/10 rounded-lg text-white focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all shadow-inner"
-                    type="text"
-                    name="otp"
-                    maxLength="1"
-                    key={index}
-                    value={data}
-                    onChange={(e) => handleChange(e.target, index)}
-                    onFocus={(e) => e.target.select()}
-                  />
-                );
-              })}
-            </div>
+        <div className="flex justify-between gap-2 mb-8">
+          {otp.map((digit, index) => (
+            <input
+              key={index}
+              ref={(el) => inputRefs.current[index] = el}
+              type="text"
+              inputMode="numeric"
+              maxLength={1}
+              value={digit}
+              onChange={(e) => handleChange(index, e)}
+              onKeyDown={(e) => handleKeyDown(index, e)}
+              className="w-12 h-14 text-center text-xl font-bold rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] text-[var(--color-text-primary)] focus:ring-2 focus:ring-[var(--color-primary)] focus:outline-none transition-all"
+            />
+          ))}
+        </div>
 
-            <button
-              type="submit"
-              disabled={loading || otp.join('').length !== 6}
-              className="w-full flex justify-center items-center py-3 px-4 border border-transparent rounded-xl shadow-lg shadow-emerald-500/20 text-sm font-bold text-slate-900 bg-emerald-500 hover:bg-emerald-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-slate-900 focus:ring-emerald-500 transition-all group disabled:opacity-70 disabled:cursor-not-allowed mt-4"
-            >
-              {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : (
-                <>
-                  Verify Account
-                  <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                </>
-              )}
+        <button 
+          onClick={() => handleSubmit()} 
+          disabled={loading || otp.join('').length < 6}
+          className="w-full py-3 rounded-xl font-semibold text-sm text-white bg-[var(--color-primary)] hover:opacity-90 transition-all disabled:opacity-60 flex justify-center items-center mb-6"
+        >
+          {loading ? <div className="w-5 h-5 border-2 rounded-full animate-spin border-white/30 border-t-white" /> : 'Verify Account'}
+        </button>
+
+        <div className="text-sm">
+          {timeLeft > 0 ? (
+            <p className="text-[var(--color-text-muted)]">Resend code in <span className="font-semibold text-[var(--color-text-primary)]">{timeLeft}s</span></p>
+          ) : (
+            <button onClick={handleResend} className="font-medium text-[var(--color-primary)] hover:underline">
+              Resend verification code
             </button>
-          </form>
+          )}
+        </div>
 
-          <div className="mt-8 pt-6 border-t border-white/10 relative z-10">
-            <p className="text-sm text-slate-400">
-              Didn't receive the code?{' '}
-              <button 
-                onClick={handleResend}
-                disabled={resendLoading}
-                className="font-semibold text-emerald-400 hover:text-emerald-300 transition-colors disabled:opacity-50 inline-flex items-center"
-              >
-                {resendLoading ? <Loader2 className="w-3 h-3 mr-1 animate-spin" /> : <RefreshCw className="w-3 h-3 mr-1" />}
-                Resend Code
-              </button>
-            </p>
-          </div>
+        <div className="mt-8 pt-6 border-t border-[var(--color-border)]">
+          <Link to="/login" className="text-sm font-medium text-[var(--color-text-muted)] hover:underline">
+            Back to login
+          </Link>
         </div>
       </div>
     </div>
   );
-};
-
-export default OTPVerifyPage;
+}

@@ -1,6 +1,8 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { persistStore, persistReducer } from 'redux-persist';
 import authReducer from './slices/authSlice.js';
+import uiReducer from './slices/uiSlice.js';
+import notificationsReducer from './slices/notificationsSlice.js';
 
 // Custom localStorage storage for redux-persist (ESM-safe)
 const localStorageEngine = {
@@ -16,6 +18,8 @@ const authPersistConfig = {
 
 const rootReducer = {
   auth: persistReducer(authPersistConfig, authReducer),
+  ui: uiReducer,
+  notifications: notificationsReducer
 };
 
 export const store = configureStore({

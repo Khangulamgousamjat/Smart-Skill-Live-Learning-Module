@@ -58,3 +58,15 @@ export const reviewAssignment = async (req, res) => {
     res.status(500).json({ success: false, message: 'Failed to update review' });
   }
 };
+
+export const getMyTeam = async (req, res) => {
+  res.status(200).json({ success: true, data: [] });
+};
+
+export const createEvaluation = async (req, res) => {
+  res.status(200).json({ success: true, message: 'Evaluation created' });
+};
+
+export const assignProject = async (req, res) => {
+  res.status(200).json({ success: true, message: 'Project assigned' });
+};

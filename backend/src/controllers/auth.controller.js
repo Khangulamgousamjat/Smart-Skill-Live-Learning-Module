@@ -144,54 +144,119 @@ export const verifyEmail = async (req, res, next) => {
   }
 };
 
-export const login = async (req, res, next) => {
+export const login = async (req, res) => {
   try {
     const { email, password } = req.body;
-    const userResult = await db.query('SELECT * FROM users WHERE email = $1', [email]);
-    if (userResult.rows.length === 0) return res.status(401).json({ success: false, message: 'Invalid credentials' });
-    
-    const user = userResult.rows[0];
-    const isMatch = await bcrypt.compare(password, user.password_hash);
-    if (!isMatch) return res.status(401).json({ success: false, message: 'Invalid credentials' });
+
+    if (!email || !password) {
+      return res.status(400).json({
+        success: false,
+        message: 'Email and password are required'
+      });
+    }
+
+    // Find user
+    const result = await db.query(
+      'SELECT * FROM users WHERE email = $1',
+      [email]
+    );
+    const user = result.rows[0];
+
+    if (!user) {
+      return res.status(401).json({
+        success: false,
+        message: 'Invalid email or password'
+      });
+    }
+
+    // Check password
+    const isMatch = await bcrypt.compare(
+      password, user.password_hash
+    );
+    if (!isMatch) {
+      return res.status(401).json({
+        success: false,
+        message: 'Invalid email or password'
+      });
+    }
+
+    // Check account status
+    if (user.account_status === 'pending_approval') {
+      return res.status(403).json({
+        success: false,
+        message: 'Your account is pending admin approval',
+        status: 'pending_approval'
+      });
+    }
 
     if (user.account_status === 'pending_email') {
-      return res.status(403).json({ success: false, message: 'Email not verified', account_status: 'pending_email' });
-    }
-    
-    if (user.account_status === 'pending_approval') {
-      return res.status(403).json({ success: false, message: 'Your account is pending Super Admin approval', account_status: 'pending_approval' });
+      return res.status(403).json({
+        success: false,
+        message: 'Please verify your email first',
+        status: 'pending_email'
+      });
     }
 
     if (user.account_status === 'rejected') {
-      return res.status(403).json({ success: false, message: 'Your account request was rejected', account_status: 'rejected', rejection_reason: user.rejection_reason });
+      return res.status(403).json({
+        success: false,
+        message: 'Your account request was rejected',
+        status: 'rejected'
+      });
     }
 
     if (user.account_status === 'deactivated') {
-      return res.status(403).json({ success: false, message: 'Account deactivated' });
+      return res.status(403).json({
+        success: false,
+        message: 'Your account has been deactivated'
+      });
     }
 
-    const { accessToken, refreshToken } = generateTokens(user.id);
-
-    const tokenHash = hashToken(refreshToken);
-    const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
-    await db.query(
-      `INSERT INTO refresh_tokens (user_id, token_hash, expires_at) VALUES ($1, $2, $3)`,
-      [user.id, tokenHash, expiresAt]
+    // Generate tokens
+    const accessToken = jwt.sign(
+      { id: user.id, role: user.role },
+      process.env.JWT_ACCESS_SECRET,
+      { expiresIn: '15m' }
     );
 
-    res.cookie('refreshToken', refreshToken, { httpOnly: true, secure: process.env.NODE_ENV === 'production', maxAge: 7 * 24 * 60 * 60 * 1000 });
-    
-    await db.query('UPDATE users SET last_active = NOW() WHERE id = $1', [user.id]);
+    const refreshToken = jwt.sign(
+      { id: user.id },
+      process.env.JWT_REFRESH_SECRET,
+      { expiresIn: '7d' }
+    );
 
-    res.status(200).json({
+    // Set refresh token in httpOnly cookie
+    res.cookie('refreshToken', refreshToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+    });
+
+    // Update last active
+    await db.query(
+      'UPDATE users SET last_active = NOW() WHERE id = $1',
+      [user.id]
+    );
+
+    // Return user data (no password)
+    const { password_hash, ...safeUser } = user;
+
+    return res.json({
       success: true,
+      message: 'Login successful',
       data: {
+        user: safeUser,
         accessToken,
-        user: { id: user.id, full_name: user.full_name, email: user.email, role: user.role }
       }
     });
-  } catch (err) {
-    next(err);
+
+  } catch (error) {
+    console.error('Login error:', error);
+    return res.status(500).json({
+      success: false,
+      message: 'Login failed. Please try again.'
+    });
   }
 };
 
@@ -206,5 +271,32 @@ export const logout = async (req, res, next) => {
     res.status(200).json({ success: true, message: 'Logged out successfully' });
   } catch (err) {
     next(err);
+  }
+};
+
+export const refreshToken = async (req, res) => {
+  try {
+    const token = req.cookies.refreshToken;
+    if (!token) return res.status(401).json({ success: false, message: 'No refresh token' });
+
+    const decoded = jwt.verify(token, process.env.JWT_REFRESH_SECRET);
+    if (!decoded || !decoded.id) return res.status(401).json({ success: false, message: 'Invalid refresh token' });
+
+    const userResult = await db.query('SELECT * FROM users WHERE id = $1', [decoded.id]);
+    const user = userResult.rows[0];
+    if (!user) return res.status(401).json({ success: false, message: 'User not found' });
+
+    const accessToken = jwt.sign(
+      { id: user.id, role: user.role },
+      process.env.JWT_ACCESS_SECRET,
+      { expiresIn: '15m' }
+    );
+
+    res.json({
+      success: true,
+      data: { accessToken }
+    });
+  } catch (err) {
+    res.status(401).json({ success: false, message: 'Invalid or expired refresh token' });
   }
 };
