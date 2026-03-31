@@ -62,6 +62,7 @@ const NAV_ITEMS = {
     { label: 'Announcements',  icon: Megaphone,       path: '/admin/announcements' },
     { label: 'System Logs',    icon: ClipboardList,   path: '/admin/logs' },
     { label: 'Org Settings',   icon: Settings,        path: '/admin/settings' },
+    { label: 'Profile',        icon: User,            path: '/admin/profile' },
   ],
 };
 
@@ -94,7 +95,7 @@ export default function DashboardLayout({ children }) {
   const isActive = (path) => location.pathname === path;
 
   const SidebarContent = () => (
-    <div className="flex flex-col h-full bg-[var(--color-surface)] border-r border-[var(--color-border)]">
+    <div className="flex flex-col h-full bg-[var(--color-sidebar-bg)] border-r border-[var(--color-border)]">
       {/* Logo */}
       <div className="px-4 py-5 border-b border-[var(--color-border)]">
         {collapsed ? (
@@ -103,13 +104,16 @@ export default function DashboardLayout({ children }) {
           </div>
         ) : (
           <div>
-            <p className="text-[var(--color-primary)] font-bold font-sora text-sm leading-tight">
-              Smart Skill &
+            <p className="text-[var(--color-accent)] font-bold font-sora text-sm leading-tight">
+              Smart Skill
             </p>
-            <p className="text-[var(--color-primary)] font-bold font-sora text-sm leading-tight">
-              Live Learning Module
+            <p className="text-white font-bold font-sora text-xs leading-tight mt-0.5">
+              & Live Learning Module
             </p>
-            <p className="text-[var(--color-text-muted)] text-xs mt-1">Gous org</p>
+            <p className="text-white/40 text-[10px] uppercase tracking-widest font-bold mt-1.5 flex items-center gap-1.5">
+              <span className="w-1 h-1 rounded-full bg-[var(--color-accent)]"></span>
+              Gous org
+            </p>
           </div>
         )}
       </div>

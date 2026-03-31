@@ -103,6 +103,8 @@ import SystemLogs
   from './pages/admin/SystemLogs';
 import OrgSettings
   from './pages/admin/OrgSettings';
+import AdminProfile
+  from './pages/admin/AdminProfile';
 
 // ── PUBLIC ────────────────────────────────────────
 import CertificateVerify
@@ -384,6 +386,11 @@ export default function App() {
         <Route path="/admin/settings" element={
           <ProtectedRoute allowedRoles={['super_admin']}>
             <OrgSettings />
+          </ProtectedRoute>
+        } />
+        <Route path="/admin/profile" element={
+          <ProtectedRoute allowedRoles={['super_admin']}>
+            <AdminProfile />
           </ProtectedRoute>
         } />
 
