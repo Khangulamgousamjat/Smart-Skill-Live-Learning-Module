@@ -49,4 +49,10 @@
     --color-sidebar-active: #F4A100;
     --color-sidebar-hover:  #111827;
   }
+
+  /* Dropdown accessibility for dark mode browsers */
+  .dark select option {
+    background-color: var(--color-surface);
+    color: var(--color-text-primary);
+  }
 }

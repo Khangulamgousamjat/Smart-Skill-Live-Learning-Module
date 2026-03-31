@@ -125,11 +125,11 @@ export default function StaffRegisterPage() {
             <div>
               <label className="block text-sm font-medium text-[var(--color-text-primary)] mb-1.5">Requested Role</label>
               <select name="requested_role" onChange={handleChange} value={formData.requested_role} required
-                      className="w-full px-3 py-2.5 rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] focus:ring-2 focus:ring-[var(--color-primary)]">
-                <option value="">Select Role</option>
-                <option value="manager">Manager</option>
-                <option value="hr_admin">HR Admin</option>
-                <option value="expert">Expert</option>
+                      className="w-full px-3 py-2.5 rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] text-[var(--color-text-primary)] focus:ring-2 focus:ring-[var(--color-primary)] outline-none">
+                <option value="" className="bg-[var(--color-surface)] text-[var(--color-text-primary)]">Select Role</option>
+                <option value="manager" className="bg-[var(--color-surface)] text-[var(--color-text-primary)]">Manager</option>
+                <option value="hr_admin" className="bg-[var(--color-surface)] text-[var(--color-text-primary)]">HR Admin</option>
+                <option value="expert" className="bg-[var(--color-surface)] text-[var(--color-text-primary)]">Expert</option>
               </select>
             </div>
             <div>
@@ -158,11 +158,11 @@ export default function StaffRegisterPage() {
                            focus:ring-[var(--color-primary)]
                            transition-all text-sm"
               >
-                <option value="">
+                <option value="" className="bg-[var(--color-surface)] text-[var(--color-text-primary)]">
                   {deptLoading ? 'Loading...' : 'Select Department'}
                 </option>
                 {departments.map((dept) => (
-                  <option key={dept.id} value={dept.id}>
+                  <option key={dept.id} value={dept.id} className="bg-[var(--color-surface)] text-[var(--color-text-primary)]">
                     {dept.name}
                   </option>
                 ))}

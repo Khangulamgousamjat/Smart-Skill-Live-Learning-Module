@@ -144,11 +144,11 @@ export default function StudentRegisterPage() {
                            focus:ring-[var(--color-primary)]
                            transition-all text-sm"
               >
-                <option value="">
+                <option value="" className="bg-[var(--color-surface)] text-[var(--color-text-primary)]">
                   {deptLoading ? 'Loading...' : 'Select Department'}
                 </option>
                 {departments.map((dept) => (
-                  <option key={dept.id} value={dept.id}>
+                  <option key={dept.id} value={dept.id} className="bg-[var(--color-surface)] text-[var(--color-text-primary)]">
                     {dept.name}
                   </option>
                 ))}
