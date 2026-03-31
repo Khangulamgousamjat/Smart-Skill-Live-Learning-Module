@@ -15,6 +15,7 @@ import projectsRoutes from './routes/projects.routes.js';
 import certificateRoutes from './routes/certificate.routes.js';
 import evaluationRoutes from './routes/evaluation.routes.js';
 import aiRoutes from './routes/ai.routes.js';
+
 // Add any other existing routes here as they are developed
 // import lectureRoutes from './routes/lecture.routes.js'; (Placeholder)
 

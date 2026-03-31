@@ -74,15 +74,15 @@ async function createTablesIfNotExist() {
       CREATE TABLE IF NOT EXISTS role_requests (
         id               UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
         user_id          UUID NOT NULL REFERENCES users(id)
-                         ON DELETE CASCADE,
+                          ON DELETE CASCADE,
         requested_role   user_role NOT NULL,
         department_id    UUID REFERENCES departments(id)
-                         ON DELETE SET NULL,
+                          ON DELETE SET NULL,
         employee_id      VARCHAR(100) NOT NULL,
         reason           TEXT NOT NULL,
         status           VARCHAR(20) DEFAULT 'pending',
         reviewed_by      UUID REFERENCES users(id)
-                         ON DELETE SET NULL,
+                          ON DELETE SET NULL,
         rejection_reason TEXT,
         requested_at     TIMESTAMP DEFAULT NOW(),
         reviewed_at      TIMESTAMP
