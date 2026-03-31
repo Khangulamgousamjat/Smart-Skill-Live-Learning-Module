@@ -1,135 +1,383 @@
-import { lazy, Suspense } from 'react';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { useEffect, lazy, Suspense } from 'react';
+import {
+  BrowserRouter, Routes, Route, Navigate
+} from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { Toaster } from 'react-hot-toast';
+import { applyTheme } from './utils/applyTheme';
 
-import LoginPage from './pages/auth/LoginPage';
-import StudentRegisterPage from './pages/auth/StudentRegisterPage';
-import StaffRegisterPage from './pages/auth/StaffRegisterPage';
-import OTPVerifyPage from './pages/auth/OTPVerifyPage';
-import PendingApprovalPage from './pages/auth/PendingApprovalPage';
-import ForgotPasswordPage from './pages/auth/ForgotPasswordPage';
+// ── AUTH PAGES ────────────────────────────────────
+import LoginPage
+  from './pages/auth/LoginPage';
+import StudentRegisterPage
+  from './pages/auth/StudentRegisterPage';
+import StaffRegisterPage
+  from './pages/auth/StaffRegisterPage';
+import OTPVerifyPage
+  from './pages/auth/OTPVerifyPage';
+import PendingApprovalPage
+  from './pages/auth/PendingApprovalPage';
+import ForgotPasswordPage
+  from './pages/auth/ForgotPasswordPage';
 
-const StudentDashboard = lazy(() => import('./pages/student/StudentDashboard'));
-const ManagerDashboard = lazy(() => import('./pages/manager/ManagerDashboard'));
-const HRDashboard      = lazy(() => import('./pages/hr/HRDashboard'));
-const ExpertDashboard  = lazy(() => import('./pages/expert/ExpertDashboard'));
-const AdminDashboard   = lazy(() => import('./pages/admin/AdminDashboard'));
+// ── STUDENT PAGES ─────────────────────────────────
+import StudentDashboard
+  from './pages/student/StudentDashboard';
+import MySkillGap
+  from './pages/student/MySkillGap';
+import MyProjects
+  from './pages/student/MyProjects';
+import StudentLectures
+  from './pages/student/StudentLectures';
+import LearningPath
+  from './pages/student/LearningPath';
+import MyCertificates
+  from './pages/student/MyCertificates';
+import StudentMessages
+  from './pages/student/StudentMessages';
+import StudentProfile
+  from './pages/student/StudentProfile';
 
+// ── MANAGER PAGES ─────────────────────────────────
+import ManagerDashboard
+  from './pages/manager/ManagerDashboard';
+import TeamProgress
+  from './pages/manager/TeamProgress';
+import ManagerProjects
+  from './pages/manager/ManagerProjects';
+import ManagerLectures
+  from './pages/manager/ManagerLectures';
+import SkillHeatMap
+  from './pages/manager/SkillHeatMap';
+import ManagerMessages
+  from './pages/manager/ManagerMessages';
+import ManagerProfile
+  from './pages/manager/ManagerProfile';
+
+// ── HR PAGES ──────────────────────────────────────
+import HRDashboard
+  from './pages/hr/HRDashboard';
+import AllInterns
+  from './pages/hr/AllInterns';
+import DeptComparison
+  from './pages/hr/DeptComparison';
+import HRCertificates
+  from './pages/hr/HRCertificates';
+import HREvaluations
+  from './pages/hr/HREvaluations';
+import HRMessages
+  from './pages/hr/HRMessages';
+import HRProfile
+  from './pages/hr/HRProfile';
+
+// ── EXPERT PAGES ──────────────────────────────────
+import ExpertDashboard
+  from './pages/expert/ExpertDashboard';
+import ExpertLectures
+  from './pages/expert/ExpertLectures';
+import ExpertResources
+  from './pages/expert/ExpertResources';
+import ExpertQnA
+  from './pages/expert/ExpertQnA';
+import ExpertMessages
+  from './pages/expert/ExpertMessages';
+import ExpertProfile
+  from './pages/expert/ExpertProfile';
+
+// ── ADMIN PAGES ───────────────────────────────────
+import AdminDashboard
+  from './pages/admin/AdminDashboard';
+import ApprovalRequests
+  from './pages/admin/ApprovalRequests';
+import UserManagement
+  from './pages/admin/UserManagement';
+import DepartmentManagement
+  from './pages/admin/DepartmentManagement';
+import SkillsManagement
+  from './pages/admin/SkillsManagement';
+import AdminCertificates
+  from './pages/admin/AdminCertificates';
+import Announcements
+  from './pages/admin/Announcements';
+import SystemLogs
+  from './pages/admin/SystemLogs';
+import OrgSettings
+  from './pages/admin/OrgSettings';
+
+// ── PUBLIC ────────────────────────────────────────
+import CertificateVerify
+  from './pages/public/CertificateVerify';
+import NotFoundPage
+  from './pages/public/NotFoundPage';
+
+// ── PROTECTED ROUTE ───────────────────────────────
 function ProtectedRoute({ children, allowedRoles }) {
-  const { isAuthenticated, user } = useSelector((state) => state.auth);
-  
+  const { isAuthenticated, user } = useSelector(
+    (s) => s.auth
+  );
   if (!isAuthenticated) {
     return <Navigate to="/login" replace />;
   }
-
-  // Optional: check user.account_status again here if it might change silently.
-  if (allowedRoles && user?.role && !allowedRoles.includes(user.role)) {
-    // If not allowed, redirect to their own dash based on role
-    const roleMap = {
-      super_admin: '/admin/dashboard',
-      hr_admin: '/hr/dashboard',
-      manager: '/manager/dashboard',
-      expert: '/expert/dashboard',
-      student: '/student/dashboard'
-    };
-    return <Navigate to={roleMap[user.role] || '/login'} replace />;
+  if (allowedRoles && !allowedRoles.includes(user?.role)) {
+    return <Navigate to="/login" replace />;
   }
-
   return children;
 }
 
+// ── LOADING SPINNER ───────────────────────────────
+function PageLoader() {
+  return (
+    <div className="min-h-screen flex items-center
+                    justify-center bg-[var(--color-bg)]">
+      <div className="w-10 h-10 border-4 rounded-full
+                      animate-spin
+                      border-[var(--color-border)]
+                      border-t-[var(--color-primary)]" />
+    </div>
+  );
+}
+
 export default function App() {
-  const { theme } = useSelector((state) => state.ui);
+  const theme = useSelector((s) => s.ui.theme);
+
+  useEffect(() => {
+    applyTheme(theme);
+  }, [theme]);
 
   return (
     <BrowserRouter>
-      <Toaster 
+      <Toaster
         position="top-right"
         toastOptions={{
-          className: theme === 'dark' ? '!bg-gray-800 !text-white' : '',
+          duration: 4000,
+          style: {
+            background: 'var(--color-surface)',
+            color: 'var(--color-text-primary)',
+            border: '1px solid var(--color-border)',
+            borderRadius: '12px',
+            fontSize: '14px',
+          },
         }}
       />
-      
-      <Suspense fallback={
-        <div className="min-h-screen flex items-center justify-center bg-[var(--color-bg)]">
-          <div className="w-10 h-10 border-4 rounded-full animate-spin border-[var(--color-border)] border-t-[var(--color-primary)]" />
-        </div>
-      }>
-        <Routes>
-          {/* Default Route */}
-          <Route path="/" element={<Navigate to="/login" replace />} />
+      <Routes>
 
-          {/* Public Auth Routes */}
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/auth/register/student" element={<StudentRegisterPage />} />
-          <Route path="/auth/register/staff" element={<StaffRegisterPage />} />
-          <Route path="/auth/verify-email" element={<OTPVerifyPage />} />
-          <Route path="/auth/forgot-password" element={<ForgotPasswordPage />} />
+        {/* ── PUBLIC ────────────────────────────── */}
+        <Route path="/"
+          element={<Navigate to="/login" replace />} />
+        <Route path="/login"
+          element={<LoginPage />} />
+        <Route path="/auth/register/student"
+          element={<StudentRegisterPage />} />
+        <Route path="/auth/register/staff"
+          element={<StaffRegisterPage />} />
+        <Route path="/auth/verify-email"
+          element={<OTPVerifyPage />} />
+        <Route path="/auth/pending"
+          element={<PendingApprovalPage />} />
+        <Route path="/auth/forgot-password"
+          element={<ForgotPasswordPage />} />
+        <Route path="/verify/:code"
+          element={<CertificateVerify />} />
 
-          {/* Pending Approval (Authenticated but not active) */}
-          <Route path="/auth/pending" element={
-            <ProtectedRoute>
-               <PendingApprovalPage />
-            </ProtectedRoute>
-          } />
+        {/* ── STUDENT ───────────────────────────── */}
+        <Route path="/student/dashboard" element={
+          <ProtectedRoute allowedRoles={['student']}>
+            <StudentDashboard />
+          </ProtectedRoute>
+        } />
+        <Route path="/student/skills" element={
+          <ProtectedRoute allowedRoles={['student']}>
+            <MySkillGap />
+          </ProtectedRoute>
+        } />
+        <Route path="/student/projects" element={
+          <ProtectedRoute allowedRoles={['student']}>
+            <MyProjects />
+          </ProtectedRoute>
+        } />
+        <Route path="/student/lectures" element={
+          <ProtectedRoute allowedRoles={['student']}>
+            <StudentLectures />
+          </ProtectedRoute>
+        } />
+        <Route path="/student/learning-path" element={
+          <ProtectedRoute allowedRoles={['student']}>
+            <LearningPath />
+          </ProtectedRoute>
+        } />
+        <Route path="/student/certificates" element={
+          <ProtectedRoute allowedRoles={['student']}>
+            <MyCertificates />
+          </ProtectedRoute>
+        } />
+        <Route path="/student/messages" element={
+          <ProtectedRoute allowedRoles={['student']}>
+            <StudentMessages />
+          </ProtectedRoute>
+        } />
+        <Route path="/student/profile" element={
+          <ProtectedRoute allowedRoles={['student']}>
+            <StudentProfile />
+          </ProtectedRoute>
+        } />
 
-          {/* Student Routes */}
-          <Route path="/student/dashboard" element={
-            <ProtectedRoute allowedRoles={['student']}>
-              <StudentDashboard />
-            </ProtectedRoute>
-          } />
+        {/* ── MANAGER ───────────────────────────── */}
+        <Route path="/manager/dashboard" element={
+          <ProtectedRoute allowedRoles={['manager']}>
+            <ManagerDashboard />
+          </ProtectedRoute>
+        } />
+        <Route path="/manager/team" element={
+          <ProtectedRoute allowedRoles={['manager']}>
+            <TeamProgress />
+          </ProtectedRoute>
+        } />
+        <Route path="/manager/projects" element={
+          <ProtectedRoute allowedRoles={['manager']}>
+            <ManagerProjects />
+          </ProtectedRoute>
+        } />
+        <Route path="/manager/lectures" element={
+          <ProtectedRoute allowedRoles={['manager']}>
+            <ManagerLectures />
+          </ProtectedRoute>
+        } />
+        <Route path="/manager/skills" element={
+          <ProtectedRoute allowedRoles={['manager']}>
+            <SkillHeatMap />
+          </ProtectedRoute>
+        } />
+        <Route path="/manager/messages" element={
+          <ProtectedRoute allowedRoles={['manager']}>
+            <ManagerMessages />
+          </ProtectedRoute>
+        } />
+        <Route path="/manager/profile" element={
+          <ProtectedRoute allowedRoles={['manager']}>
+            <ManagerProfile />
+          </ProtectedRoute>
+        } />
 
-          {/* Manager Routes */}
-          <Route path="/manager/dashboard" element={
-            <ProtectedRoute allowedRoles={['manager', 'super_admin']}>
-              <ManagerDashboard />
-            </ProtectedRoute>
-          } />
+        {/* ── HR ────────────────────────────────── */}
+        <Route path="/hr/dashboard" element={
+          <ProtectedRoute allowedRoles={['hr_admin']}>
+            <HRDashboard />
+          </ProtectedRoute>
+        } />
+        <Route path="/hr/interns" element={
+          <ProtectedRoute allowedRoles={['hr_admin']}>
+            <AllInterns />
+          </ProtectedRoute>
+        } />
+        <Route path="/hr/departments" element={
+          <ProtectedRoute allowedRoles={['hr_admin']}>
+            <DeptComparison />
+          </ProtectedRoute>
+        } />
+        <Route path="/hr/certificates" element={
+          <ProtectedRoute allowedRoles={['hr_admin']}>
+            <HRCertificates />
+          </ProtectedRoute>
+        } />
+        <Route path="/hr/evaluations" element={
+          <ProtectedRoute allowedRoles={['hr_admin']}>
+            <HREvaluations />
+          </ProtectedRoute>
+        } />
+        <Route path="/hr/messages" element={
+          <ProtectedRoute allowedRoles={['hr_admin']}>
+            <HRMessages />
+          </ProtectedRoute>
+        } />
+        <Route path="/hr/profile" element={
+          <ProtectedRoute allowedRoles={['hr_admin']}>
+            <HRProfile />
+          </ProtectedRoute>
+        } />
 
-          {/* HR Routes */}
-          <Route path="/hr/dashboard" element={
-            <ProtectedRoute allowedRoles={['hr_admin', 'super_admin']}>
-              <HRDashboard />
-            </ProtectedRoute>
-          } />
+        {/* ── EXPERT ────────────────────────────── */}
+        <Route path="/expert/dashboard" element={
+          <ProtectedRoute allowedRoles={['expert']}>
+            <ExpertDashboard />
+          </ProtectedRoute>
+        } />
+        <Route path="/expert/lectures" element={
+          <ProtectedRoute allowedRoles={['expert']}>
+            <ExpertLectures />
+          </ProtectedRoute>
+        } />
+        <Route path="/expert/resources" element={
+          <ProtectedRoute allowedRoles={['expert']}>
+            <ExpertResources />
+          </ProtectedRoute>
+        } />
+        <Route path="/expert/qna" element={
+          <ProtectedRoute allowedRoles={['expert']}>
+            <ExpertQnA />
+          </ProtectedRoute>
+        } />
+        <Route path="/expert/messages" element={
+          <ProtectedRoute allowedRoles={['expert']}>
+            <ExpertMessages />
+          </ProtectedRoute>
+        } />
+        <Route path="/expert/profile" element={
+          <ProtectedRoute allowedRoles={['expert']}>
+            <ExpertProfile />
+          </ProtectedRoute>
+        } />
 
-          {/* Expert Routes */}
-          <Route path="/expert/dashboard" element={
-            <ProtectedRoute allowedRoles={['expert', 'super_admin']}>
-              <ExpertDashboard />
-            </ProtectedRoute>
-          } />
+        {/* ── ADMIN ─────────────────────────────── */}
+        <Route path="/admin/dashboard" element={
+          <ProtectedRoute allowedRoles={['super_admin']}>
+            <AdminDashboard />
+          </ProtectedRoute>
+        } />
+        <Route path="/admin/approvals" element={
+          <ProtectedRoute allowedRoles={['super_admin']}>
+            <ApprovalRequests />
+          </ProtectedRoute>
+        } />
+        <Route path="/admin/users" element={
+          <ProtectedRoute allowedRoles={['super_admin']}>
+            <UserManagement />
+          </ProtectedRoute>
+        } />
+        <Route path="/admin/departments" element={
+          <ProtectedRoute allowedRoles={['super_admin']}>
+            <DepartmentManagement />
+          </ProtectedRoute>
+        } />
+        <Route path="/admin/skills" element={
+          <ProtectedRoute allowedRoles={['super_admin']}>
+            <SkillsManagement />
+          </ProtectedRoute>
+        } />
+        <Route path="/admin/certificates" element={
+          <ProtectedRoute allowedRoles={['super_admin']}>
+            <AdminCertificates />
+          </ProtectedRoute>
+        } />
+        <Route path="/admin/announcements" element={
+          <ProtectedRoute allowedRoles={['super_admin']}>
+            <Announcements />
+          </ProtectedRoute>
+        } />
+        <Route path="/admin/logs" element={
+          <ProtectedRoute allowedRoles={['super_admin']}>
+            <SystemLogs />
+          </ProtectedRoute>
+        } />
+        <Route path="/admin/settings" element={
+          <ProtectedRoute allowedRoles={['super_admin']}>
+            <OrgSettings />
+          </ProtectedRoute>
+        } />
 
-          {/* Admin Routes */}
-          <Route path="/admin/dashboard" element={
-            <ProtectedRoute allowedRoles={['super_admin']}>
-              <AdminDashboard />
-            </ProtectedRoute>
-          } />
+        {/* ── 404 ───────────────────────────────── */}
+        <Route path="*" element={<NotFoundPage />} />
 
-          {/* Placeholder/Sub-routes to prevent 404s */}
-          <Route path="/student/*" element={<ProtectedRoute allowedRoles={['student']}><StudentDashboard /></ProtectedRoute>} />
-          <Route path="/manager/*" element={<ProtectedRoute allowedRoles={['manager', 'super_admin']}><ManagerDashboard /></ProtectedRoute>} />
-          <Route path="/hr/*" element={<ProtectedRoute allowedRoles={['hr_admin', 'super_admin']}><HRDashboard /></ProtectedRoute>} />
-          <Route path="/expert/*" element={<ProtectedRoute allowedRoles={['expert', 'super_admin']}><ExpertDashboard /></ProtectedRoute>} />
-          <Route path="/admin/*" element={<ProtectedRoute allowedRoles={['super_admin']}><AdminDashboard /></ProtectedRoute>} />
-
-          {/* Catch All 404 */}
-          <Route path="*" element={
-            <div className="min-h-screen flex flex-col items-center justify-center bg-[var(--color-bg)]">
-               <h1 className="text-4xl font-bold text-[var(--color-primary)] mb-4">404</h1>
-               <p className="text-[var(--color-text-muted)] mb-6">Page Not Found</p>
-               <button 
-                  onClick={() => window.history.back()} 
-                  className="px-6 py-2 bg-[var(--color-primary)] text-white rounded-lg">
-                  Go Back
-               </button>
-            </div>
-          } />
-        </Routes>
-      </Suspense>
+      </Routes>
     </BrowserRouter>
   );
 }

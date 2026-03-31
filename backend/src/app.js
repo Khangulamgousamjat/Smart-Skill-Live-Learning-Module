@@ -15,6 +15,7 @@ import projectsRoutes from './routes/projects.routes.js';
 import certificateRoutes from './routes/certificate.routes.js';
 import evaluationRoutes from './routes/evaluation.routes.js';
 import aiRoutes from './routes/ai.routes.js';
+import userRoutes from './routes/user.routes.js';
 
 // Add any other existing routes here as they are developed
 // import lectureRoutes from './routes/lecture.routes.js'; (Placeholder)
@@ -64,6 +65,7 @@ app.use('/api/projects', projectsRoutes);
 app.use('/api/certificates', certificateRoutes);
 app.use('/api/evaluations', evaluationRoutes);
 app.use('/api/ai', aiRoutes);
+app.use('/api/users', userRoutes);
 
 // Health check
 app.get('/api/health', (req, res) => {
