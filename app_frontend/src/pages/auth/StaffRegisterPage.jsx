@@ -99,12 +99,12 @@ export default function StaffRegisterPage() {
             <div>
               <label className="block text-sm font-medium text-[var(--color-text-primary)] mb-1.5">Full Name</label>
               <input required type="text" name="full_name" value={formData.full_name} onChange={handleChange}
-                     className="w-full px-3 py-2.5 rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] focus:ring-2 focus:ring-[var(--color-primary)]" />
+                     className="w-full px-3 py-2.5 rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] text-[var(--color-text-primary)] focus:ring-2 focus:ring-[var(--color-primary)] outline-none" placeholder="Enter Full Name" />
             </div>
             <div>
               <label className="block text-sm font-medium text-[var(--color-text-primary)] mb-1.5">Work Email</label>
               <input required type="email" name="email" value={formData.email} onChange={handleChange}
-                     className="w-full px-3 py-2.5 rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] focus:ring-2 focus:ring-[var(--color-primary)]" />
+                     className="w-full px-3 py-2.5 rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] text-[var(--color-text-primary)] focus:ring-2 focus:ring-[var(--color-primary)] outline-none" placeholder="work@example.com" />
             </div>
           </div>
 
@@ -112,12 +112,12 @@ export default function StaffRegisterPage() {
             <div>
               <label className="block text-sm font-medium text-[var(--color-text-primary)] mb-1.5">Password</label>
               <input required type="password" name="password" value={formData.password} onChange={handleChange}
-                     className="w-full px-3 py-2.5 rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] focus:ring-2 focus:ring-[var(--color-primary)]" />
+                     className="w-full px-3 py-2.5 rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] text-[var(--color-text-primary)] focus:ring-2 focus:ring-[var(--color-primary)] outline-none" />
             </div>
             <div>
               <label className="block text-sm font-medium text-[var(--color-text-primary)] mb-1.5">Confirm Password</label>
               <input required type="password" name="confirm_password" value={formData.confirm_password} onChange={handleChange}
-                     className="w-full px-3 py-2.5 rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] focus:ring-2 focus:ring-[var(--color-primary)]" />
+                     className="w-full px-3 py-2.5 rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] text-[var(--color-text-primary)] focus:ring-2 focus:ring-[var(--color-primary)] outline-none" />
             </div>
           </div>
 
@@ -135,7 +135,7 @@ export default function StaffRegisterPage() {
             <div>
               <label className="block text-sm font-medium text-[var(--color-text-primary)] mb-1.5">Employee ID</label>
               <input required type="text" name="employee_id" value={formData.employee_id} onChange={handleChange}
-                     className="w-full px-3 py-2.5 rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] focus:ring-2 focus:ring-[var(--color-primary)]" />
+                     className="w-full px-3 py-2.5 rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] text-[var(--color-text-primary)] focus:ring-2 focus:ring-[var(--color-primary)] outline-none" />
             </div>
           </div>
 
@@ -186,7 +186,7 @@ export default function StaffRegisterPage() {
              <label className="block text-sm font-medium text-[var(--color-text-primary)] mb-1.5">Reason for Access</label>
              <textarea required name="reason" value={formData.reason} onChange={handleChange} rows={3}
                        placeholder="Please explain why you need this role (min 20 characters)"
-                       className="w-full px-3 py-2.5 rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] focus:ring-2 focus:ring-[var(--color-primary)]" />
+                       className="w-full px-3 py-2.5 rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] text-[var(--color-text-primary)] focus:ring-2 focus:ring-[var(--color-primary)] outline-none" />
           </div>
 
           <button type="submit" disabled={loading}

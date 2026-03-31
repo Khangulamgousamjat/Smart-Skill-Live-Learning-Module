@@ -50,6 +50,25 @@
     --color-sidebar-hover:  #111827;
   }
 
+  /* Form accessibility for dark mode */
+  .dark input,
+  .dark textarea,
+  .dark select {
+    color: var(--color-text-primary) !important;
+    background-color: var(--color-surface) !important;
+  }
+
+  /* Specific fix for typed text visibility */
+  .dark input:not([type="checkbox"]):not([type="radio"]),
+  .dark textarea {
+    color: var(--color-text-primary) !important;
+  }
+
+  .dark input::placeholder,
+  .dark textarea::placeholder {
+    color: var(--color-text-muted) !important;
+  }
+
   /* Dropdown accessibility for dark mode browsers */
   .dark select option {
     background-color: var(--color-surface);
