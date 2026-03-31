@@ -124,6 +124,19 @@ function ProtectedRoute({ children, allowedRoles }) {
   return children;
 }
 
+// ── DASHBOARD REDIRECT ────────────────────────────
+function DashboardRedirect() {
+  const { user } = useSelector((s) => s.auth);
+  const homes = {
+    super_admin : '/admin/dashboard',
+    hr_admin    : '/hr/dashboard',
+    manager     : '/manager/dashboard',
+    expert      : '/expert/dashboard',
+    student     : '/student/dashboard',
+  };
+  return <Navigate to={homes[user?.role] || '/login'} replace />;
+}
+
 // ── LOADING SPINNER ───────────────────────────────
 function PageLoader() {
   return (
@@ -371,6 +384,13 @@ export default function App() {
         <Route path="/admin/settings" element={
           <ProtectedRoute allowedRoles={['super_admin']}>
             <OrgSettings />
+          </ProtectedRoute>
+        } />
+
+        {/* ── REDIRECTS ──────────────────────────── */}
+        <Route path="/dashboard" element={
+          <ProtectedRoute>
+            <DashboardRedirect />
           </ProtectedRoute>
         } />
 
