@@ -109,8 +109,11 @@ import AdminProfile
 // ── PUBLIC ────────────────────────────────────────
 import CertificateVerify
   from './pages/public/CertificateVerify';
+import LandingPage
+  from './pages/public/LandingPage';
 import NotFoundPage
   from './pages/public/NotFoundPage';
+import SettingsPage from './pages/shared/SettingsPage';
 
 // ── PROTECTED ROUTE ───────────────────────────────
 function ProtectedRoute({ children, allowedRoles }) {
@@ -178,7 +181,7 @@ export default function App() {
 
         {/* ── PUBLIC ────────────────────────────── */}
         <Route path="/"
-          element={<Navigate to="/login" replace />} />
+          element={<LandingPage />} />
         <Route path="/login"
           element={<LoginPage />} />
         <Route path="/auth/register/student"
@@ -235,6 +238,11 @@ export default function App() {
             <StudentProfile />
           </ProtectedRoute>
         } />
+        <Route path="/student/settings" element={
+          <ProtectedRoute allowedRoles={['student']}>
+            <SettingsPage />
+          </ProtectedRoute>
+        } />
 
         {/* ── MANAGER ───────────────────────────── */}
         <Route path="/manager/dashboard" element={
@@ -270,6 +278,11 @@ export default function App() {
         <Route path="/manager/profile" element={
           <ProtectedRoute allowedRoles={['manager']}>
             <ManagerProfile />
+          </ProtectedRoute>
+        } />
+        <Route path="/manager/settings" element={
+          <ProtectedRoute allowedRoles={['manager']}>
+            <SettingsPage />
           </ProtectedRoute>
         } />
 
@@ -309,6 +322,11 @@ export default function App() {
             <HRProfile />
           </ProtectedRoute>
         } />
+        <Route path="/hr/settings" element={
+          <ProtectedRoute allowedRoles={['hr_admin']}>
+            <SettingsPage />
+          </ProtectedRoute>
+        } />
 
         {/* ── EXPERT ────────────────────────────── */}
         <Route path="/expert/dashboard" element={
@@ -339,6 +357,11 @@ export default function App() {
         <Route path="/expert/profile" element={
           <ProtectedRoute allowedRoles={['expert']}>
             <ExpertProfile />
+          </ProtectedRoute>
+        } />
+        <Route path="/expert/settings" element={
+          <ProtectedRoute allowedRoles={['expert']}>
+            <SettingsPage />
           </ProtectedRoute>
         } />
 

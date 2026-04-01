@@ -1,6 +1,9 @@
+import { useLanguage } from '../../contexts/LanguageContext';
+
 export default function StatCard({
   title, value, icon: Icon, color = 'primary', trend
 }) {
+  const { t } = useLanguage();
   const colors = {
     primary : 'bg-[var(--color-primary)]/10 text-[var(--color-primary)]',
     success : 'bg-[var(--color-success)]/10 text-[var(--color-success)]',
@@ -23,7 +26,7 @@ export default function StatCard({
             <div className={`flex items-center gap-1 mt-2 text-xs font-medium px-2 py-0.5 rounded-full inline-flex
               ${trend >= 0 ? 'bg-[var(--color-success)]/10 text-[var(--color-success)]' : 'bg-[var(--color-danger)]/10 text-[var(--color-danger)]'}`}>
               <span>{trend >= 0 ? '▲' : '▼'}</span>
-              <span>{Math.abs(trend)}% this week</span>
+              <span>{Math.abs(trend)}% {t('thisWeek')}</span>
             </div>
           )}
         </div>

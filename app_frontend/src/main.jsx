@@ -8,14 +8,18 @@ import { store, persistor } from './store/store.js';
 
 import { SocketProvider } from './context/SocketContext.jsx';
 
+import { LanguageProvider } from './contexts/LanguageContext';
+
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
-        <SocketProvider>
-          <App />
-        </SocketProvider>
+        <LanguageProvider>
+          <SocketProvider>
+            <App />
+          </SocketProvider>
+        </LanguageProvider>
       </PersistGate>
     </Provider>
   </StrictMode>,
-)
+);

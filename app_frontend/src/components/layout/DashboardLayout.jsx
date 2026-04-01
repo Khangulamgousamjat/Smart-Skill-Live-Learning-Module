@@ -14,59 +14,65 @@ import {
 } from 'lucide-react';
 import { setTheme } from '../../store/slices/uiSlice';
 import { applyTheme } from '../../utils/applyTheme';
+import { useLanguage } from '../../contexts/LanguageContext';
 
-const NAV_ITEMS = {
+const NAV_KEYS_ROLES = {
   student: [
-    { label: 'Dashboard',      icon: LayoutDashboard, path: '/student/dashboard' },
-    { label: 'My Skill Gap',   icon: Target,          path: '/student/skills' },
-    { label: 'My Projects',    icon: FolderOpen,      path: '/student/projects' },
-    { label: 'Lectures',       icon: BookOpen,        path: '/student/lectures' },
-    { label: 'Learning Path',  icon: Lightbulb,       path: '/student/learning-path' },
-    { label: 'Certificates',   icon: Award,           path: '/student/certificates' },
-    { label: 'Messages',       icon: MessageSquare,   path: '/student/messages' },
-    { label: 'Profile',        icon: User,            path: '/student/profile' },
+    { labelKey: 'dashboard',      icon: LayoutDashboard, path: '/student/dashboard' },
+    { labelKey: 'skillGap',       icon: Target,          path: '/student/skills' },
+    { labelKey: 'myProjects',    icon: FolderOpen,      path: '/student/projects' },
+    { labelKey: 'lectures',       icon: BookOpen,        path: '/student/lectures' },
+    { labelKey: 'learningPath',  icon: Lightbulb,       path: '/student/learning-path' },
+    { labelKey: 'certificates',   icon: Award,           path: '/student/certificates' },
+    { labelKey: 'messages',       icon: MessageSquare,   path: '/student/messages' },
+    { labelKey: 'profile',        icon: User,            path: '/student/profile' },
+    { labelKey: 'settings',       icon: Settings,        path: '/student/settings' },
   ],
   manager: [
-    { label: 'Dashboard',      icon: LayoutDashboard, path: '/manager/dashboard' },
-    { label: 'Team Progress',  icon: BarChart2,       path: '/manager/team' },
-    { label: 'Projects',       icon: FolderOpen,      path: '/manager/projects' },
-    { label: 'Lectures',       icon: BookOpen,        path: '/manager/lectures' },
-    { label: 'Skill Heat Map', icon: Target,          path: '/manager/skills' },
-    { label: 'Messages',       icon: MessageSquare,   path: '/manager/messages' },
-    { label: 'Profile',        icon: User,            path: '/manager/profile' },
+    { labelKey: 'dashboard',      icon: LayoutDashboard, path: '/manager/dashboard' },
+    { labelKey: 'teamProgress',  icon: BarChart2,       path: '/manager/team' },
+    { labelKey: 'projects',       icon: FolderOpen,      path: '/manager/projects' },
+    { labelKey: 'lectures',       icon: BookOpen,        path: '/manager/lectures' },
+    { labelKey: 'skillHeatMap', icon: Target,          path: '/manager/skills' },
+    { labelKey: 'messages',       icon: MessageSquare,   path: '/manager/messages' },
+    { labelKey: 'profile',        icon: User,            path: '/manager/profile' },
+    { labelKey: 'settings',       icon: Settings,        path: '/manager/settings' },
   ],
   hr_admin: [
-    { label: 'Dashboard',      icon: LayoutDashboard, path: '/hr/dashboard' },
-    { label: 'All Interns',    icon: Users,           path: '/hr/interns' },
-    { label: 'Dept Comparison',icon: BarChart2,       path: '/hr/departments' },
-    { label: 'Certificates',   icon: Award,           path: '/hr/certificates' },
-    { label: 'Evaluations',    icon: ClipboardList,   path: '/hr/evaluations' },
-    { label: 'Messages',       icon: MessageSquare,   path: '/hr/messages' },
-    { label: 'Profile',        icon: User,            path: '/hr/profile' },
+    { labelKey: 'dashboard',      icon: LayoutDashboard, path: '/hr/dashboard' },
+    { labelKey: 'allInterns',    icon: Users,           path: '/hr/interns' },
+    { labelKey: 'deptComparison',icon: BarChart2,       path: '/hr/departments' },
+    { labelKey: 'certificates',   icon: Award,           path: '/hr/certificates' },
+    { labelKey: 'evaluations',    icon: ClipboardList,   path: '/hr/evaluations' },
+    { labelKey: 'messages',       icon: MessageSquare,   path: '/hr/messages' },
+    { labelKey: 'profile',        icon: User,            path: '/hr/profile' },
+    { labelKey: 'settings',       icon: Settings,        path: '/hr/settings' },
   ],
   expert: [
-    { label: 'Dashboard',      icon: LayoutDashboard, path: '/expert/dashboard' },
-    { label: 'My Lectures',    icon: BookOpen,        path: '/expert/lectures' },
-    { label: 'Resources',      icon: FolderOpen,      path: '/expert/resources' },
-    { label: 'Q&A',            icon: MessageSquare,   path: '/expert/qna' },
-    { label: 'Messages',       icon: MessageSquare,   path: '/expert/messages' },
-    { label: 'Profile',        icon: User,            path: '/expert/profile' },
+    { labelKey: 'dashboard',      icon: LayoutDashboard, path: '/expert/dashboard' },
+    { labelKey: 'myLectures',    icon: BookOpen,        path: '/expert/lectures' },
+    { labelKey: 'resources',      icon: FolderOpen,      path: '/expert/resources' },
+    { labelKey: 'qna',            icon: MessageSquare,   path: '/expert/qna' },
+    { labelKey: 'messages',       icon: MessageSquare,   path: '/expert/messages' },
+    { labelKey: 'profile',        icon: User,            path: '/expert/profile' },
+    { labelKey: 'settings',       icon: Settings,        path: '/expert/settings' },
   ],
   super_admin: [
-    { label: 'Dashboard',      icon: LayoutDashboard, path: '/admin/dashboard' },
-    { label: 'Approvals',      icon: CheckSquare,     path: '/admin/approvals' },
-    { label: 'Users',          icon: Users,           path: '/admin/users' },
-    { label: 'Departments',    icon: Building2,       path: '/admin/departments' },
-    { label: 'Skills',         icon: Target,          path: '/admin/skills' },
-    { label: 'Certificates',   icon: Award,           path: '/admin/certificates' },
-    { label: 'Announcements',  icon: Megaphone,       path: '/admin/announcements' },
-    { label: 'System Logs',    icon: ClipboardList,   path: '/admin/logs' },
-    { label: 'Org Settings',   icon: Settings,        path: '/admin/settings' },
-    { label: 'Profile',        icon: User,            path: '/admin/profile' },
+    { labelKey: 'dashboard',      icon: LayoutDashboard, path: '/admin/dashboard' },
+    { labelKey: 'approvals',      icon: CheckSquare,     path: '/admin/approvals' },
+    { labelKey: 'users',          icon: Users,           path: '/admin/users' },
+    { labelKey: 'departments',    icon: Building2,       path: '/admin/departments' },
+    { labelKey: 'skills',         icon: Target,          path: '/admin/skills' },
+    { labelKey: 'certificates',   icon: Award,           path: '/admin/certificates' },
+    { labelKey: 'announcements',  icon: Megaphone,       path: '/admin/announcements' },
+    { labelKey: 'systemLogs',    icon: ClipboardList,   path: '/admin/logs' },
+    { labelKey: 'orgSettings',   icon: Settings,        path: '/admin/settings' },
+    { labelKey: 'profile',        icon: User,            path: '/admin/profile' },
   ],
 };
 
 export default function DashboardLayout({ children }) {
+  const { t } = useLanguage();
   const { user } = useSelector((s) => s.auth);
   const { theme } = useSelector((s) => s.ui);
   const { unreadCount } = useSelector((s) => s.notifications);
@@ -76,13 +82,13 @@ export default function DashboardLayout({ children }) {
   const [collapsed, setCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
 
-  const navItems = NAV_ITEMS[user?.role] || [];
+  const navItems = NAV_KEYS_ROLES[user?.role] || [];
 
   const handleLogout = async () => {
     try { await axiosInstance.post('/auth/logout'); } catch {}
     dispatch(logout());
     navigate('/login');
-    toast.success('Logged out successfully');
+    toast.success(t('logoutSuccess') || 'Logged out successfully');
   };
 
   const handleTheme = () => {
@@ -105,14 +111,14 @@ export default function DashboardLayout({ children }) {
         ) : (
           <div>
             <p className="text-[var(--color-accent)] font-bold font-sora text-sm leading-tight">
-              Smart Skill
+              {t('brandTitleShort')}
             </p>
             <p className="text-white font-bold font-sora text-xs leading-tight mt-0.5">
-              & Live Learning Module
+              {t('brandTitleLong')}
             </p>
             <p className="text-white/40 text-[10px] uppercase tracking-widest font-bold mt-1.5 flex items-center gap-1.5">
               <span className="w-1 h-1 rounded-full bg-[var(--color-accent)]"></span>
-              Gous org
+              {t('orgName')}
             </p>
           </div>
         )}
@@ -141,7 +147,7 @@ export default function DashboardLayout({ children }) {
             >
               <Icon size={18} className="shrink-0" />
               {!collapsed && (
-                <span className="truncate">{item.label}</span>
+                <span className="truncate">{t(item.labelKey)}</span>
               )}
             </button>
           );
@@ -176,7 +182,7 @@ export default function DashboardLayout({ children }) {
                      transition-all text-sm font-medium"
         >
           <LogOut size={16} />
-          {!collapsed && <span>Logout</span>}
+          {!collapsed && <span>{t('logout')}</span>}
         </button>
       </div>
     </div>
@@ -216,12 +222,12 @@ export default function DashboardLayout({ children }) {
               {collapsed ? <ChevronRight size={18} /> : <ChevronLeft size={18} />}
             </button>
             <span className="font-sora font-semibold text-sm hidden sm:block">
-              {user?.full_name ? `Welcome back, ${user.full_name.split(' ')[0]}!` : 'Smart Skill & Live Learning Module'}
+              {user?.full_name ? `${t('welcome')}, ${user.full_name.split(' ')[0]}!` : t('appTitle')}
             </span>
           </div>
 
           <div className="flex items-center gap-2">
-            <button onClick={handleTheme} className="p-2 rounded-lg text-[var(--color-text-muted)] hover:bg-[var(--color-border)]/50 transition-all" title="Toggle theme">
+            <button onClick={handleTheme} className="p-2 rounded-lg text-[var(--color-text-muted)] hover:bg-[var(--color-border)]/50 transition-all" title={t('toggleTheme')}>
               {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
             </button>
             <button className="relative p-2 rounded-lg text-[var(--color-text-muted)] hover:bg-[var(--color-border)]/50"

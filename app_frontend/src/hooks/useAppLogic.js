@@ -130,7 +130,7 @@ export const useAppLogic = () => {
     chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [chatMessages]);
 
-  const t = {
+  const themeStyles = {
     bg: isDarkMode ? 'bg-slate-900 text-slate-200' : 'bg-gray-50 text-gray-900',
     sidebar: isDarkMode ? 'bg-slate-900/40 backdrop-blur-2xl border-white/10' : 'bg-white border-gray-200',
     card: isDarkMode ? 'bg-white/5 backdrop-blur-xl border border-white/10 shadow-[0_8px_30px_rgb(0,0,0,0.12)] overflow-hidden relative' : 'bg-white border border-gray-100 shadow-sm overflow-hidden relative',

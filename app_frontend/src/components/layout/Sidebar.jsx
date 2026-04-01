@@ -11,54 +11,55 @@ import { useAppContext } from '../../context/AppContext';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { logoutSuccess } from '../../store/slices/authSlice';
+import { useLanguage } from '../../contexts/LanguageContext';
 
-// ─── Role-specific navigation menus ───────────────────────────────
-const NAV_CONFIG = {
+// ─── Role-specific navigation config ───────────────────────────────
+const NAV_KEYS = {
   super_admin: [
-    { id: 'overview',      label: 'Admin Dashboard', icon: LayoutDashboard, path: '/admin/dashboard' },
-    { id: 'approvals',     label: 'Role Approvals',  icon: ShieldAlert,     path: '/admin/approvals' },
-    { id: 'users',         label: 'All Users',       icon: Users,           path: '/admin/users' },
-    { id: 'departments',   label: 'Departments',     icon: Building2,       path: '/admin/departments' },
-    { id: 'skills',        label: 'Skills Master',   icon: Target,          path: '/admin/skills' },
-    { id: 'announcements', label: 'Announcements',   icon: MessageSquare,   path: '/admin/announcements' },
-    { id: 'logs',          label: 'System Logs',     icon: FileText,        path: '/admin/logs' },
-    { id: 'settings',      label: 'Org Settings',    icon: Settings,        path: '/admin/settings' },
+    { id: 'overview',      key: 'dashboard', icon: LayoutDashboard, path: '/admin/dashboard' },
+    { id: 'approvals',     key: 'approvals',  icon: ShieldAlert,     path: '/admin/approvals' },
+    { id: 'users',         key: 'users',         icon: Users,           path: '/admin/users' },
+    { id: 'departments',   key: 'departments',   icon: Building2,       path: '/admin/departments' },
+    { id: 'skills',        key: 'skills',        icon: Target,          path: '/admin/skills' },
+    { id: 'announcements', key: 'announcements', icon: MessageSquare,   path: '/admin/announcements' },
+    { id: 'logs',          key: 'systemLogs',     icon: FileText,        path: '/admin/logs' },
+    { id: 'settings',      key: 'orgSettings',    icon: Settings,        path: '/admin/settings' },
   ],
   hr_admin: [
-    { id: 'overview',      label: 'HR Dashboard',    icon: LayoutDashboard, path: '/hr/dashboard' },
-    { id: 'interns',       label: 'Intern Directory',icon: Users,           path: '/hr/interns' },
-    { id: 'departments',   label: 'Departments',     icon: Building2,       path: '/hr/departments' },
-    { id: 'certificates',  label: 'Certificates',    icon: Award,           path: '/hr/certificates' },
-    { id: 'evaluations',   label: 'Evaluations',     icon: LayoutList,      path: '/hr/evaluations' },
-    { id: 'messages',      label: 'Messages',        icon: MessageSquare,   path: '/hr/messages' },
-    { id: 'profile',       label: 'Profile',         icon: User,            path: '/hr/profile' },
+    { id: 'overview',      key: 'dashboard',    icon: LayoutDashboard, path: '/hr/dashboard' },
+    { id: 'interns',       key: 'allInterns',icon: Users,           path: '/hr/interns' },
+    { id: 'departments',   key: 'departments',     icon: Building2,       path: '/hr/departments' },
+    { id: 'certificates',  key: 'certificates',     icon: Award,           path: '/hr/certificates' },
+    { id: 'evaluations',   key: 'evaluations',     icon: LayoutList,      path: '/hr/evaluations' },
+    { id: 'messages',      key: 'messages',        icon: MessageSquare,   path: '/hr/messages' },
+    { id: 'profile',       key: 'profile',         icon: User,            path: '/hr/profile' },
   ],
   manager: [
-    { id: 'overview',      label: 'Manager Dashboard', icon: LayoutDashboard, path: '/manager/dashboard' },
-    { id: 'team',          label: 'My Team',           icon: Users,           path: '/manager/team' },
-    { id: 'projects',      label: 'Projects',          icon: Target,          path: '/manager/projects' },
-    { id: 'lectures',      label: 'Lectures',          icon: Video,           path: '/manager/lectures' },
-    { id: 'skills',        label: 'Skill Analysis',    icon: TrendingUp,      path: '/manager/skills' },
-    { id: 'messages',      label: 'Messages',          icon: MessageSquare,   path: '/manager/messages' },
-    { id: 'profile',       label: 'Profile',           icon: User,            path: '/manager/profile' },
+    { id: 'overview',      key: 'dashboard', icon: LayoutDashboard, path: '/manager/dashboard' },
+    { id: 'team',          key: 'teamProgress',           icon: Users,           path: '/manager/team' },
+    { id: 'projects',      key: 'projects',          icon: Target,          path: '/manager/projects' },
+    { id: 'lectures',      key: 'lectures',          icon: Video,           path: '/manager/lectures' },
+    { id: 'skills',        key: 'skillHeatMap',    icon: TrendingUp,      path: '/manager/skills' },
+    { id: 'messages',      key: 'messages',          icon: MessageSquare,   path: '/manager/messages' },
+    { id: 'profile',       key: 'profile',           icon: User,            path: '/manager/profile' },
   ],
   expert: [
-    { id: 'overview',      label: 'Expert Dashboard',  icon: LayoutDashboard, path: '/expert/dashboard' },
-    { id: 'lectures',      label: 'My Lectures',       icon: Video,           path: '/expert/lectures' },
-    { id: 'resources',     label: 'Resources',         icon: UploadCloud,     path: '/expert/resources' },
-    { id: 'qna',           label: 'Q&A Forum',         icon: MessageSquare,   path: '/expert/qna' },
-    { id: 'messages',      label: 'Messages',          icon: MessageSquare,   path: '/expert/messages' },
-    { id: 'profile',       label: 'Profile',           icon: User,            path: '/expert/profile' },
+    { id: 'overview',      key: 'dashboard',  icon: LayoutDashboard, path: '/expert/dashboard' },
+    { id: 'lectures',      key: 'lectures',       icon: Video,           path: '/expert/lectures' },
+    { id: 'resources',     key: 'uploadVideos',         icon: UploadCloud,     path: '/expert/resources' },
+    { id: 'qna',           key: 'qna',         icon: MessageSquare,   path: '/expert/qna' },
+    { id: 'messages',      key: 'messages',          icon: MessageSquare,   path: '/expert/messages' },
+    { id: 'profile',       key: 'profile',           icon: User,            path: '/expert/profile' },
   ],
   student: [
-    { id: 'overview',      label: 'Student Dashboard', icon: LayoutDashboard, path: '/student/dashboard' },
-    { id: 'skills',        label: 'Skill Radar',       icon: Laptop2,         path: '/student/skills' },
-    { id: 'projects',      label: 'My Projects',       icon: Briefcase,       path: '/student/projects' },
-    { id: 'lectures',      label: 'Live Lectures',     icon: Video,           path: '/student/lectures' },
-    { id: 'path',          label: 'Learning Path',     icon: Target,          path: '/student/learning-path' },
-    { id: 'certificates',  label: 'Certificates',      icon: Award,           path: '/student/certificates' },
-    { id: 'messages',      label: 'Messages',          icon: MessageSquare,   path: '/student/messages' },
-    { id: 'profile',       label: 'Profile',           icon: User,            path: '/student/profile' },
+    { id: 'overview',      key: 'dashboard', icon: LayoutDashboard, path: '/student/dashboard' },
+    { id: 'skills',        key: 'skillRadar',       icon: Laptop2,         path: '/student/skills' },
+    { id: 'projects',      key: 'myProjects',       icon: Briefcase,       path: '/student/projects' },
+    { id: 'lectures',      key: 'lectures',     icon: Video,           path: '/student/lectures' },
+    { id: 'path',          key: 'learningPath',     icon: Target,          path: '/student/learning-path' },
+    { id: 'certificates',  key: 'certificates',      icon: Award,           path: '/student/certificates' },
+    { id: 'messages',      key: 'messages',          icon: MessageSquare,   path: '/student/messages' },
+    { id: 'profile',       key: 'profile',           icon: User,            path: '/student/profile' },
   ],
 };
 
@@ -79,8 +80,9 @@ const ROLE_COLORS = {
 };
 
 export const Sidebar = () => {
+  const { t } = useLanguage();
   const {
-    isDarkMode, t,
+    isDarkMode, themeStyles,
     isSidebarOpen, setIsSidebarOpen,
     setIsSettingsOpen, handleCareerCoach,
     handleGenerateBio, handleStandupPrep, handleOneOnOnePrep
@@ -91,7 +93,7 @@ export const Sidebar = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const navItems = NAV_CONFIG[role] || NAV_CONFIG['student'];
+  const navItems = NAV_KEYS[role] || NAV_KEYS['student'];
   const roleLabel = ROLE_LABELS[role] || 'Student Intern';
   const roleColor = ROLE_COLORS[role] || 'text-emerald-400';
 
@@ -127,7 +129,7 @@ export const Sidebar = () => {
         w-64 flex flex-col border-r shrink-0 transition-all duration-300
         fixed inset-y-0 left-0 z-[101] lg:static lg:flex
         ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
-        ${t.sidebar}
+        ${themeStyles.sidebar}
       `}>
         {/* Logo / Branding */}
         <div className="flex flex-col items-center px-4 py-8 border-b border-white/10 relative">
@@ -159,7 +161,7 @@ export const Sidebar = () => {
               className={`w-full flex items-center px-3 py-2.5 rounded-xl text-sm text-left transition-all duration-200 ${
                 active
                   ? 'font-semibold shadow-inner border'
-                  : `${t.textMuted} ${t.hover}`
+                  : `${themeStyles.textMuted} ${themeStyles.hover}`
               }`}
               style={active ? {
                 backgroundColor: 'rgba(244, 161, 0, 0.12)',
@@ -171,7 +173,7 @@ export const Sidebar = () => {
                 className="w-4 h-4 mr-3 flex-shrink-0"
                 style={active ? { color: '#F4A100' } : {}}
               />
-              {item.label}
+              {item.key ? t(item.key) : item.label}
             </button>
           );
         })}
@@ -179,8 +181,8 @@ export const Sidebar = () => {
 
       {/* AI Toolkit (student only) */}
       {showAIToolkit && (
-        <div className={`px-3 pb-2 pt-1 border-t ${t.border}`}>
-          <p className={`text-[10px] font-bold uppercase tracking-widest mb-2 px-1 ${t.textMuted}`}>AI Toolkit</p>
+        <div className={`px-3 pb-2 pt-1 border-t ${themeStyles.border}`}>
+          <p className={`text-[10px] font-bold uppercase tracking-widest mb-2 px-1 ${themeStyles.textMuted}`}>AI Toolkit</p>
           <div className="grid grid-cols-2 gap-1.5 w-full">
             <button
               onClick={handleCareerCoach}
@@ -219,7 +221,7 @@ export const Sidebar = () => {
       )}
 
       {/* User Profile Footer */}
-      <div className={`p-3 border-t transition-colors duration-500 ${t.border} ${t.profileSection}`}>
+      <div className={`p-3 border-t transition-colors duration-500 ${themeStyles.border} ${themeStyles.profileSection}`}>
         <div className="flex items-center justify-between">
           <div className="flex items-center min-w-0">
             <div
@@ -229,7 +231,7 @@ export const Sidebar = () => {
               {user?.full_name?.charAt(0)?.toUpperCase() || 'U'}
             </div>
             <div className="ml-2.5 min-w-0">
-              <p className={`text-sm font-medium leading-tight truncate ${t.textMain}`}>
+              <p className={`text-sm font-medium leading-tight truncate ${themeStyles.textMain}`}>
                 {user?.full_name || 'User'}
               </p>
               <p className={`text-[10px] mt-0.5 font-semibold ${roleColor}`}>{roleLabel}</p>
@@ -240,14 +242,14 @@ export const Sidebar = () => {
             <button
               onClick={() => setIsSettingsOpen(true)}
               className={`p-1.5 rounded-xl transition-all ${isDarkMode ? 'hover:bg-white/10 text-slate-400 hover:text-white' : 'hover:bg-gray-200 text-gray-500 hover:text-gray-800'}`}
-              title="Settings"
+              title={t('settings')}
             >
               <Settings className="w-4 h-4" />
             </button>
             <button
               onClick={handleLogout}
               className={`p-1.5 rounded-xl transition-all ${isDarkMode ? 'hover:bg-red-500/10 text-slate-400 hover:text-red-400' : 'hover:bg-red-50 text-gray-500 hover:text-red-500'}`}
-              title="Logout"
+              title={t('logout')}
             >
               <LogOut className="w-4 h-4" />
             </button>

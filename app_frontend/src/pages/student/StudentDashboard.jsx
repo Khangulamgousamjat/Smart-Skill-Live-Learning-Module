@@ -4,8 +4,10 @@ import StatCard from '../../components/cards/StatCard';
 import axiosInstance from '../../api/axios';
 import { Target, FolderOpen, Video, Award, PlayCircle, Bot, ArrowRight, BookOpen } from 'lucide-react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import { useLanguage } from '../../contexts/LanguageContext';
 
 export default function StudentDashboard() {
+  const { t } = useLanguage();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [data, setData] = useState({
@@ -29,7 +31,6 @@ export default function StudentDashboard() {
 
       const pData = pRes.data || {};
       
-      // Mocking graph data as required by "Progress graph — line chart of last 8 weeks"
       const mockGraph = [
         { week: 'W1', score: 45 }, { week: 'W2', score: 52 },
         { week: 'W3', score: 50 }, { week: 'W4', score: 65 },
@@ -48,14 +49,14 @@ export default function StudentDashboard() {
           { name: 'React Development', gap: 65 },
           { name: 'Node.js Backend', gap: 40 },
           { name: 'UI/UX Design', gap: 85 }
-        ], // Mock fallback
+        ],
         upcomingLectures: lRes.data || [],
         projects: projRes.data || [],
         aiRecommendation: aiRes.data || { title: 'Advanced React Patterns', platform: 'Coursera', reason: 'High gap in React component lifecycle' },
         progressGraph: mockGraph
       });
     } catch (err) {
-      setError('Failed to load dashboard data');
+      setError(t('failedLoadDashboard'));
     } finally {
       setLoading(false);
     }
@@ -80,7 +81,7 @@ export default function StudentDashboard() {
       <DashboardLayout>
         <div className="text-center py-20 min-h-[50vh]">
           <p className="text-[var(--color-danger)] font-medium mb-3">{error}</p>
-          <button onClick={fetchData} className="text-sm font-semibold px-4 py-2 bg-[var(--color-primary)] text-white rounded-lg hover:opacity-90">Try Again</button>
+          <button onClick={fetchData} className="text-sm font-semibold px-4 py-2 bg-[var(--color-primary)] text-white rounded-lg hover:opacity-90">{t('tryAgain')}</button>
         </div>
       </DashboardLayout>
     );
@@ -91,10 +92,10 @@ export default function StudentDashboard() {
       <div className="space-y-6">
         {/* Row 1: Stat Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          <StatCard title="Skill Score %" value={`${data.stats.score}%`} icon={Target} color="primary" trend={12} />
-          <StatCard title="Projects Done" value={data.stats.projectsDone} icon={FolderOpen} color="success" trend={1} />
-          <StatCard title="Lectures Attended" value={data.stats.lecturesAttended} icon={Video} color="info" />
-          <StatCard title="Certificates" value={data.stats.certificates} icon={Award} color="warning" />
+          <StatCard title={t('skillScore')} value={`${data.stats.score}%`} icon={Target} color="primary" trend={12} />
+          <StatCard title={t('projectsDone')} value={data.stats.projectsDone} icon={FolderOpen} color="success" trend={1} />
+          <StatCard title={t('lecturesAttended')} value={data.stats.lecturesAttended} icon={Video} color="info" />
+          <StatCard title={t('certificatesEarned')} value={data.stats.certificates} icon={Award} color="warning" />
         </div>
 
         {/* Row 2: Left 60% Right 40% */}
@@ -102,7 +103,7 @@ export default function StudentDashboard() {
           {/* Skill Gaps (60%) */}
           <div className="lg:col-span-3 bg-[var(--color-surface)] border border-[var(--color-border)] rounded-xl shadow-sm overflow-hidden flex flex-col pb-4">
             <div className="px-6 py-4 border-b border-[var(--color-border)]">
-              <h2 className="text-base font-bold font-sora text-[var(--color-text-primary)]">My Skill Gap Progress</h2>
+              <h2 className="text-base font-bold font-sora text-[var(--color-text-primary)]">{t('skillGapProgress')}</h2>
             </div>
             <div className="p-6 space-y-6 flex-1">
               {data.skills.map((skill, idx) => {
@@ -129,12 +130,12 @@ export default function StudentDashboard() {
           {/* Upcoming Lectures (40%) */}
           <div className="lg:col-span-2 bg-[var(--color-surface)] border border-[var(--color-border)] rounded-xl shadow-sm overflow-hidden flex flex-col">
             <div className="px-6 py-4 border-b border-[var(--color-border)] flex justify-between items-center">
-              <h2 className="text-base font-bold font-sora text-[var(--color-text-primary)]">Upcoming Lectures</h2>
+              <h2 className="text-base font-bold font-sora text-[var(--color-text-primary)]">{t('upcomingLecturesShort')}</h2>
               <BookOpen size={18} className="text-[var(--color-primary)]" />
             </div>
             <div className="p-4 flex-1">
               {data.upcomingLectures.length === 0 ? (
-                <div className="text-center py-8 text-sm text-[var(--color-text-muted)]">No upcoming lectures</div>
+                <div className="text-center py-8 text-sm text-[var(--color-text-muted)]">{t('noUpcomingLectures')}</div>
               ) : (
                 <div className="space-y-3">
                   {data.upcomingLectures.map(lecture => (
@@ -144,7 +145,7 @@ export default function StudentDashboard() {
                         <p className="text-xs text-[var(--color-text-muted)] font-medium">{new Date(lecture.start_time).toLocaleString()}</p>
                       </div>
                       <button className="mt-3 w-full py-2 bg-[var(--color-primary)] text-white text-xs font-bold rounded-lg flex items-center justify-center gap-1.5 hover:bg-opacity-90 transition-opacity">
-                        <PlayCircle size={14} /> Join Session
+                        <PlayCircle size={14} /> {t('joinSession')}
                       </button>
                     </div>
                   ))}
@@ -159,20 +160,20 @@ export default function StudentDashboard() {
           {/* Projects Kanban mini */}
           <div className="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-xl shadow-sm overflow-hidden flex flex-col">
             <div className="px-6 py-4 border-b border-[var(--color-border)]">
-              <h2 className="text-base font-bold font-sora text-[var(--color-text-primary)]">My Projects</h2>
+              <h2 className="text-base font-bold font-sora text-[var(--color-text-primary)]">{t('myProjects')}</h2>
             </div>
             <div className="p-5 grid grid-cols-1 gap-3">
               {data.projects.length === 0 ? (
-                <div className="text-center py-6 text-sm text-[var(--color-text-muted)]">No active projects</div>
+                <div className="text-center py-6 text-sm text-[var(--color-text-muted)]">{t('noActiveProjects')}</div>
               ) : (
                 data.projects.map(proj => (
-                  <div key={proj.id} className="p-4 rounded-xl border border-[var(--color-border)] bg-white dark:bg-black/20 flex justify-between items-center justify-between group hover:border-[var(--color-primary)] transition-colors">
+                  <div key={proj.id} className="p-4 rounded-xl border border-[var(--color-border)] bg-white dark:bg-black/20 flex justify-between items-center group hover:border-[var(--color-primary)] transition-colors">
                     <div className="flex flex-col gap-1">
                       <h3 className="font-bold text-sm text-[var(--color-text-primary)]">{proj.title}</h3>
-                      <p className="text-xs text-[var(--color-text-muted)]">Due: {new Date(proj.deadline).toLocaleDateString()}</p>
+                      <p className="text-xs text-[var(--color-text-muted)]">{t('due')}: {new Date(proj.deadline).toLocaleDateString()}</p>
                     </div>
                     <span className="px-2.5 py-1 text-[10px] font-bold uppercase rounded-md border border-[var(--color-primary)] bg-[var(--color-primary)]/10 text-[var(--color-primary)]">
-                       {proj.status || 'Assigned'}
+                       {proj.status || t('assigned')}
                     </span>
                   </div>
                 ))
@@ -187,22 +188,22 @@ export default function StudentDashboard() {
             </div>
             <div className="px-6 py-4 border-b border-white/10 relative z-10 flex items-center gap-2">
               <Bot size={20} className="text-[var(--color-accent)]" />
-              <h2 className="text-base font-bold font-sora">Today's AI Recommendation</h2>
+              <h2 className="text-base font-bold font-sora">{t('aiRecommendationTitle')}</h2>
             </div>
             <div className="p-6 flex-1 flex flex-col justify-center relative z-10">
               {data.aiRecommendation ? (
                 <>
                    <span className="inline-block px-3 py-1 bg-[var(--color-accent)]/20 text-[var(--color-accent)] border border-[var(--color-accent)]/40 rounded-full text-[10px] font-bold uppercase mb-4 self-start">
-                     {data.aiRecommendation.platform} match
+                     {data.aiRecommendation.platform} {t('match')}
                    </span>
                    <h3 className="text-xl font-bold font-sora mb-2">{data.aiRecommendation.title}</h3>
                    <p className="text-sm text-white/70 mb-6 flex-1">{data.aiRecommendation.reason}</p>
                    <button className="w-full py-3 bg-[var(--color-accent)] text-[var(--color-primary)] font-bold text-sm rounded-lg hover:bg-white transition-colors flex items-center justify-center gap-2">
-                     Start Learning <ArrowRight size={16} />
+                     {t('startLearning')} <ArrowRight size={16} />
                    </button>
                 </>
               ) : (
-                <div className="text-center py-6 text-sm text-white/60">No recommendations available today</div>
+                <div className="text-center py-6 text-sm text-white/60">{t('noRecommendations')}</div>
               )}
             </div>
           </div>
@@ -210,7 +211,7 @@ export default function StudentDashboard() {
 
         {/* Row 4: Full width Progress Graph */}
         <div className="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-xl shadow-sm overflow-hidden p-6">
-          <h2 className="text-base font-bold font-sora text-[var(--color-text-primary)] mb-6">Learning Trajectory</h2>
+          <h2 className="text-base font-bold font-sora text-[var(--color-text-primary)] mb-6">{t('learningTrajectory')}</h2>
           <div className="h-[250px] w-full">
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={data.progressGraph}>

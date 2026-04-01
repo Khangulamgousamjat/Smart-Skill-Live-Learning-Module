@@ -6,7 +6,10 @@ import api from '../../api/axios';
 import toast from 'react-hot-toast';
 import { Mail, Lock, ArrowRight, Loader2 } from 'lucide-react';
 
+import { useLanguage } from '../../contexts/LanguageContext';
+
 const LoginPage = () => {
+  const { t } = useLanguage();
   const { theme } = useSelector((state) => state.ui);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -21,7 +24,7 @@ const LoginPage = () => {
       const res = await api.post('/auth/login', { email, password });
       if (res.data.success) {
         dispatch(loginSuccess(res.data.data));
-        toast.success(`Welcome back, ${res.data.data.user.full_name}!`);
+        toast.success(`${t('welcomeBack')}, ${res.data.data.user.full_name}!`);
         
         // Role-based redirect
         const roleRedirect = {
@@ -40,7 +43,7 @@ const LoginPage = () => {
       } else if (error.response?.data?.account_status === 'pending_approval') {
         navigate('/auth/pending');
       } else {
-         toast.error(error.response?.data?.message || 'Login failed');
+         toast.error(error.response?.data?.message || t('loginFailed'));
       }
     } finally {
       setLoading(false);
@@ -65,11 +68,11 @@ const LoginPage = () => {
         </div>
 
         <div className="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-2xl shadow-2xl p-8 relative z-10">
-          <h2 className="text-2xl font-bold mb-6 font-sora text-[var(--color-text-primary)]">Welcome back</h2>
+          <h2 className="text-2xl font-bold mb-6 font-sora text-[var(--color-text-primary)]">{t('welcomeBack')}</h2>
           
           <form onSubmit={handleLogin} className="space-y-5 relative z-10">
             <div>
-              <label className="block text-sm font-medium text-[var(--color-text-secondary)] mb-1.5 ml-1">Work Email</label>
+              <label className="block text-sm font-medium text-[var(--color-text-secondary)] mb-1.5 ml-1">{t('emailAddress')}</label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-[var(--color-text-muted)]">
                   <Mail className="h-5 w-5" />
@@ -86,7 +89,7 @@ const LoginPage = () => {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-[var(--color-text-secondary)] mb-1.5 ml-1">Password</label>
+              <label className="block text-sm font-medium text-[var(--color-text-secondary)] mb-1.5 ml-1">{t('password')}</label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-[var(--color-text-muted)]">
                   <Lock className="h-5 w-5" />
@@ -102,7 +105,7 @@ const LoginPage = () => {
               </div>
               <div className="flex justify-end mt-2">
                 <Link to="/auth/forgot-password" className="text-xs text-[var(--color-accent)] hover:text-[var(--color-accent-light)] font-medium transition-colors">
-                  Forgot password?
+                  {t('forgotPassword')}
                 </Link>
               </div>
             </div>
@@ -114,7 +117,7 @@ const LoginPage = () => {
             >
               {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : (
                 <>
-                  Sign In
+                  {t('signIn')}
                   <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
                 </>
               )}
@@ -123,15 +126,15 @@ const LoginPage = () => {
 
           <div className="mt-8 pt-6 border-t border-[var(--color-border)] text-center space-y-3 relative z-10">
             <p className="text-sm text-[var(--color-text-secondary)]">
-              New Intern?{' '}
+              {t('dontHaveAccount')}{' '}
               <Link to="/auth/register/student" className="font-semibold text-[var(--color-primary)] hover:opacity-80 transition-colors">
-                Register here
+                {t('register')}
               </Link>
             </p>
             <p className="text-sm text-[var(--color-text-secondary)]">
               Staff Member?{' '}
               <Link to="/auth/register/staff" className="font-semibold text-[var(--color-primary)] hover:opacity-80 transition-colors">
-                Request access
+                {t('requestStaffAccess')}
               </Link>
             </p>
           </div>
