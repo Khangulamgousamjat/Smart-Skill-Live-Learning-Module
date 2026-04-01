@@ -116,6 +116,8 @@ import NotFoundPage
 import SettingsPage from './pages/shared/SettingsPage';
 import PublicProfile from './pages/shared/PublicProfile';
 import Leaderboard from './pages/shared/Leaderboard';
+import DepartmentForums from './pages/shared/DepartmentForums';
+import HelpBoard from './pages/shared/HelpBoard';
 
 // ── PROTECTED ROUTE ───────────────────────────────
 function ProtectedRoute({ children, allowedRoles }) {
@@ -435,6 +437,16 @@ export default function App() {
         <Route path="/leaderboard" element={
           <ProtectedRoute>
             <Leaderboard />
+          </ProtectedRoute>
+        } />
+        <Route path="/forums" element={
+          <ProtectedRoute>
+            <DepartmentForums />
+          </ProtectedRoute>
+        } />
+        <Route path="/help-board" element={
+          <ProtectedRoute>
+            <HelpBoard />
           </ProtectedRoute>
         } />
 

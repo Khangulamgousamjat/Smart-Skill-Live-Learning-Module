@@ -176,6 +176,51 @@ async function createTablesIfNotExist() {
       )
     `);
 
+    await db.query(`
+      CREATE TABLE IF NOT EXISTS messages (
+        id           UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+        sender_id    UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+        receiver_id  UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+        content      TEXT NOT NULL,
+        is_read      BOOLEAN DEFAULT FALSE,
+        created_at   TIMESTAMP DEFAULT NOW()
+      )
+    `);
+
+    await db.query(`
+      CREATE TABLE IF NOT EXISTS forum_posts (
+        id            UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+        author_id     UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+        department_id UUID NOT NULL REFERENCES departments(id) ON DELETE CASCADE,
+        title         VARCHAR(255) NOT NULL,
+        content       TEXT NOT NULL,
+        created_at    TIMESTAMP DEFAULT NOW(),
+        updated_at    TIMESTAMP DEFAULT NOW()
+      )
+    `);
+
+    await db.query(`
+      CREATE TABLE IF NOT EXISTS forum_comments (
+        id          UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+        post_id     UUID NOT NULL REFERENCES forum_posts(id) ON DELETE CASCADE,
+        author_id   UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+        content     TEXT NOT NULL,
+        created_at  TIMESTAMP DEFAULT NOW()
+      )
+    `);
+
+    await db.query(`
+      CREATE TABLE IF NOT EXISTS project_help_requests (
+        id                 UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+        project_id         UUID REFERENCES personal_projects(id) ON DELETE CASCADE,
+        requester_id       UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+        issue_description  TEXT NOT NULL,
+        status             VARCHAR(50) DEFAULT 'open',
+        created_at         TIMESTAMP DEFAULT NOW(),
+        updated_at         TIMESTAMP DEFAULT NOW()
+      )
+    `);
+
     // After creating departments table:
     const deptCheck = await db.query(
       'SELECT COUNT(*) FROM departments'

@@ -16,6 +16,9 @@ import certificateRoutes from './routes/certificate.routes.js';
 import evaluationRoutes from './routes/evaluation.routes.js';
 import aiRoutes from './routes/ai.routes.js';
 import userRoutes from './routes/user.routes.js';
+import messageRoutes from './routes/message.routes.js';
+import forumRoutes from './routes/forum.routes.js';
+import helpRoutes from './routes/help.routes.js';
 
 // Add any other existing routes here as they are developed
 // import lectureRoutes from './routes/lecture.routes.js'; (Placeholder)
@@ -66,6 +69,9 @@ app.use('/api/certificates', certificateRoutes);
 app.use('/api/evaluations', evaluationRoutes);
 app.use('/api/ai', aiRoutes);
 app.use('/api/users', userRoutes);
+app.use('/api/messages', messageRoutes);
+app.use('/api/forums', forumRoutes);
+app.use('/api/help-board', helpRoutes);
 
 // Health check
 app.get('/api/health', (req, res) => {
