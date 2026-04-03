@@ -164,7 +164,7 @@ export default function StudentDashboard() {
         <div className="grid grid-cols-1 lg:grid-cols-5 gap-8">
           
           {/* AI Daily Mission (Left 40%) */}
-          <div className="lg:col-span-2 bg-[#0F1117] rounded-[2.5rem] p-10 text-white relative overflow-hidden group shadow-2xl border border-white/5">
+          <div className="lg:col-span-2 bg-[var(--color-sidebar-bg)] rounded-[2.5rem] p-10 text-white relative overflow-hidden group shadow-2xl border border-white/5">
              <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-indigo-500/5 to-purple-500/10" />
              <div className="absolute -bottom-10 -right-10 opacity-10 pointer-events-none group-hover:scale-110 transition-transform duration-1000 text-indigo-500">
                 <Bot size={220} />

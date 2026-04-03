@@ -1,7 +1,40 @@
-import React from 'react';
-import { Zap, FolderOpen, Video, Award, TrendingUp, Calendar, ArrowRight, Loader2 } from 'lucide-react';
-import { useAppContext } from '../../context/AppContext';
-import { SkillRadarChart } from '../../components/charts/SkillRadarChart';
+import { 
+  LineChart, Line, XAxis, YAxis, CartesianGrid, 
+  Tooltip, ResponsiveContainer, AreaChart, Area 
+} from 'recharts';
+import Skeleton from '../../components/ui/Skeleton';
+
+const velocityData = [
+  { name: 'Week 1', score: 45 },
+  { name: 'Week 2', score: 52 },
+  { name: 'Week 3', score: 48 },
+  { name: 'Week 4', score: 61 },
+  { name: 'Week 5', score: 55 },
+  { name: 'Week 6', score: 67 },
+  { name: 'Week 7', score: 75 },
+];
+
+const StudentDashboardSkeleton = () => {
+    const { t } = useAppContext();
+    return (
+        <div className="space-y-6 animate-pulse">
+            <div className="flex justify-between items-center mb-6">
+                <div className="space-y-2">
+                    <Skeleton className="h-8 w-48" />
+                    <Skeleton className="h-4 w-64" />
+                </div>
+            </div>
+            <Skeleton className="h-40 w-full rounded-[40px]" />
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                {[1, 2, 3, 4].map(i => <Skeleton key={i} className="h-32 rounded-[32px]" />)}
+            </div>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <Skeleton className="h-64 rounded-[40px]" />
+                <Skeleton className="h-64 rounded-[40px]" />
+            </div>
+        </div>
+    );
+};
 
 export const StudentDashboard = () => {
   const { t, isDarkMode, studentOverview, studentSkills, isDataLoading, setActiveTab } = useAppContext();
@@ -11,12 +44,7 @@ export const StudentDashboard = () => {
     : 0;
 
   if (isDataLoading && !studentOverview.xp) {
-    return (
-      <div className="flex flex-col items-center justify-center h-64">
-        <Loader2 className="w-10 h-10 animate-spin text-amber-500" />
-        <p className={`mt-4 ${t.textMuted}`}>Loading your success metrics...</p>
-      </div>
-    );
+    return <StudentDashboardSkeleton />;
   }
 
   return (
@@ -122,8 +150,12 @@ export const StudentDashboard = () => {
                     </div>
                 </div>
             ) : (
-                <div className="py-10 text-center bg-[var(--color-surface)]/3 rounded-[32px] border border-dashed border-white/5">
-                    <p className={`text-sm font-medium ${t.textMuted}`}>No live sessions scheduled for your track today.</p>
+                <div className="py-16 text-center bg-[var(--color-surface-2)]/30 rounded-[32px] border border-dashed border-[var(--color-border)] flex flex-col items-center group">
+                    <div className="w-16 h-16 rounded-full bg-[var(--color-surface)]/5 border border-[var(--color-border)] flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-500">
+                        <Calendar className="w-8 h-8 text-[var(--color-text-muted)] opacity-20" />
+                    </div>
+                    <p className={`text-xs font-black uppercase tracking-[2px] ${t.textMuted} mb-1`}>No Sessions Active</p>
+                    <p className={`text-[10px] font-bold opacity-40 italic ${t.textMuted}`}>Next synchronization scheduled for tomorrow at 09:00 AM</p>
                 </div>
             )}
         </div>
@@ -222,9 +254,44 @@ export const StudentDashboard = () => {
          <div className={`lg:col-span-8 p-8 rounded-[40px] ${t.card} border ${t.borderSoft}`}>
             <h3 className={`text-lg font-bold font-sora mb-1 ${t.textMain}`}>Development Velocity</h3>
             <p className={`text-xs font-medium mb-6 ${t.textMuted}`}>Week-by-week performance improvements</p>
-            <div className="h-48 flex items-center justify-center bg-[var(--color-surface)]/3 rounded-3xl border border-dashed border-white/5">
-               <TrendingUp className="w-8 h-8 text-slate-700 opacity-20" />
-               <p className="text-[10px] font-black uppercase tracking-widest text-slate-700 ml-4">Progress Visualizer Coming in Phase 6</p>
+            <div className="h-64 mt-4">
+              <ResponsiveContainer width="100%" height="100%">
+                <AreaChart data={velocityData}>
+                  <defs>
+                    <linearGradient id="colorScore" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="var(--color-primary)" stopOpacity={0.3}/>
+                      <stop offset="95%" stopColor="var(--color-primary)" stopOpacity={0}/>
+                    </linearGradient>
+                  </defs>
+                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="var(--color-border)" opacity={0.5} />
+                  <XAxis 
+                    dataKey="name" 
+                    axisLine={false} 
+                    tickLine={false} 
+                    tick={{ fontSize: 10, fontWeight: 700, fill: 'var(--color-text-muted)' }} 
+                    dy={10}
+                  />
+                  <YAxis hide />
+                  <Tooltip 
+                    contentStyle={{ 
+                      backgroundColor: 'var(--color-surface)', 
+                      border: '1px solid var(--color-border)', 
+                      borderRadius: '12px',
+                      fontSize: '11px',
+                      fontWeight: 'bold'
+                    }} 
+                    itemStyle={{ color: 'var(--color-primary)' }}
+                  />
+                  <Area 
+                    type="monotone" 
+                    dataKey="score" 
+                    stroke="var(--color-primary)" 
+                    strokeWidth={4}
+                    fillOpacity={1} 
+                    fill="url(#colorScore)" 
+                  />
+                </AreaChart>
+              </ResponsiveContainer>
             </div>
          </div>
          <div className={`lg:col-span-4 p-8 rounded-[40px] shadow-sm bg-gradient-to-br from-indigo-500/10 to-blue-500/5 border border-indigo-500/20`}>

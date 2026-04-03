@@ -135,20 +135,20 @@ export const Sidebar = () => {
         ${themeStyles.sidebar}
       `}>
         {/* Logo / Branding */}
-        <div className="flex flex-col items-center px-4 py-8 border-b border-white/10 relative">
+        <div className={`flex flex-col items-center px-4 py-8 border-b ${isDarkMode ? 'border-white/10' : 'border-gray-100'} relative`}>
           <button 
              onClick={() => setIsSidebarOpen(false)}
              className="lg:hidden absolute left-4 top-8 p-1.5 rounded-lg bg-[var(--color-surface)]/5 text-slate-500"
           >
              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7"></path></svg>
           </button>
-          <span className="text-[var(--color-accent)] font-bold text-lg leading-tight text-center font-sora tracking-tight">
+          <span className={`${isDarkMode ? 'text-[var(--color-accent)]' : 'text-[var(--color-primary)]'} font-bold text-lg leading-tight text-center font-sora tracking-tight`}>
             Smart Skill &
           </span>
-          <span className="text-[var(--color-accent)] font-bold text-lg leading-tight text-center font-sora tracking-tight">
+          <span className={`${isDarkMode ? 'text-[var(--color-accent)]' : 'text-[var(--color-primary)]'} font-bold text-lg leading-tight text-center font-sora tracking-tight`}>
             Live Learning
           </span>
-          <span className="text-white/40 text-[10px] mt-2 text-center font-black uppercase tracking-[3px]">
+          <span className={`${isDarkMode ? 'text-white/40' : 'text-slate-400'} text-[10px] mt-2 text-center font-black uppercase tracking-[3px]`}>
             Gous org
           </span>
         </div>
@@ -163,7 +163,7 @@ export const Sidebar = () => {
               onClick={() => handleNav(item.path)}
               className={`w-full flex items-center px-3 py-2.5 rounded-xl text-sm text-left transition-all duration-200 ${
                 active
-                  ? 'font-semibold shadow-inner border text-white bg-white/10 border-white/20'
+                  ? 'font-semibold shadow-inner border'
                   : `${themeStyles.sidebarTextMuted} ${themeStyles.sidebarHover}`
               }`}
               style={active ? {
@@ -184,8 +184,8 @@ export const Sidebar = () => {
 
       {/* AI Toolkit (student only) */}
       {showAIToolkit && (
-        <div className={`px-3 pb-2 pt-1 border-t border-white/10`}>
-          <p className={`text-[10px] font-bold uppercase tracking-widest mb-2 px-1 text-white/40`}>AI Toolkit</p>
+        <div className={`px-3 pb-2 pt-1 border-t ${isDarkMode ? 'border-white/10' : 'border-gray-100'}`}>
+          <p className={`text-[10px] font-bold uppercase tracking-widest mb-2 px-1 ${isDarkMode ? 'text-white/40' : 'text-slate-400'}`}>AI Toolkit</p>
           <div className="grid grid-cols-2 gap-1.5 w-full">
             <button
               onClick={handleCareerCoach}
@@ -234,7 +234,7 @@ export const Sidebar = () => {
               {user?.full_name?.charAt(0)?.toUpperCase() || 'U'}
             </div>
             <div className="ml-2.5 min-w-0">
-              <p className={`text-sm font-medium leading-tight truncate text-[#F1F5F9]`}>
+              <p className={`text-sm font-medium leading-tight truncate ${themeStyles.sidebarText}`}>
                 {user?.full_name || 'User'}
               </p>
               <p className={`text-[10px] mt-0.5 font-semibold ${roleColor}`}>{roleLabel}</p>

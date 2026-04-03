@@ -44,10 +44,10 @@
   --color-text-muted:      #94A3B8;
   --color-text-inverse:    #FFFFFF;
 
-  --color-sidebar-bg:      #1E3A5F;
-  --color-sidebar-text:    #CBD5E1;
+  --color-sidebar-bg:      #FFFFFF;
+  --color-sidebar-text:    #334155;
   --color-sidebar-active:  #F4A100;
-  --color-sidebar-hover:   rgba(255,255,255,0.08);
+  --color-sidebar-hover:   rgba(0,0,0,0.04);
 }
 
 /* ── DARK MODE VARIABLES ──────────────────────────────── */
@@ -216,14 +216,15 @@ textarea::placeholder {
 .sidebar-container span, 
 .sidebar-container label, 
 .sidebar-container button {
-  color: var(--color-sidebar-text) !important;
+  color: var(--color-sidebar-text);
 }
 
-.sidebar-container .text-white\/40 {
-  color: rgba(255, 255, 255, 0.4) !important;
+.sidebar-container .text-white\/40,
+.sidebar-container .text-white\/60 {
+  color: var(--color-text-muted);
 }
 
 .sidebar-container .text-\[\#F1F5F9\] {
-  color: #F1F5F9 !important;
+  color: var(--color-text-primary);
 }
 

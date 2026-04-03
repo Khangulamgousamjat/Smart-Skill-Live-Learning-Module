@@ -2,8 +2,8 @@ import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { 
   User, Mail, Building2, Shield, Briefcase, MapPin, 
-  Phone, Globe, Edit, Save, X, Loader2, Github, 
-  Linkedin, Award, CheckCircle2, CloudUpload
+  Phone, Globe, Edit, Save, X, Loader2, Link, 
+  Award, CheckCircle2, CloudUpload
 } from 'lucide-react';
 import { useLanguage } from '../../contexts/LanguageContext';
 import { updateUser } from '../../store/slices/authSlice';
@@ -292,7 +292,7 @@ export default function ProfilePageTemplate({ children }) {
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
-                      <Github size={18} className="text-black dark:text-white" />
+                      <Link size={18} className="text-black dark:text-white" />
                       <span className="text-xs font-bold uppercase tracking-tight">GitHub</span>
                     </div>
                     {isEditing ? (
@@ -309,7 +309,7 @@ export default function ProfilePageTemplate({ children }) {
                   </div>
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
-                      <Linkedin size={18} className="text-[#0A66C2]" />
+                      <Link size={18} className="text-[#0A66C2]" />
                       <span className="text-xs font-bold uppercase tracking-tight">LinkedIn</span>
                     </div>
                     {isEditing ? (

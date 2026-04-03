@@ -224,7 +224,7 @@ export default function UnifiedMessages({ title, subtitle }) {
                           >
                              <div className={`max-w-[80%] md:max-w-[70%] group relative`}>
                                 <div className={`p-4 rounded-2xl shadow-lg border backdrop-blur-md ${isMine 
-                                  ? 'bg-gradient-to-br from-[var(--color-primary)] to-blue-600 text-white border-blue-400/20 rounded-tr-none' 
+                                  ? 'bg-gradient-to-br from-[var(--color-primary)] to-[var(--color-primary)]/80 text-white border-white/10 rounded-tr-none' 
                                   : 'bg-[var(--color-surface)] text-[var(--color-text-primary)] border-[var(--color-border)] rounded-tl-none shadow-sm'}`}>
                                    <p className="text-sm leading-relaxed whitespace-pre-wrap">{m.content}</p>
                                 </div>

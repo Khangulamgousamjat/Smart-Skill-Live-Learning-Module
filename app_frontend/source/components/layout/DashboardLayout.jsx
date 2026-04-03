@@ -53,14 +53,14 @@ const NAV_KEYS_ROLES = {
     { labelKey: 'profile',        icon: User,            path: '/hr/profile' },
     { labelKey: 'settings',       icon: Settings,        path: '/hr/settings' },
   ],
-  Teacher: [
-    { labelKey: 'teacherDashboard', icon: LayoutDashboard, path: '/Teacher/dashboard' },
-    { labelKey: 'myLectures',      icon: BookOpen,        path: '/Teacher/lectures' },
-    { labelKey: 'resources',       icon: FolderOpen,      path: '/Teacher/resources' },
-    { labelKey: 'qna',             icon: MessageSquare,   path: '/Teacher/qna' },
-    { labelKey: 'messages',        icon: MessageSquare,   path: '/Teacher/messages' },
-    { labelKey: 'profile',         icon: User,            path: '/Teacher/profile' },
-    { labelKey: 'settings',        icon: Settings,        path: '/Teacher/settings' },
+  teacher: [
+    { labelKey: 'teacherDashboard', icon: LayoutDashboard, path: '/teacher/dashboard' },
+    { labelKey: 'myLectures',      icon: BookOpen,        path: '/teacher/lectures' },
+    { labelKey: 'resources',       icon: FolderOpen,      path: '/teacher/resources' },
+    { labelKey: 'qna',             icon: MessageSquare,   path: '/teacher/qna' },
+    { labelKey: 'messages',        icon: MessageSquare,   path: '/teacher/messages' },
+    { labelKey: 'profile',         icon: User,            path: '/teacher/profile' },
+    { labelKey: 'settings',        icon: Settings,        path: '/teacher/settings' },
   ],
   super_admin: [
     { labelKey: 'dashboard',      icon: LayoutDashboard, path: '/admin/dashboard' },

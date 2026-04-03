@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { X, User, Briefcase, Tag, Globe, MapPin, Loader2, Github, Linkedin, Save } from 'lucide-react';
+import { X, User, Briefcase, Tag, Globe, MapPin, Loader2, Link, Save } from 'lucide-react';
 import { useLanguage } from '../../contexts/LanguageContext';
 import { updateUser } from '../../store/slices/authSlice';
 import axiosInstance from '../../api/axios';
@@ -166,7 +166,7 @@ export default function ProfileCompletionModal() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-2">
                 <label className="text-xs font-bold text-[var(--color-text-muted)] uppercase tracking-widest flex items-center gap-2">
-                  <Github size={14} className="text-[var(--color-text-primary)]" />
+                  <Link size={14} className="text-[var(--color-text-primary)]" />
                   GitHub URL
                 </label>
                 <input
@@ -179,7 +179,7 @@ export default function ProfileCompletionModal() {
               </div>
               <div className="space-y-2">
                 <label className="text-xs font-bold text-[var(--color-text-muted)] uppercase tracking-widest flex items-center gap-2">
-                  <Linkedin size={14} className="text-blue-600" />
+                  <Link size={14} className="text-blue-600" />
                   LinkedIn URL
                 </label>
                 <input

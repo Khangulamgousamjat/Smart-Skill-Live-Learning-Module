@@ -133,16 +133,16 @@ export const useAppLogic = () => {
 
   const themeStyles = {
     bg: isDarkMode ? 'bg-[#070D1A] text-[#F1F5F9]' : 'bg-[#F8FAFC] text-[#0F172A]',
-    sidebar: isDarkMode ? 'bg-[#050B14] border-white/10' : 'bg-[#1E3A5F] border-gray-200',
-    sidebarText: 'text-[#F1F5F9]',
-    sidebarTextMuted: 'text-[#94A3B8]',
+    sidebar: isDarkMode ? 'bg-[#050B14] border-white/10' : 'bg-white border-gray-200',
+    sidebarText: isDarkMode ? 'text-[#F1F5F9]' : 'text-[#334155]',
+    sidebarTextMuted: isDarkMode ? 'text-[#94A3B8]' : 'text-[#64748B]',
     card: isDarkMode ? 'bg-[#0F1829] backdrop-blur-xl border border-[#1E2D45] shadow-2xl relative' : 'bg-white border border-gray-100 shadow-sm relative',
     textMain: isDarkMode ? 'text-[#F1F5F9]' : 'text-[#0F172A]',
     textMuted: isDarkMode ? 'text-[#94A3B8]' : 'text-[#64748B]',
     border: isDarkMode ? 'border-[#1E2D45]' : 'border-[#E2E8F0]',
     borderSoft: isDarkMode ? 'border-white/5' : 'border-gray-100',
     hover: isDarkMode ? 'hover:bg-white/5' : 'hover:bg-gray-50',
-    sidebarHover: 'hover:bg-white/10',
+    sidebarHover: isDarkMode ? 'hover:bg-white/10' : 'hover:bg-black/5',
     input: isDarkMode ? 'bg-[#162033] border-[#1E2D45] text-[#F1F5F9] placeholder-[#94A3B8]' : 'bg-[#F1F5F9] border-[#E2E8F0] text-[#0F172A]',
     modalBg: isDarkMode ? 'bg-[#0F1829]/95 backdrop-blur-2xl border border-[#1E2D45] shadow-2xl' : 'bg-white border border-gray-100 shadow-xl',
     profileSection: isDarkMode ? 'bg-black/20' : 'bg-gray-50'

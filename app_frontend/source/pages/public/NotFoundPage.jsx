@@ -10,7 +10,7 @@ export default function NotFoundPage() {
       super_admin : '/admin/dashboard',
       hr_admin    : '/hr/dashboard',
       manager     : '/manager/dashboard',
-      Teacher      : '/Teacher/dashboard',
+      teacher      : '/teacher/dashboard',
       student     : '/student/dashboard',
     };
     return homes[user?.role] || '/login';

@@ -30,7 +30,7 @@ const LoginPage = () => {
           student: '/student/dashboard',
           manager: '/manager/dashboard',
           hr_admin: '/hr/dashboard',
-          Teacher: '/Teacher/dashboard',
+          teacher: '/teacher/dashboard',
           super_admin: '/admin/dashboard'
         };
         navigate(roleRedirect[res.data.data.user.role] || '/login');
@@ -119,7 +119,7 @@ const LoginPage = () => {
                 />
               </div>
               <div className="flex justify-end mt-2">
-                <Link to="/auth/forgot-password" **bold text color-primary** className="text-[10px] font-black uppercase tracking-widest text-[var(--color-primary)] hover:opacity-80 transition-all">
+                <Link to="/auth/forgot-password" className="text-[10px] font-black uppercase tracking-widest text-[var(--color-primary)] hover:opacity-80 transition-all">
                   {t('forgotPassword')}?
                 </Link>
               </div>

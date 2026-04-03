@@ -4,7 +4,10 @@ import {
   createEvaluation,
   assignProject,
   getPendingReviews,
-  reviewAssignment
+  reviewAssignment,
+  getDepartmentLectures,
+  scheduleLecture,
+  getSkillStats
 } from '../controllers/manager.controller.js';
 import { verifyToken } from '../middleware/auth.middleware.js';
 import { checkRole } from '../middleware/roleCheck.middleware.js';

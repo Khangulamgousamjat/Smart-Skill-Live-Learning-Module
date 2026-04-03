@@ -13,7 +13,6 @@ import {
   GraduationCap, 
   Briefcase, 
   Users, 
-  Linkedin, 
   Mail,
   Globe,
   MessageCircle,
@@ -349,7 +348,7 @@ const LandingPage = () => {
                </p>
                <div className="flex items-center gap-4">
                   <a href="#" className="w-10 h-10 rounded-full bg-[var(--color-surface)]/5 flex items-center justify-center text-slate-400 hover:bg-[#F4A100] hover:text-white transition-all"><Globe className="w-5 h-5" /></a>
-                  <a href="#" className="w-10 h-10 rounded-full bg-[var(--color-surface)]/5 flex items-center justify-center text-slate-400 hover:bg-[#F4A100] hover:text-white transition-all"><Linkedin className="w-5 h-5" /></a>
+                  <a href="#" className="w-10 h-10 rounded-full bg-[var(--color-surface)]/5 flex items-center justify-center text-slate-400 hover:bg-[#F4A100] hover:text-white transition-all"><Globe className="w-5 h-5" /></a>
                   <a href="#" className="w-10 h-10 rounded-full bg-[var(--color-surface)]/5 flex items-center justify-center text-slate-400 hover:bg-[#F4A100] hover:text-white transition-all"><Mail className="w-5 h-5" /></a>
                </div>
             </div>
@@ -369,7 +368,7 @@ const LandingPage = () => {
                <h4 className="font-sora font-semibold text-white mb-6 uppercase tracking-wider text-xs">{t('contact')}</h4>
                <ul className="space-y-4">
                   <li className="flex items-center gap-2 text-sm text-slate-400"><Mail className="w-4 h-4" /> gousk2004@gmail.com</li>
-                  <li className="flex items-center gap-2 text-sm text-slate-400"><Linkedin className="w-4 h-4" /> linkedin.com/in/gousskhan</li>
+                  <li className="flex items-center gap-2 text-sm text-slate-400"><Globe className="w-4 h-4" /> linkedin.com/in/gousskhan</li>
                   <li className="flex items-center gap-2 text-sm text-slate-400"><Globe className="w-4 h-4" /> khangulamgousamjat</li>
                </ul>
                <h4 className="font-sora font-semibold text-white mt-10 mb-6 uppercase tracking-wider text-xs">{t('madeBy')}</h4>
