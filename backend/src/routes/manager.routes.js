@@ -20,4 +20,9 @@ router.post('/projects/assign',   assignProject);
 router.get('/reviews',            getPendingReviews);
 router.patch('/reviews/:id',      reviewAssignment);
 
+// New Routes
+router.get('/lectures',           getDepartmentLectures);
+router.post('/lectures',          scheduleLecture);
+router.get('/skill-stats',        getSkillStats);
+
 export default router;

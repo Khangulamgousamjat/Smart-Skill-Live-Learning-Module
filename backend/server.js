@@ -65,10 +65,35 @@ async function createTablesIfNotExist() {
         access_reason     TEXT,
         dark_mode         BOOLEAN DEFAULT FALSE,
         last_active       TIMESTAMP,
+        position          VARCHAR(150),
+        skills            JSONB DEFAULT '[]',
+        social_links      JSONB DEFAULT '{}',
+        location          VARCHAR(150),
+        is_profile_completed BOOLEAN DEFAULT FALSE,
         created_at        TIMESTAMP DEFAULT NOW(),
         updated_at        TIMESTAMP DEFAULT NOW()
       )
     `);
+
+    // Migration to add columns if they don't exist
+    const columnsToAdd = [
+      { name: 'position', type: 'VARCHAR(150)' },
+      { name: 'skills', type: "JSONB DEFAULT '[]'" },
+      { name: 'social_links', type: "JSONB DEFAULT '{}'" },
+      { name: 'location', type: 'VARCHAR(150)' },
+      { name: 'is_profile_completed', type: 'BOOLEAN DEFAULT FALSE' }
+    ];
+
+    for (const col of columnsToAdd) {
+      await db.query(`
+        DO $$ BEGIN
+          IF NOT EXISTS (SELECT 1 FROM information_schema.columns 
+                         WHERE table_name='users' AND column_name='${col.name}') THEN
+            ALTER TABLE users ADD COLUMN ${col.name} ${col.type};
+          END IF;
+        END $$;
+      `);
+    }
 
     await db.query(`
       CREATE TABLE IF NOT EXISTS role_requests (
@@ -183,6 +208,178 @@ async function createTablesIfNotExist() {
         receiver_id  UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
         content      TEXT NOT NULL,
         is_read      BOOLEAN DEFAULT FALSE,
+        created_at   TIMESTAMP DEFAULT NOW()
+      )
+    `);
+
+    await db.query(`
+      CREATE TABLE IF NOT EXISTS skills (
+        id          UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+        name        VARCHAR(100) NOT NULL UNIQUE,
+        description TEXT,
+        category    VARCHAR(50),
+        is_active   BOOLEAN DEFAULT TRUE,
+        created_at  TIMESTAMP DEFAULT NOW(),
+        updated_at  TIMESTAMP DEFAULT NOW()
+      )
+    `);
+
+    await db.query(`
+      CREATE TABLE IF NOT EXISTS user_skills (
+        id        UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+        user_id   UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+        skill_id  UUID NOT NULL REFERENCES skills(id) ON DELETE CASCADE,
+        level     INTEGER DEFAULT 0,
+        added_at  TIMESTAMP DEFAULT NOW(),
+        UNIQUE(user_id, skill_id)
+      )
+    `);
+
+    await db.query(`
+      CREATE TABLE IF NOT EXISTS department_skills (
+        id            UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+        department_id UUID NOT NULL REFERENCES departments(id) ON DELETE CASCADE,
+        skill_id      UUID NOT NULL REFERENCES skills(id) ON DELETE CASCADE,
+        is_mandatory  BOOLEAN DEFAULT FALSE,
+        created_at    TIMESTAMP DEFAULT NOW(),
+        UNIQUE(department_id, skill_id)
+      )
+    `);
+
+    await db.query(`
+      CREATE TABLE IF NOT EXISTS announcements (
+        id                   UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+        author_id            UUID REFERENCES users(id) ON DELETE SET NULL,
+        title                VARCHAR(255) NOT NULL,
+        body                 TEXT NOT NULL,
+        type                 VARCHAR(20) DEFAULT 'info',
+        target_role          user_role,
+        target_department_id UUID REFERENCES departments(id) ON DELETE SET NULL,
+        is_active            BOOLEAN DEFAULT TRUE,
+        created_at           TIMESTAMP DEFAULT NOW(),
+        updated_at           TIMESTAMP DEFAULT NOW()
+      )
+    `);
+
+    await db.query(`
+       CREATE TABLE IF NOT EXISTS activity_logs (
+        id          UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+        user_id     UUID REFERENCES users(id) ON DELETE SET NULL,
+        action      VARCHAR(100) NOT NULL,
+        entity_type VARCHAR(50),
+        entity_id   UUID,
+        description TEXT,
+        ip_address  VARCHAR(45),
+        created_at  TIMESTAMP DEFAULT NOW()
+      )
+    `);
+
+    await db.query(`
+      CREATE TABLE IF NOT EXISTS projects (
+        id               UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+        department_id    UUID REFERENCES departments(id) ON DELETE SET NULL,
+        title            VARCHAR(255) NOT NULL,
+        description      TEXT,
+        difficulty_level VARCHAR(50) DEFAULT 'Beginner',
+        status           VARCHAR(50) DEFAULT 'In Progress',
+        deadline         TIMESTAMP,
+        max_marks        INTEGER DEFAULT 100,
+        created_by       UUID REFERENCES users(id) ON DELETE SET NULL,
+        created_at       TIMESTAMP DEFAULT NOW(),
+        updated_at       TIMESTAMP DEFAULT NOW()
+      )
+    `);
+
+    await db.query(`
+      CREATE TABLE IF NOT EXISTS project_assignments (
+        id               UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+        project_id       UUID NOT NULL REFERENCES projects(id) ON DELETE CASCADE,
+        intern_id        UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+        status           VARCHAR(50) DEFAULT 'todo',
+        submission_url   VARCHAR(500),
+        submission_notes TEXT,
+        submitted_at     TIMESTAMP,
+        feedback         TEXT,
+        grade            VARCHAR(10),
+        created_at       TIMESTAMP DEFAULT NOW(),
+        updated_at       TIMESTAMP DEFAULT NOW(),
+        UNIQUE(project_id, intern_id)
+      )
+    `);
+
+    await db.query(`
+      CREATE TABLE IF NOT EXISTS lectures (
+        id            UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+        expert_id     UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+        department_id UUID REFERENCES departments(id) ON DELETE SET NULL,
+        title         VARCHAR(255) NOT NULL,
+        description   TEXT,
+        video_url     VARCHAR(500),
+        scheduled_at  TIMESTAMP,
+        status        VARCHAR(20) DEFAULT 'upcoming',
+        is_recorded   BOOLEAN DEFAULT FALSE,
+        created_at    TIMESTAMP DEFAULT NOW(),
+        updated_at    TIMESTAMP DEFAULT NOW()
+      )
+    `);
+
+    await db.query(`
+      CREATE TABLE IF NOT EXISTS resources (
+        id            UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+        uploader_id   UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+        department_id UUID REFERENCES departments(id) ON DELETE SET NULL,
+        title         VARCHAR(255) NOT NULL,
+        type          VARCHAR(50) NOT NULL,
+        url           VARCHAR(500) NOT NULL,
+        created_at    TIMESTAMP DEFAULT NOW()
+      )
+    `);
+
+    await db.query(`
+      CREATE TABLE IF NOT EXISTS lecture_attendance (
+        id         UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+        lecture_id UUID NOT NULL REFERENCES lectures(id) ON DELETE CASCADE,
+        intern_id  UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+        joined_at  TIMESTAMP DEFAULT NOW(),
+        UNIQUE(lecture_id, intern_id)
+      )
+    `);
+
+    await db.query(`
+      CREATE TABLE IF NOT EXISTS certificates (
+        id               UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+        intern_id        UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+        department_id    UUID REFERENCES departments(id) ON DELETE SET NULL,
+        title            VARCHAR(255) NOT NULL,
+        verification_url VARCHAR(500) UNIQUE,
+        issued_at        TIMESTAMP DEFAULT NOW(),
+        created_at       TIMESTAMP DEFAULT NOW()
+      )
+    `);
+
+    await db.query(`
+      CREATE TABLE IF NOT EXISTS evaluations (
+        id            UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+        intern_id     UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+        manager_id    UUID NOT NULL REFERENCES users(id) ON DELETE SET NULL,
+        period_start  DATE,
+        period_end    DATE,
+        scores        JSONB NOT NULL DEFAULT '{}',
+        comments      TEXT,
+        overall_score DECIMAL(4,2),
+        submitted_at  TIMESTAMP DEFAULT NOW()
+      )
+    `);
+
+    await db.query(`
+      CREATE TABLE IF NOT EXISTS qa_questions (
+        id           UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+        lecture_id   UUID NOT NULL REFERENCES lectures(id) ON DELETE CASCADE,
+        student_id   UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+        question     TEXT NOT NULL,
+        answer       TEXT,
+        is_answered  BOOLEAN DEFAULT FALSE,
+        answered_at  TIMESTAMP,
         created_at   TIMESTAMP DEFAULT NOW()
       )
     `);

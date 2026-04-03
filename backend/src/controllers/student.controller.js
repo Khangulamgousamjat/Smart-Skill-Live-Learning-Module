@@ -79,25 +79,21 @@ export const getMySkills = async (req, res) => {
     const result = await pool.query(`
       SELECT 
         s.id, s.name, 
-        iss.current_level as current, 
-        ds.required_level as required
-      FROM intern_skills iss
-      JOIN skills s ON iss.skill_id = s.id
-      JOIN users u ON u.id = iss.intern_id
-      JOIN department_skills ds ON ds.department_id = u.department_id AND ds.skill_id = s.id
+        us.level as current, 
+        ds.is_mandatory
+      FROM user_skills us
+      JOIN skills s ON us.skill_id = s.id
+      JOIN users u ON u.id = us.user_id
+      LEFT JOIN department_skills ds ON ds.department_id = u.department_id AND ds.skill_id = s.id
       WHERE u.id = $1
     `, [studentId]);
 
-    // Format for Radar Chart (0-100 scale mapping if needed, or just levels)
-    // Assuming Beginner=30, Intermediate=60, Advanced=90 for the chart
-    const levelMap = { 'beginner': 30, 'intermediate': 65, 'advanced': 95 };
-    
+    // Format for easier UI consumption
     const formatted = result.rows.map(r => ({
       id: r.id,
       name: r.name,
-      current: levelMap[r.current] || 0,
-      required: levelMap[r.required] || 0,
-      levelRaw: r.current
+      current: r.current, // 0-100 score or 0-5 level
+      is_mandatory: r.is_mandatory || false
     }));
 
     res.json({ success: true, data: formatted });
@@ -134,7 +130,7 @@ export const getMyLectures = async (req, res) => {
   try {
     const result = await pool.query(`
       SELECT 
-        l.id, l.title, l.description, l.scheduled_at, l.meeting_link, l.status,
+        l.id, l.title, l.description, l.scheduled_at, l.video_url, l.status,
         u.full_name as expert_name,
         EXISTS(SELECT 1 FROM lecture_attendance WHERE lecture_id = l.id AND intern_id = $1) as attended
       FROM lectures l
@@ -175,7 +171,6 @@ export const submitProject = async (req, res) => {
     }
 
     // GAMIFICATION: Award XP for submission
-    // We increment XP and update last_activity_at
     await pool.query(`
       UPDATE gamification 
       SET total_xp = total_xp + 100, 
@@ -256,7 +251,7 @@ export const generateRoadmap = async (req, res) => {
   const userId = req.user.id;
   const { topic } = req.body;
   
-  // Mock roadmap generation logic for 20+ topics
+  // Mock roadmap generation logic
   const mockRoadmap = [
     { step: 1, title: `Introduction to ${topic}`, status: 'Not Started' },
     { step: 2, title: `Core Concepts of ${topic}`, status: 'Locked' },

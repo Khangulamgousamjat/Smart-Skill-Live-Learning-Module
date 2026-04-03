@@ -358,3 +358,79 @@ export const updatePlatformSettings = async (req, res) => {
     res.status(500).json({ success: false, message: 'Failed to update settings' });
   }
 };
+
+// ─── ANNOUNCEMENTS ────────────────────────────────────────────────
+export const getAnnouncements = async (req, res) => {
+  try {
+    const result = await pool.query(`
+      SELECT a.*, u.full_name as author_name
+      FROM announcements a
+      JOIN users u ON a.posted_by = u.id
+      ORDER BY a.created_at DESC
+    `);
+    res.json({ success: true, data: result.rows });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ success: false, message: 'Failed to fetch announcements' });
+  }
+};
+
+export const createAnnouncement = async (req, res) => {
+  const { title, body, targetRole, targetDepartmentId } = req.body;
+  const adminId = req.user.id;
+  try {
+    const result = await pool.query(`
+      INSERT INTO announcements (title, body, posted_by, target_role, target_department_id)
+      VALUES ($1, $2, $3, $4, $5)
+      RETURNING *
+    `, [title, body, adminId, targetRole || null, targetDepartmentId || null]);
+    
+    // Log the action
+    await pool.query(`
+      INSERT INTO activity_logs (user_id, action, entity_type, entity_id, description)
+      VALUES ($1, $2, $3, $4, $5)
+    `, [adminId, 'create_announcement', 'announcement', result.rows[0].id, `Created announcement: ${title}`]);
+
+    res.status(201).json({ success: true, data: result.rows[0] });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ success: false, message: 'Failed to create announcement' });
+  }
+};
+
+export const deleteAnnouncement = async (req, res) => {
+  const { id } = req.params;
+  const adminId = req.user.id;
+  try {
+    await pool.query('DELETE FROM announcements WHERE id = $1', [id]);
+    
+    // Log the action
+    await pool.query(`
+      INSERT INTO activity_logs (user_id, action, description)
+      VALUES ($1, $2, $3)
+    `, [adminId, 'delete_announcement', `Deleted announcement ID: ${id}`]);
+
+    res.json({ success: true, message: 'Announcement deleted' });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ success: false, message: 'Failed to delete announcement' });
+  }
+};
+
+// ─── SYSTEM LOGS ──────────────────────────────────────────────────
+export const getSystemLogs = async (req, res) => {
+  const { limit = 50, offset = 0 } = req.query;
+  try {
+    const result = await pool.query(`
+      SELECT al.*, u.full_name as user_name, u.role as user_role
+      FROM activity_logs al
+      LEFT JOIN users u ON al.user_id = u.id
+      ORDER BY al.created_at DESC
+      LIMIT $1 OFFSET $2
+    `, [limit, offset]);
+    res.json({ success: true, data: result.rows });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ success: false, message: 'Failed to fetch system logs' });
+  }
+};

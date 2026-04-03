@@ -19,6 +19,10 @@ import userRoutes from './routes/user.routes.js';
 import messageRoutes from './routes/message.routes.js';
 import forumRoutes from './routes/forum.routes.js';
 import helpRoutes from './routes/help.routes.js';
+import hrRoutes from './routes/hr.routes.js';
+import managerRoutes from './routes/manager.routes.js';
+import adminRoutes from './routes/admin.routes.js';
+import expertRoutes from './routes/expert.routes.js';
 
 // Add any other existing routes here as they are developed
 // import lectureRoutes from './routes/lecture.routes.js'; (Placeholder)
@@ -72,6 +76,10 @@ app.use('/api/users', userRoutes);
 app.use('/api/messages', messageRoutes);
 app.use('/api/forums', forumRoutes);
 app.use('/api/help-board', helpRoutes);
+app.use('/api/hr', hrRoutes);
+app.use('/api/manager', managerRoutes);
+app.use('/api/admin', adminRoutes);
+app.use('/api/expert', expertRoutes);
 
 // Health check
 app.get('/api/health', (req, res) => {

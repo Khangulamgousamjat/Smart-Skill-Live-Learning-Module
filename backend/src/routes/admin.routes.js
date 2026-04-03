@@ -11,7 +11,17 @@ import {
   deleteDepartment,
   getPlatformSettings,
   updatePlatformSettings,
+  getAnnouncements,
+  createAnnouncement,
+  deleteAnnouncement,
+  getSystemLogs,
 } from '../controllers/admin.controller.js';
+import {
+  getAllSkills,
+  createSkill,
+  updateSkill,
+  deleteSkill,
+} from '../controllers/skills.controller.js';
 import { verifyToken } from '../middleware/auth.middleware.js';
 import { checkRole } from '../middleware/roleCheck.middleware.js';
 
@@ -41,5 +51,19 @@ router.delete('/departments/:id',           deleteDepartment);
 // Settings
 router.get('/settings',                    getPlatformSettings);
 router.patch('/settings',                  updatePlatformSettings);
+
+// Announcements
+router.get('/announcements',               getAnnouncements);
+router.post('/announcements',              createAnnouncement);
+router.delete('/announcements/:id',         deleteAnnouncement);
+
+// System Logs
+router.get('/logs',                        getSystemLogs);
+
+// Skills
+router.get('/skills',                      getAllSkills);
+router.post('/skills',                     createSkill);
+router.put('/skills/:id',                  updateSkill);
+router.delete('/skills/:id',               deleteSkill);
 
 export default router;

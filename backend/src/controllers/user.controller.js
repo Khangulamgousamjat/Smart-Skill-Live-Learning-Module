@@ -94,7 +94,10 @@ export const getUserById = async (req, res) => {
  */
 export const updateProfile = async (req, res) => {
   const userId = req.user.id;
-  const { bio, phone, profile_photo_url } = req.body;
+  const { 
+    bio, phone, profile_photo_url, 
+    position, skills, social_links, location 
+  } = req.body;
 
   try {
     const result = await db.query(
@@ -102,10 +105,16 @@ export const updateProfile = async (req, res) => {
        SET bio = COALESCE($1, bio), 
            phone = COALESCE($2, phone), 
            profile_photo_url = COALESCE($3, profile_photo_url),
+           position = COALESCE($4, position),
+           skills = COALESCE($5, skills),
+           social_links = COALESCE($6, social_links),
+           location = COALESCE($7, location),
+           is_profile_completed = TRUE,
            updated_at = NOW()
-       WHERE id = $4
-       RETURNING id, full_name, email, role, bio, phone, profile_photo_url`,
-      [bio, phone, profile_photo_url, userId]
+       WHERE id = $8
+       RETURNING id, full_name, email, role, bio, phone, profile_photo_url, 
+                 position, skills, social_links, location, is_profile_completed`,
+      [bio, phone, profile_photo_url, position, skills, social_links, location, userId]
     );
 
     if (result.rowCount === 0) {

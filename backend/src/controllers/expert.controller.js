@@ -5,10 +5,10 @@ export const getMyLectures = async (req, res) => {
   const expertId = req.user.id;
   try {
     const query = `
-      SELECT id, title, description, scheduled_time as time, link, status 
+      SELECT id, title, description, scheduled_at, video_url, status 
       FROM lectures 
       WHERE expert_id = $1 
-      ORDER BY scheduled_time ASC
+      ORDER BY scheduled_at ASC
     `;
     const result = await pool.query(query, [expertId]);
     res.json({ success: true, count: result.rowCount, data: result.rows });
@@ -21,15 +21,22 @@ export const getMyLectures = async (req, res) => {
 // ─── POST /api/expert/lectures ──────────────────────────────────
 export const scheduleLecture = async (req, res) => {
   const expertId = req.user.id;
-  const { title, description, scheduledTime, link } = req.body;
+  const { title, description, scheduledAt, videoUrl, departmentId } = req.body;
 
   try {
     const query = `
-      INSERT INTO lectures (expert_id, title, description, scheduled_time, link, status)
-      VALUES ($1, $2, $3, $4, $5, 'upcoming')
-      RETURNING id, title, scheduled_time as time, status
+      INSERT INTO lectures (expert_id, department_id, title, description, scheduled_at, video_url, status)
+      VALUES ($1, $2, $3, $4, $5, $6, 'upcoming')
+      RETURNING *
     `;
-    const result = await pool.query(query, [expertId, title, description || '', scheduledTime, link || '']);
+    const result = await pool.query(query, [
+      expertId, 
+      departmentId || null, 
+      title, 
+      description || '', 
+      scheduledAt, 
+      videoUrl || ''
+    ]);
     res.status(201).json({ success: true, message: 'Lecture scheduled.', data: result.rows[0] });
   } catch (error) {
     console.error('schedule lecture error:', error);
@@ -41,8 +48,6 @@ export const scheduleLecture = async (req, res) => {
 export const getMyResources = async (req, res) => {
   const expertId = req.user.id;
   try {
-    // We'll mock returning a list of files or resource links for now, 
-    // assuming a hypothetical `resources` table linked by uploader_id.
     const query = `
       SELECT id, title, type, url, created_at 
       FROM resources 
@@ -60,14 +65,14 @@ export const getMyResources = async (req, res) => {
 // ─── POST /api/expert/resources ─────────────────────────────────
 export const uploadResource = async (req, res) => {
   const expertId = req.user.id;
-  const { title, type, url } = req.body;
+  const { title, type, url, departmentId } = req.body;
   try {
     const query = `
-      INSERT INTO resources (uploader_id, title, type, url)
-      VALUES ($1, $2, $3, $4)
+      INSERT INTO resources (uploader_id, department_id, title, type, url)
+      VALUES ($1, $2, $3, $4, $5)
       RETURNING id, title, type, url, created_at
     `;
-    const result = await pool.query(query, [expertId, title, type, url]);
+    const result = await pool.query(query, [expertId, departmentId || null, title, type, url]);
     res.status(201).json({ success: true, message: 'Resource shared.', data: result.rows[0] });
   } catch (error) {
     console.error('upload resource error:', error);
@@ -80,7 +85,7 @@ export const getPendingQuestions = async (req, res) => {
   const expertId = req.user.id;
   try {
     const query = `
-      SELECT qa.id, qa.question, qa.is_answered, u.first_name, u.last_name, l.title as lecture_title
+      SELECT qa.id, qa.question, qa.is_answered, u.full_name as student_name, l.title as lecture_title
       FROM qa_questions qa
       JOIN lectures l ON qa.lecture_id = l.id
       JOIN users u ON qa.student_id = u.id
@@ -102,7 +107,6 @@ export const answerQuestion = async (req, res) => {
   const { answer } = req.body;
 
   try {
-    // Update the question using the expert_id check through the lecture
     const query = `
       UPDATE qa_questions 
       SET answer = $1, is_answered = true, answered_at = NOW()
