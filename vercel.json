@@ -4,9 +4,10 @@
   "buildCommand": "npm run build --prefix app_frontend",
   "installCommand": "npm install --prefix app_frontend",
   "outputDirectory": "app_frontend/dist",
+  "cleanUrls": true,
   "rewrites": [
     {
-      "source": "/(.*)",
+      "source": "/((?!assets/|favicon.ico|.*\\.).*)",
       "destination": "/index.html"
     }
   ]
