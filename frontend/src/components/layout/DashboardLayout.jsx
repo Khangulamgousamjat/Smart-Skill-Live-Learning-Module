@@ -15,7 +15,7 @@ import {
 import { setTheme } from '../../store/slices/uiSlice';
 import { applyTheme } from '../../utils/applyTheme';
 import { useLanguage } from '../../contexts/LanguageContext';
-import ChatBot from '../chatbot/ChatBot';
+import ChatBot from '../ChatBot/ChatBot';
 import ProfileCompletionModal from '../modals/ProfileCompletionModal';
 
 const NAV_KEYS_ROLES = {
