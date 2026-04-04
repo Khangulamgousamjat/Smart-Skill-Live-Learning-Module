@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux';
 import { useNavigate, Link } from 'react-router-dom';
 import axiosInstance from '../../api/axios';
 import toast from 'react-hot-toast';
+import { Home } from 'lucide-react';
 
 export default function StudentRegisterPage() {
   const { theme } = useSelector((state) => state.ui);
@@ -85,6 +86,13 @@ export default function StudentRegisterPage() {
 
   return (
     <div className={`${theme} min-h-screen flex items-center justify-center bg-[var(--color-bg)] px-4 py-8 transition-colors duration-300`}>
+      <Link 
+        to="/" 
+        className="fixed top-6 left-6 p-3 bg-[var(--color-surface)] border border-[var(--color-border)] rounded-xl shadow-xl hover:translate-y-[-2px] transition-all group z-50 text-[var(--color-primary)] flex items-center justify-center"
+        title="Back to Home"
+      >
+        <Home size={20} className="group-hover:scale-110 transition-transform" />
+      </Link>
       <div className="w-full max-w-lg bg-[var(--color-surface)] border border-[var(--color-border)] rounded-2xl shadow-xl p-8">
         <div className="text-center mb-8">
           <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl mb-4 bg-[var(--color-primary)]">

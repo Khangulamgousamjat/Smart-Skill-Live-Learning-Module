@@ -4,7 +4,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { loginSuccess } from '../../store/slices/authSlice';
 import api from '../../api/axios';
 import toast from 'react-hot-toast';
-import { Mail, Lock, ArrowRight, Loader2, ShieldCheck, Sparkles } from 'lucide-react';
+import { Mail, Lock, ArrowRight, Loader2, ShieldCheck, Sparkles, Home } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useLanguage } from '../../contexts/LanguageContext';
 
@@ -51,6 +51,13 @@ const LoginPage = () => {
 
   return (
     <div className={`${theme} min-h-screen bg-[var(--color-bg)] flex items-center justify-center p-6 relative overflow-hidden transition-colors duration-500`}>
+      <Link 
+        to="/" 
+        className="fixed top-6 left-6 p-3 bg-[var(--color-surface)] border border-[var(--color-border)] rounded-xl shadow-xl hover:translate-y-[-2px] transition-all group z-50 text-[var(--color-primary)] flex items-center justify-center"
+        title="Back to Home"
+      >
+        <Home size={20} className="group-hover:scale-110 transition-transform" />
+      </Link>
       {/* Dynamic Background */}
       <div className="absolute inset-0 z-0">
         <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-indigo-500/10 rounded-full blur-[120px] animate-pulse" />
