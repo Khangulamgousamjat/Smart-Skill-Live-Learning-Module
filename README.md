@@ -12,7 +12,7 @@ The project is structured as a full-stack monorepo bridging a Vite-React fronten
 ```text
 Gous-Org-Learning-Module/
 │
-├── app_frontend/                 # React 18 + Vite Frontend Application
+├── frontend/                 # React 18 + Vite Frontend Application
 │   ├── public/                   # Static uncompiled assets (favicons, etc.)
 │   ├── src/
 │   │   ├── api/                  # API Clients
@@ -114,7 +114,7 @@ The database `001_initial_schema.sql` defines the relationships operating SSLLM:
 
 SSLLM leverages Google's **Gemini 2.5 Flash API** extensively. To maintain zero-trust security architecture, the `GEMINI_API_KEY` never touches the React frontend. 
 
-1. **The AI Router:** Custom queries generated in React via `app_frontend/src/services/geminiApi.js` encapsulate the prompt and send a `POST` request to `[SERVER]/api/ai/ask`.
+1. **The AI Router:** Custom queries generated in React via `frontend/src/services/geminiApi.js` encapsulate the prompt and send a `POST` request to `[SERVER]/api/ai/ask`.
 2. **The AI Controller:** The Node.js Express Controller at `src/controllers/ai.controller.js` parses the incoming request, injects system meta-prompts (e.g. "Act as a Senior Developer..."), and fires off a generation task using the official `@google/genai` library.
 3. **Delivery:** The structured JSON string is passed safely back to the frontend to render inside the target UI module.
 
@@ -186,8 +186,8 @@ npm run dev
 ```
 
 ### 4. Frontend Environment Settings
-Open a new terminal, navigate into `/app_frontend/` and run `npm install`.
-Create a `.env` file at the root of `app_frontend/`:
+Open a new terminal, navigate into `/frontend/` and run `npm install`.
+Create a `.env` file at the root of `frontend/`:
 
 ```env
 # Important: Must map directly to your backend server prefix route.
@@ -205,7 +205,7 @@ npm run dev -- --port 5173
 ## 🎨 Modifying The Design System (Tailwind)
 The SSLLM system utilizes "Glassmorphism" as its primary aesthetic, bound to dynamic theme tokens.
 
-1. **Theme Tokens**: Look inside `app_frontend/src/context/AppContext.jsx`. The variable `t` contains conditional class strings (dark vs light mode).
+1. **Theme Tokens**: Look inside `frontend/src/context/AppContext.jsx`. The variable `t` contains conditional class strings (dark vs light mode).
 2. **Animations**: Built-in Tailwind keyframes (`animate-fade-in`, `animate-slide-up`, `glare-hover`) are explicitly defined inside `tailwind.config.js`. You can adjust timing loops within the `theme: { extend: {} }` keys.
 3. **Gradients**: Core identity colors are `#1E3A5F` (Navy), `#00D2FF` (Cyan Glow), and `#F4A100` (Amber).
 
@@ -221,7 +221,7 @@ The SSLLM system utilizes "Glassmorphism" as its primary aesthetic, bound to dyn
 
 ### Frontend (Vercel / Netlify)
 1. Link your personal GitHub repository to Vercel.
-2. Set Root Directory manually to `app_frontend/`.
+2. Set Root Directory manually to `frontend/`.
 3. Build Command: `npm run build`
 4. Output Directory: `dist`
 5. Very Important: Add the environment variable `VITE_API_BASE_URL` to Vercel. Set the value to exactly whatever the HTTPS link of your backend is *(Example: `https://ssllm-api.onrender.com/api`)*.
