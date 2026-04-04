@@ -73,7 +73,7 @@ const LoginPage = () => {
           <h1 className="text-4xl font-bold font-sora text-[var(--color-text-primary)] tracking-tight mb-2">
             SSLLM <span className="text-[var(--color-primary)]">Platform</span>
           </h1>
-          <p className="text-[var(--color-text-muted)] font-black uppercase tracking-[0.2em] text-[10px]">
+          <p className="text-[var(--color-text-secondary)] font-semibold uppercase tracking-[0.1em] text-[11px]">
             Institutional Knowledge Retrieval Engine
           </p>
         </div>
@@ -87,7 +87,7 @@ const LoginPage = () => {
           
           <form onSubmit={handleLogin} className="space-y-6 relative z-10">
             <div className="space-y-2">
-              <label className="text-[10px] font-black uppercase tracking-widest text-[var(--color-text-muted)] ml-2">{t('emailAddress')}</label>
+              <label className="text-[11px] font-bold uppercase tracking-wider text-[var(--color-text-secondary)] ml-2">{t('emailAddress')}</label>
               <div className="relative group/input">
                 <div className="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none text-[var(--color-text-muted)] group-focus-within/input:text-[var(--color-primary)] transition-colors">
                   <Mail className="h-5 w-5" />
@@ -104,7 +104,7 @@ const LoginPage = () => {
             </div>
 
             <div className="space-y-2">
-              <label className="text-[10px] font-black uppercase tracking-widest text-[var(--color-text-muted)] ml-2">{t('password')}</label>
+              <label className="text-[11px] font-bold uppercase tracking-wider text-[var(--color-text-secondary)] ml-2">{t('password')}</label>
               <div className="relative group/input">
                 <div className="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none text-[var(--color-text-muted)] group-focus-within/input:text-[var(--color-primary)] transition-colors">
                   <Lock className="h-5 w-5" />
@@ -119,7 +119,7 @@ const LoginPage = () => {
                 />
               </div>
               <div className="flex justify-end mt-2">
-                <Link to="/auth/forgot-password" className="text-[10px] font-black uppercase tracking-widest text-[var(--color-primary)] hover:opacity-80 transition-all">
+                <Link to="/auth/forgot-password" id="forgot_password_link" className="text-xs font-bold text-[var(--color-primary)] hover:underline transition-all">
                   {t('forgotPassword')}?
                 </Link>
               </div>
@@ -140,20 +140,20 @@ const LoginPage = () => {
           </form>
 
           <div className="mt-12 pt-8 border-t border-[var(--color-border)] space-y-4 text-center">
-            <p className="text-[10px] font-bold text-[var(--color-text-muted)] uppercase tracking-widest leading-relaxed">
+            <p className="text-[11px] font-semibold text-[var(--color-text-secondary)] uppercase tracking-wide leading-relaxed">
               New to the ecosystem?{' '}
-              <Link to="/auth/register/student" className="text-[var(--color-primary)] hover:underline">
+              <Link to="/auth/register/student" className="text-[var(--color-primary)] font-bold hover:underline">
                 Provision Intern ID
               </Link>
-              <span className="mx-3 opacity-20">|</span>
-              <Link to="/auth/register/staff" className="text-[var(--color-primary)] hover:underline">
+              <span className="mx-3 opacity-40">|</span>
+              <Link to="/auth/register/staff" className="text-[var(--color-primary)] font-bold hover:underline">
                 Request Staff Auth
               </Link>
             </p>
           </div>
         </div>
         
-        <p className="mt-8 text-center text-[var(--color-text-muted)] text-[10px] uppercase font-black tracking-[0.3em] opacity-30">
+        <p className="mt-8 text-center text-[var(--color-text-muted)] text-[10px] uppercase font-bold tracking-[0.2em] opacity-60">
           SECURED BY SSLLM CORE INFRASTRUCTURE
         </p>
       </motion.div>
