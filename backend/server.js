@@ -1,3 +1,4 @@
+import http from 'http';
 import app from './src/app.js';
 import { db } from './src/config/db.js';
 import { initializeSocket } from './src/config/socket.js';
