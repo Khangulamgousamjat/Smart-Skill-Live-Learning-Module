@@ -10,7 +10,7 @@ import {
   ChevronLeft, ChevronRight, LogOut, Sun, Moon,
   BarChart2, Target, CheckSquare, Megaphone,
   ClipboardList, Building2, Lightbulb, GraduationCap,
-  Menu, X, Trophy, AlertCircle
+  Menu, X, Trophy, AlertCircle, Sparkles
 } from 'lucide-react';
 import { setTheme } from '../../store/slices/uiSlice';
 import { applyTheme } from '../../utils/applyTheme';
