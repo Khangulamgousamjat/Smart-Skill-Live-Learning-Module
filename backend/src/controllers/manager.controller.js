@@ -1,4 +1,5 @@
 import pool from '../config/db.js';
+import { getOrSetCache, clearCache } from '../utils/cache.js';
 
 // ─── GET /api/manager/reviews ─────────────────────────────────────
 export const getPendingReviews = async (req, res) => {
@@ -53,6 +54,11 @@ export const reviewAssignment = async (req, res) => {
     }
 
     res.json({ success: true, message: `Project ${status}` });
+
+    // Invalidate Caches
+    clearCache(`manager_team_${managerId}`);
+    clearCache('hr_all_interns');
+    clearCache('hr_department_stats');
   } catch (err) {
     console.error(err);
     res.status(500).json({ success: false, message: 'Failed to update review' });
@@ -62,20 +68,25 @@ export const reviewAssignment = async (req, res) => {
 // ─── GET /api/manager/team ──────────────────────────────────────────
 export const getMyTeam = async (req, res) => {
   const managerId = req.user.id;
-  try {
-    const result = await pool.query(`
-      SELECT 
-        u.id, u.full_name, u.email, u.profile_photo_url, u.last_active,
-        g.total_xp, g.current_level,
-        (SELECT count(*) FROM project_assignments WHERE intern_id = u.id AND status = 'completed') as projects_completed
-      FROM users u
-      LEFT JOIN gamification g ON u.id = g.user_id
-      WHERE u.role = 'student'
-      AND u.department_id = (SELECT department_id FROM users WHERE id = $1)
-      ORDER BY g.total_xp DESC
-    `, [managerId]);
+  const cacheKey = `manager_team_${managerId}`;
 
-    res.json({ success: true, data: result.rows });
+  try {
+    const data = await getOrSetCache(cacheKey, async () => {
+      const result = await pool.query(`
+        SELECT 
+          u.id, u.full_name, u.email, u.profile_photo_url, u.last_active,
+          g.total_xp, g.current_level,
+          (SELECT count(*) FROM project_assignments WHERE intern_id = u.id AND status = 'completed') as projects_completed
+        FROM users u
+        LEFT JOIN gamification g ON u.id = g.user_id
+        WHERE u.role = 'student'
+        AND u.department_id = (SELECT department_id FROM users WHERE id = $1)
+        ORDER BY g.total_xp DESC
+      `, [managerId]);
+      return result.rows;
+    });
+
+    res.json({ success: true, data });
   } catch (err) {
     console.error(err);
     res.status(500).json({ success: false, message: 'Failed to fetch team data' });
@@ -132,6 +143,10 @@ export const assignProject = async (req, res) => {
     `, [internId, projectId, managerId]);
 
     res.status(201).json({ success: true, message: 'Project assigned successfully', data: result.rows[0] });
+
+    // Invalidate Cache
+    clearCache(`manager_team_${managerId}`);
+    clearCache('hr_all_interns');
   } catch (err) {
     console.error(err);
     res.status(500).json({ success: false, message: 'Failed to assign project' });
@@ -176,6 +191,9 @@ export const scheduleLecture = async (req, res) => {
     `, [title, description, scheduledAt, meetingLink, teacherId || managerId, deptId]);
 
     res.status(201).json({ success: true, message: 'Lecture scheduled successfully', data: result.rows[0] });
+
+    // Invalidate Teacher Cache if teacherId provided
+    if (teacherId) clearCache(`teacher_stats_${teacherId}`);
   } catch (err) {
     console.error(err);
     res.status(500).json({ success: false, message: 'Failed to schedule lecture' });

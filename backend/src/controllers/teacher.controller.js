@@ -1,4 +1,5 @@
 import pool from '../config/db.js';
+import { getOrSetCache, clearCache } from '../utils/cache.js';
 
 // ─── GET /api/teacher/lectures ───────────────────────────────────
 export const getMyLectures = async (req, res) => {
@@ -38,6 +39,9 @@ export const scheduleLecture = async (req, res) => {
       videoUrl || ''
     ]);
     res.status(201).json({ success: true, message: 'Lecture scheduled.', data: result.rows[0] });
+    
+    // Invalidate Cache
+    clearCache(`teacher_stats_${teacherId}`);
   } catch (error) {
     console.error('schedule lecture error:', error);
     res.status(500).json({ success: false, message: 'Failed to schedule lecture.' });
@@ -120,6 +124,9 @@ export const answerQuestion = async (req, res) => {
     }
     
     res.json({ success: true, message: 'Question answered successfully.' });
+
+    // Invalidate Cache
+    clearCache(`teacher_stats_${teacherId}`);
   } catch (error) {
     console.error('answer Q&A error:', error);
     res.status(500).json({ success: false, message: 'Failed to save answer.' });
@@ -155,6 +162,9 @@ export const uploadVideo = async (req, res) => {
       [teacherId, title, description, video_url, thumbnail_url, duration, category, JSON.stringify(tags || []), is_public ?? true]
     );
     res.status(201).json({ success: true, message: 'Video uploaded successfully', data: result.rows[0] });
+
+    // Invalidate Cache
+    clearCache(`teacher_stats_${teacherId}`);
   } catch (error) {
     console.error('Upload video error:', error);
     res.status(500).json({ success: false, message: 'Failed to upload video' });
@@ -211,39 +221,38 @@ export const deleteVideo = async (req, res) => {
 // ─── GET /api/teacher/dashboard/stats ─────────────────────────────
 export const getDashboardStats = async (req, res) => {
   const teacherId = req.user.id;
-  try {
-    const [students, lectures, videos, pendingQna] = await Promise.all([
-      // Total students in the teacher's department (or global for now)
-      pool.query(`
-        SELECT COUNT(*) FROM users 
-        WHERE role = 'student' 
-        AND department_id = (SELECT department_id FROM users WHERE id = $1)
-      `, [teacherId]),
-      
-      // Total lectures scheduled by this teacher
-      pool.query(`SELECT COUNT(*) FROM lectures WHERE teacher_id = $1`, [teacherId]),
-      
-      // Total videos published by this teacher
-      pool.query(`SELECT COUNT(*) FROM teacher_videos WHERE teacher_id = $1`, [teacherId]),
-      
-      // Total pending Q&A questions for this teacher's lectures
-      pool.query(`
-        SELECT COUNT(*) FROM qa_questions 
-        WHERE lecture_id IN (SELECT id FROM lectures WHERE teacher_id = $1)
-        AND is_answered = false
-      `, [teacherId])
-    ]);
+  const cacheKey = `teacher_stats_${teacherId}`;
 
-    res.json({
-      success: true,
-      data: {
+  try {
+    const stats = await getOrSetCache(cacheKey, async () => {
+      const [students, lectures, videos, pendingQna] = await Promise.all([
+        pool.query(`
+          SELECT COUNT(*) FROM users 
+          WHERE role = 'student' 
+          AND department_id = (SELECT department_id FROM users WHERE id = $1)
+        `, [teacherId]),
+        
+        pool.query(`SELECT COUNT(*) FROM lectures WHERE teacher_id = $1`, [teacherId]),
+        
+        pool.query(`SELECT COUNT(*) FROM teacher_videos WHERE teacher_id = $1`, [teacherId]),
+        
+        pool.query(`
+          SELECT COUNT(*) FROM qa_questions 
+          WHERE lecture_id IN (SELECT id FROM lectures WHERE teacher_id = $1)
+          AND is_answered = false
+        `, [teacherId])
+      ]);
+
+      return {
         totalStudents: parseInt(students.rows[0]?.count || 0),
         totalLectures: parseInt(lectures.rows[0]?.count || 0),
         totalVideos: parseInt(videos.rows[0]?.count || 0),
         pendingQna: parseInt(pendingQna.rows[0]?.count || 0),
-        avgRating: 4.8 // Placeholder for now
-      }
+        avgRating: 4.8
+      };
     });
+
+    res.json({ success: true, data: stats });
   } catch (error) {
     console.error('Get teacher stats error:', error);
     res.status(500).json({ success: false, message: 'Failed to fetch dashboard statistics.' });

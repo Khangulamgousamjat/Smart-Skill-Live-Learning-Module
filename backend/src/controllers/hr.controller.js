@@ -1,22 +1,26 @@
 import pool from '../config/db.js';
+import { getOrSetCache } from '../utils/cache.js';
 
 // ─── GET /api/hr/interns ──────────────────────────────────────────
 export const getAllInterns = async (req, res) => {
   try {
-    const result = await pool.query(`
-      SELECT 
-        u.id, u.full_name, u.email, u.account_status, u.profile_photo_url,
-        u.employee_id, u.created_at, u.last_active,
-        d.name AS department_name,
-        oc.checklist_completed,
-        (SELECT COUNT(*) FROM project_assignments WHERE intern_id = u.id AND status = 'completed') as completed_projects
-      FROM users u
-      LEFT JOIN departments d ON u.department_id = d.id
-      LEFT JOIN onboarding_checklist oc ON u.id = oc.intern_id
-      WHERE u.role = 'student'
-      ORDER BY u.full_name ASC
-    `);
-    res.json({ success: true, data: result.rows });
+    const data = await getOrSetCache('hr_all_interns', async () => {
+      const result = await pool.query(`
+        SELECT 
+          u.id, u.full_name, u.email, u.account_status, u.profile_photo_url,
+          u.employee_id, u.created_at, u.last_active,
+          d.name AS department_name,
+          oc.checklist_completed,
+          (SELECT COUNT(*) FROM project_assignments WHERE intern_id = u.id AND status = 'completed') as completed_projects
+        FROM users u
+        LEFT JOIN departments d ON u.department_id = d.id
+        LEFT JOIN onboarding_checklist oc ON u.id = oc.intern_id
+        WHERE u.role = 'student'
+        ORDER BY u.full_name ASC
+      `);
+      return result.rows;
+    });
+    res.json({ success: true, data });
   } catch (err) {
     console.error(err);
     res.status(500).json({ success: false, message: 'Failed to fetch interns' });
@@ -64,25 +68,28 @@ export const getOnboardingStatus = async (req, res) => {
 // ─── GET /api/hr/department-stats ───────────────────────────────
 export const getDepartmentStats = async (req, res) => {
   try {
-    const result = await pool.query(`
-      SELECT 
-        d.id, d.name,
-        COUNT(DISTINCT u.id) as intern_count,
-        COALESCE(AVG(la.duration_watched_minutes), 0) as avg_attendance,
-        (
-          SELECT COUNT(*) 
-          FROM project_assignments pa 
-          JOIN users u2 ON pa.intern_id = u2.id 
-          WHERE u2.department_id = d.id AND pa.status = 'completed'
-        ) as completed_projects
-      FROM departments d
-      LEFT JOIN users u ON d.id = u.department_id AND u.role = 'student'
-      LEFT JOIN lecture_attendance la ON u.id = la.intern_id
-      GROUP BY d.id, d.name
-      ORDER BY intern_count DESC
-    `);
+    const data = await getOrSetCache('hr_department_stats', async () => {
+      const result = await pool.query(`
+        SELECT 
+          d.id, d.name,
+          COUNT(DISTINCT u.id) as intern_count,
+          COALESCE(AVG(la.duration_watched_minutes), 0) as avg_attendance,
+          (
+            SELECT COUNT(*) 
+            FROM project_assignments pa 
+            JOIN users u2 ON pa.intern_id = u2.id 
+            WHERE u2.department_id = d.id AND pa.status = 'completed'
+          ) as completed_projects
+        FROM departments d
+        LEFT JOIN users u ON d.id = u.department_id AND u.role = 'student'
+        LEFT JOIN lecture_attendance la ON u.id = la.intern_id
+        GROUP BY d.id, d.name
+        ORDER BY intern_count DESC
+      `);
+      return result.rows;
+    });
     
-    res.json({ success: true, data: result.rows });
+    res.json({ success: true, data });
   } catch (err) {
     console.error(err);
     res.status(500).json({ success: false, message: 'Failed to fetch department statistics' });

@@ -1,12 +1,12 @@
 import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import { 
-  BarChart, Bar, XAxis, YAxis, CartesianGrid, 
-  Tooltip, ResponsiveContainer, Cell 
+import {
+  BarChart, Bar, XAxis, YAxis, CartesianGrid,
+  Tooltip, ResponsiveContainer, Cell
 } from 'recharts';
-import { 
-  Plus, Video, Users, BookOpen, MessageSquare, 
-  Calendar, Clock, TrendingUp, ArrowUpRight, Award 
+import {
+  Plus, Video, Users, BookOpen, MessageSquare,
+  Calendar, Clock, TrendingUp, ArrowUpRight, Award
 } from 'lucide-react';
 import StatCard from '../../components/cards/StatCard';
 import { useLanguage } from '../../contexts/LanguageContext';
@@ -25,30 +25,30 @@ const engagementData = [
 ];
 
 const TeacherDashboardSkeleton = () => {
-    return (
-        <div className="space-y-8 animate-pulse text-left">
-            <div className="flex justify-between items-center">
-                <div className="space-y-2">
-                    <Skeleton className="h-10 w-64" />
-                    <Skeleton className="h-4 w-96" />
-                </div>
-                <div className="flex gap-3">
-                   <Skeleton className="h-12 w-40 rounded-xl" />
-                   <Skeleton className="h-12 w-40 rounded-xl" />
-                </div>
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                {[1, 2, 3, 4].map(i => <Skeleton key={i} className="h-32 rounded-3xl" />)}
-            </div>
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                <div className="lg:col-span-2 space-y-8">
-                    <Skeleton className="h-64 rounded-3xl" />
-                    <Skeleton className="h-80 rounded-3xl" />
-                </div>
-                <Skeleton className="h-full min-h-[400px] rounded-3xl" />
-            </div>
+  return (
+    <div className="space-y-8 animate-pulse text-left">
+      <div className="flex justify-between items-center">
+        <div className="space-y-2">
+          <Skeleton className="h-10 w-64" />
+          <Skeleton className="h-4 w-96" />
         </div>
-    );
+        <div className="flex gap-3">
+          <Skeleton className="h-12 w-40 rounded-xl" />
+          <Skeleton className="h-12 w-40 rounded-xl" />
+        </div>
+      </div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        {[1, 2, 3, 4].map(i => <Skeleton key={i} className="h-32 rounded-3xl" />)}
+      </div>
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className="lg:col-span-2 space-y-8">
+          <Skeleton className="h-64 rounded-3xl" />
+          <Skeleton className="h-80 rounded-3xl" />
+        </div>
+        <Skeleton className="h-full min-h-[400px] rounded-3xl" />
+      </div>
+    </div>
+  );
 };
 
 export default function TeacherDashboard() {
@@ -95,11 +95,11 @@ export default function TeacherDashboard() {
   ];
 
   if (loading && !stats.totalStudents && stats.totalStudents !== 0) {
-      return (
-        <DashboardLayout>
-            <TeacherDashboardSkeleton />
-        </DashboardLayout>
-      );
+    return (
+      <DashboardLayout>
+        <TeacherDashboardSkeleton />
+      </DashboardLayout>
+    );
   }
 
   return (
@@ -129,36 +129,36 @@ export default function TeacherDashboard() {
 
         {/* Stats Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          <StatCard 
-            icon={Users} 
-            title="Active Interns" 
-            value={stats.totalStudents} 
-            trend="+12%" 
-            color="blue" 
+          <StatCard
+            icon={Users}
+            title="Active Interns"
+            value={stats.totalStudents}
+            trend="+12%"
+            color="blue"
             isLoading={loading}
           />
-          <StatCard 
-            icon={BookOpen} 
-            title="Total Sessions" 
-            value={stats.totalLectures} 
-            trend="100% Sync" 
-            color="indigo" 
+          <StatCard
+            icon={BookOpen}
+            title="Total Sessions"
+            value={stats.totalLectures}
+            trend="100% Sync"
+            color="indigo"
             isLoading={loading}
           />
-          <StatCard 
-            icon={Video} 
-            title="Cloud Assets" 
-            value={stats.totalVideos} 
-            trend="Active Modules" 
-            color="amber" 
+          <StatCard
+            icon={Video}
+            title="Cloud Assets"
+            value={stats.totalVideos}
+            trend="Active Modules"
+            color="amber"
             isLoading={loading}
           />
-          <StatCard 
-            icon={MessageSquare} 
-            title="Pending Queries" 
-            value={stats.pendingQna} 
-            trend="Critical Filter" 
-            color="rose" 
+          <StatCard
+            icon={MessageSquare}
+            title="Pending Queries"
+            value={stats.pendingQna}
+            trend="Critical Filter"
+            color="rose"
             isLoading={loading}
           />
         </div>
@@ -198,8 +198,8 @@ export default function TeacherDashboard() {
             <div className="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-[40px] p-8 shadow-sm">
               <div className="flex items-center justify-between mb-10">
                 <div>
-                   <h2 className="text-lg font-bold font-sora text-[var(--color-text-primary)]">Student Engagement Pulse</h2>
-                   <p className="text-[10px] font-black uppercase tracking-widest text-[var(--color-text-muted)] mt-1">Institutional Retrieval Analytics</p>
+                  <h2 className="text-lg font-bold font-sora text-[var(--color-text-primary)]">Student Engagement Pulse</h2>
+                  <p className="text-[10px] font-black uppercase tracking-widest text-[var(--color-text-muted)] mt-1">Institutional Retrieval Analytics</p>
                 </div>
                 <select className="bg-[var(--color-surface-2)] border border-[var(--color-border)] rounded-lg px-3 py-1 text-[10px] font-black uppercase tracking-widest text-[var(--color-text-muted)] focus:ring-1 focus:ring-[var(--color-primary)] outline-none cursor-pointer">
                   <option>Rolling 7-Day Sync</option>
@@ -207,43 +207,43 @@ export default function TeacherDashboard() {
                 </select>
               </div>
               <div className="h-64 mt-4">
-                 <ResponsiveContainer width="100%" height="100%">
-                    <BarChart data={engagementData}>
-                       <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="var(--color-border)" opacity={0.5} />
-                       <XAxis 
-                         dataKey="name" 
-                         axisLine={false} 
-                         tickLine={false} 
-                         tick={{ fontSize: 10, fontWeight: 900, fill: 'var(--color-text-muted)', textTransform: 'uppercase' }} 
-                         dy={10}
-                       />
-                       <YAxis hide />
-                       <Tooltip 
-                         cursor={{ fill: 'var(--color-surface-2)', opacity: 0.5 }}
-                         contentStyle={{ 
-                           backgroundColor: 'var(--color-surface)', 
-                           border: '1px solid var(--color-border)', 
-                           borderRadius: '16px',
-                           fontSize: '10px',
-                           fontWeight: 'black',
-                           textTransform: 'uppercase'
-                         }} 
-                       />
-                       <Bar 
-                         dataKey="value" 
-                         radius={[8, 8, 8, 8]}
-                         barSize={32}
-                       >
-                         {engagementData.map((entry, index) => (
-                           <Cell 
-                             key={`cell-${index}`} 
-                             fill={index === 3 ? 'var(--color-primary)' : 'var(--color-primary-light)'} 
-                             fillOpacity={index === 3 ? 1 : 0.4}
-                           />
-                         ))}
-                       </Bar>
-                    </BarChart>
-                 </ResponsiveContainer>
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChart data={engagementData}>
+                    <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="var(--color-border)" opacity={0.5} />
+                    <XAxis
+                      dataKey="name"
+                      axisLine={false}
+                      tickLine={false}
+                      tick={{ fontSize: 10, fontWeight: 900, fill: 'var(--color-text-muted)', textTransform: 'uppercase' }}
+                      dy={10}
+                    />
+                    <YAxis hide />
+                    <Tooltip
+                      cursor={{ fill: 'var(--color-surface-2)', opacity: 0.5 }}
+                      contentStyle={{
+                        backgroundColor: 'var(--color-surface)',
+                        border: '1px solid var(--color-border)',
+                        borderRadius: '16px',
+                        fontSize: '10px',
+                        fontWeight: 'black',
+                        textTransform: 'uppercase'
+                      }}
+                    />
+                    <Bar
+                      dataKey="value"
+                      radius={[8, 8, 8, 8]}
+                      barSize={32}
+                    >
+                      {engagementData.map((entry, index) => (
+                        <Cell
+                          key={`cell-${index}`}
+                          fill={index === 3 ? 'var(--color-primary)' : 'var(--color-primary-light)'}
+                          fillOpacity={index === 3 ? 1 : 0.4}
+                        />
+                      ))}
+                    </Bar>
+                  </BarChart>
+                </ResponsiveContainer>
               </div>
             </div>
           </div>
@@ -277,19 +277,19 @@ export default function TeacherDashboard() {
 
             {/* Quick Tips Box */}
             <div className="bg-gradient-to-br from-indigo-600 to-blue-700 rounded-[40px] p-10 text-white shadow-2xl relative overflow-hidden group">
-               <div className="absolute top-0 right-0 w-48 h-48 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/2 blur-3xl group-hover:scale-150 transition-transform duration-1000" />
-               <div className="relative z-10">
-                 <div className="w-12 h-12 rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center mb-6">
-                    <Award size={24} className="text-amber-400" />
-                 </div>
-                 <h3 className="font-bold font-sora text-xl mb-4 leading-tight">Insight Generator</h3>
-                 <p className="text-sm text-white/70 leading-relaxed mb-8">
-                   "High student engagement detected in 'System Design' modules. Recommend advanced architectural resources."
-                 </p>
-                 <button className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[2px] text-amber-400 hover:text-white transition-colors">
-                    Optimize Strategy <ArrowUpRight size={14} />
-                 </button>
-               </div>
+              <div className="absolute top-0 right-0 w-48 h-48 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/2 blur-3xl group-hover:scale-150 transition-transform duration-1000" />
+              <div className="relative z-10">
+                <div className="w-12 h-12 rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center mb-6">
+                  <Award size={24} className="text-amber-400" />
+                </div>
+                <h3 className="font-bold font-sora text-xl mb-4 leading-tight">Insight Generator</h3>
+                <p className="text-sm text-white/70 leading-relaxed mb-8">
+                  "High student engagement detected in 'System Design' modules. Recommend advanced architectural resources."
+                </p>
+                <button className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[2px] text-amber-400 hover:text-white transition-colors">
+                  Optimize Strategy <ArrowUpRight size={14} />
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -300,20 +300,20 @@ export default function TeacherDashboard() {
 
 function StatCard({ icon: Icon, label, value, trend, color, isLoading }) {
   const colorMap = {
-    blue:   'bg-blue-500/10 text-blue-500',
+    blue: 'bg-blue-500/10 text-blue-500',
     indigo: 'bg-indigo-500/10 text-indigo-500',
-    amber:  'bg-amber-500/10 text-amber-500',
-    rose:   'bg-rose-500/10 text-rose-500'
+    amber: 'bg-amber-500/10 text-amber-500',
+    rose: 'bg-rose-500/10 text-rose-500'
   };
 
   if (isLoading) {
-      return <Skeleton className="h-40 rounded-[32px]" />;
+    return <Skeleton className="h-40 rounded-[32px]" />;
   }
 
   return (
     <div className="bg-[var(--color-surface)] border border-[var(--color-border)] p-8 rounded-[40px] shadow-sm hover:translate-y-[-8px] transition-all duration-500 group relative overflow-hidden text-left">
       <div className="absolute top-0 right-0 w-24 h-24 bg-[var(--color-primary)]/5 rounded-full blur-2xl -translate-y-1/2 translate-x-1/2" />
-      
+
       <div className="flex items-center justify-between mb-8">
         <div className={`w-14 h-14 rounded-2xl ${colorMap[color]} group-hover:scale-110 transition-transform flex items-center justify-center border border-white/5`}>
           <Icon size={28} />

@@ -1,10 +1,10 @@
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { db } from '../config/db.js';
-import { 
-  sendEmailVerificationOTP, 
-  sendPasswordResetOTP, 
-  sendRequestReceivedEmail 
+import {
+  sendEmailVerificationOTP,
+  sendPasswordResetOTP,
+  sendRequestReceivedEmail
 } from '../services/emailService.js';
 import { generateOTP } from '../utils/generateOTP.js';
 import { hashToken } from '../utils/hashToken.js';
@@ -236,7 +236,7 @@ export const verifyEmail = async (req, res, next) => {
     );
 
     if (otpResult.rows.length === 0) return res.status(400).json({ success: false, message: 'No active OTP found' });
-    
+
     const otpData = otpResult.rows[0];
     if (otpData.otp_code !== otp) return res.status(400).json({ success: false, message: 'Invalid OTP' });
     if (new Date() > new Date(otpData.expires_at)) return res.status(400).json({ success: false, message: 'OTP expired' });
@@ -245,7 +245,7 @@ export const verifyEmail = async (req, res, next) => {
     await db.query("UPDATE users SET account_status = 'active', is_email_verified = true WHERE id = $1", [user.id]);
 
     const { accessToken, refreshToken } = generateTokens(user.id);
-    
+
     // Save refresh token
     const tokenHash = hashToken(refreshToken);
     const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
