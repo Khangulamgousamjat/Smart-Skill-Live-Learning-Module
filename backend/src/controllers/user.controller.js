@@ -89,45 +89,137 @@ export const getUserById = async (req, res) => {
 };
 
 /**
- * Update user profile (bio, phone, photo)
- * PUT /api/users/profile
+ * Update user profile (detailed fields)
+ * PUT /api/users/me
  */
 export const updateProfile = async (req, res) => {
-  const userId = req.user.id;
-  const { 
-    bio, phone, profile_photo_url, 
-    position, skills, social_links, location 
-  } = req.body;
-
   try {
-    const result = await db.query(
-      `UPDATE users 
-       SET bio = COALESCE($1, bio), 
-           phone = COALESCE($2, phone), 
-           profile_photo_url = COALESCE($3, profile_photo_url),
-           position = COALESCE($4, position),
-           skills = COALESCE($5, skills),
-           social_links = COALESCE($6, social_links),
-           location = COALESCE($7, location),
-           is_profile_completed = TRUE,
-           updated_at = NOW()
-       WHERE id = $8
-       RETURNING id, full_name, email, role, bio, phone, profile_photo_url, 
-                 position, skills, social_links, location, is_profile_completed`,
-      [bio, phone, profile_photo_url, position, skills, social_links, location, userId]
+    const {
+      first_name, last_name, gender,
+      career_objective, professional_title,
+      location, skills_list,
+      linkedin_url, github_url, bio, phone
+    } = req.body;
+
+    await db.query(
+      `UPDATE users SET
+        first_name = COALESCE($1, first_name),
+        last_name = COALESCE($2, last_name),
+        full_name = CASE
+          WHEN $1 IS NOT NULL AND $2 IS NOT NULL
+          THEN CONCAT($1, ' ', $2)
+          ELSE full_name
+        END,
+        gender = $3,
+        career_objective = $4,
+        professional_title = $5,
+        location = $6,
+        skills_list = $7,
+        linkedin_url = $8,
+        github_url = $9,
+        bio = $10,
+        phone = $11,
+        is_profile_completed = TRUE,
+        updated_at = NOW()
+      WHERE id = $12`,
+      [
+        first_name, last_name, gender,
+        career_objective, professional_title,
+        location, skills_list || [],
+        linkedin_url, github_url,
+        bio, phone, req.user.id
+      ]
     );
 
-    if (result.rowCount === 0) {
-      return res.status(404).json({ success: false, message: 'User not found' });
+    return res.json({
+      success: true,
+      message: 'Profile updated successfully'
+    });
+  } catch (e) {
+    console.error('Profile update error:', e);
+    return res.status(500).json({
+      success: false,
+      message: 'Failed to update profile'
+    });
+  }
+};
+
+/**
+ * Add education entry
+ * POST /api/users/me/education
+ */
+export const addEducation = async (req, res) => {
+  try {
+    const {
+      degree, institution, board,
+      start_year, end_year, percentage, is_current
+    } = req.body;
+
+    if (!degree || !institution) {
+      return res.status(400).json({
+        success: false,
+        message: 'Degree and institution are required'
+      });
     }
 
-    res.json({
+    const result = await db.query(
+      `INSERT INTO user_education
+       (user_id, degree, institution, board,
+        start_year, end_year, percentage, is_current)
+       VALUES ($1,$2,$3,$4,$5,$6,$7,$8) RETURNING *`,
+      [
+        req.user.id, degree, institution, board,
+        start_year, end_year, percentage,
+        is_current || false
+      ]
+    );
+
+    return res.status(201).json({
       success: true,
       data: result.rows[0]
     });
-  } catch (error) {
-    console.error('Update profile error:', error);
-    res.status(500).json({ success: false, message: 'Failed to update profile' });
+  } catch (e) {
+    console.error('Add education error:', e);
+    return res.status(500).json({
+      success: false, message: 'Failed to add education'
+    });
+  }
+};
+
+/**
+ * Get my education
+ * GET /api/users/me/education
+ */
+export const getEducation = async (req, res) => {
+  try {
+    const result = await db.query(
+      `SELECT * FROM user_education
+       WHERE user_id = $1
+       ORDER BY end_year DESC NULLS FIRST`,
+      [req.user.id]
+    );
+    return res.json({ success: true, data: result.rows });
+  } catch (e) {
+    console.error('Get education error:', e);
+    return res.status(500).json({ success: false });
+  }
+};
+
+/**
+ * Delete education entry
+ * DELETE /api/users/me/education/:id
+ */
+export const deleteEducation = async (req, res) => {
+  try {
+    await db.query(
+      `DELETE FROM user_education
+       WHERE id = $1 AND user_id = $2`,
+      [req.params.id, req.user.id]
+    );
+    return res.json({ success: true });
+  } catch (e) {
+    console.error('Delete education error:', e);
+    return res.status(500).json({ success: false });
   }
 };
 

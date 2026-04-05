@@ -4,7 +4,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { loginSuccess } from '../../store/slices/authSlice';
 import api from '../../api/axios';
 import toast from 'react-hot-toast';
-import { Mail, Lock, ArrowRight, Loader2, ShieldCheck, Sparkles, Home } from 'lucide-react';
+import { Mail, Lock, ArrowRight, Loader2, ShieldCheck, Sparkles, Home, Eye, EyeOff } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useLanguage } from '../../contexts/LanguageContext';
 
@@ -13,6 +13,7 @@ const LoginPage = () => {
   const { theme } = useSelector((state) => state.ui);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -117,13 +118,21 @@ const LoginPage = () => {
                   <Lock className="h-5 w-5" />
                 </div>
                 <input
-                  type="password"
+                  type={showPassword ? 'text' : 'password'}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="block w-full pl-14 pr-6 py-4 bg-[var(--color-surface-2)] border border-[var(--color-border)] rounded-2xl text-sm focus:ring-4 focus:ring-[var(--color-primary)]/10 outline-none transition-all text-[var(--color-text-primary)]"
+                  className="block w-full pl-14 pr-12 py-4 bg-[var(--color-surface-2)] border border-[var(--color-border)] rounded-2xl text-sm focus:ring-4 focus:ring-[var(--color-primary)]/10 outline-none transition-all text-[var(--color-text-primary)]"
                   placeholder="••••••••"
                   required
                 />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-[var(--color-text-muted)] hover:text-[var(--color-primary)] transition-colors p-1"
+                  tabIndex="-1"
+                >
+                  {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                </button>
               </div>
               <div className="flex justify-end mt-2">
                 <Link to="/auth/forgot-password" id="forgot_password_link" className="text-xs font-bold text-[var(--color-primary)] hover:underline transition-all">

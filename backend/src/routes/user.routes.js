@@ -4,8 +4,10 @@ import {
   getUserById, 
   updateProfile, 
   getPublicProfile, 
-  getLeaderboard 
-} from '../controllers/user.controller.js';
+  getLeaderboard,
+  getEducation,
+  addEducation,
+  deleteEducation} from '../controllers/user.controller.js';
 import { verifyToken } from '../middleware/auth.middleware.js';
 
 const router = express.Router();
@@ -15,7 +17,14 @@ router.get('/leaderboard', verifyToken, getLeaderboard);
 router.get('/public/:id',  verifyToken, getPublicProfile);
 
 // Profile management
-router.put('/profile',     verifyToken, updateProfile);
+// Profile management
+router.put('/me',          verifyToken, updateProfile);
+router.put('/profile',     verifyToken, updateProfile); // Keep for compatibility
+
+// Education management
+router.get('/me/education',      verifyToken, getEducation);
+router.post('/me/education',     verifyToken, addEducation);
+router.delete('/me/education/:id', verifyToken, deleteEducation);
 
 // Admin / General User views
 router.get('/',            getUsers);

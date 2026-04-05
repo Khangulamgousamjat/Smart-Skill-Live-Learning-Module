@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { logoutSuccess as logout } from '../../store/slices/authSlice';
@@ -86,6 +86,18 @@ export default function DashboardLayout({ children }) {
   const location = useLocation();
   const [collapsed, setCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [showProfileModal, setShowProfileModal] = useState(false);
+
+  useEffect(() => {
+    // Only show for students — never for admin or other roles
+    if (!user || user.role !== 'student') return;
+
+    const key = `profile_done_${user.id}`;
+    const done = localStorage.getItem(key);
+    if (!done) {
+      setTimeout(() => setShowProfileModal(true), 1500);
+    }
+  }, [user]);
 
   const navItems = NAV_KEYS_ROLES[user?.role] || [];
 
@@ -261,7 +273,9 @@ export default function DashboardLayout({ children }) {
         {user?.role === 'student' && <ChatBot />}
 
         {/* Global Profile Completion Check */}
-        {!user?.is_profile_completed && <ProfileCompletionModal />}
+        {showProfileModal && user?.role === 'student' && (
+          <ProfileCompletionModal onClose={() => setShowProfileModal(false)} />
+        )}
       </div>
     </div>
   );
