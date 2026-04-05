@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const getInitialTheme = () => {
-  const saved = localStorage.getItem('ssllm_theme');
+  const saved = localStorage.getItem('skill_developer_theme');
   if (saved) return saved;
   if (window.matchMedia('(prefers-color-scheme: dark)').matches) return 'dark';
   return 'light';

@@ -71,7 +71,7 @@ const SettingsPage = () => {
       <div className="flex justify-between items-center">
         <div>
           <h2 className={`text-2xl font-bold font-sora ${t.textMain}`}>Platform Settings</h2>
-          <p className={t.textMuted}>Global configuration for the Smart Skill & Live Learning Module ecosystem.</p>
+          <p className={t.textMuted}>Global configuration for the Skill Developer Platform ecosystem.</p>
         </div>
         <button 
           onClick={handleSave}

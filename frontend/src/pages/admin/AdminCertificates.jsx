@@ -154,7 +154,7 @@ export default function AdminCertificates() {
                       </td>
                       <td className="p-6 text-left">
                         <code className="text-[9px] bg-[var(--color-surface-2)] border border-[var(--color-border)] px-2 py-1 rounded text-[var(--color-text-muted)] font-mono">
-                           {cert.cert_id?.slice(0, 16) || 'SSLLM-CERT-X9F'}...
+                           {cert.cert_id?.slice(0, 16) || 'SKILL-DEV-CERT-X9F'}...
                         </code>
                       </td>
                       <td className="p-6">

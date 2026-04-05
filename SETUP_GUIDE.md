@@ -1,4 +1,4 @@
-# Smart Skill & Live Learning Module — Master Setup Guide
+# Skill Developer Platform — Master Setup Guide
 
 This document contains everything you need to set up the necessary third-party services and initialize your database for the Gous org Learning Platform. Follow these steps sequentially.
 

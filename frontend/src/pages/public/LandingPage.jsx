@@ -19,15 +19,15 @@ export default function LandingPage() {
           <div className="w-9 h-9 rounded-lg bg-[#1E3A5F]
             flex items-center justify-center">
             <span className="text-[#F4A100] font-bold
-              text-base font-sora">SS</span>
+              text-base font-sora">SD</span>
           </div>
           <div>
             <p className="text-white font-sora font-bold
               text-sm leading-tight">
-              Smart Skill &amp; Live Learning
+              Skill Developer
             </p>
-            <p className="text-slate-400 text-xs">
-              Module — Gous org
+            <p className="text-[#F4A100] text-xs font-bold">
+              Platform — Gous org
             </p>
           </div>
         </div>
@@ -63,11 +63,10 @@ export default function LandingPage() {
 
           <h1 className="mt-6 font-sora font-extrabold
             text-white text-5xl md:text-7xl leading-tight">
-            Smart Skill<br />
-            &amp; Live<br />
+            Skill Developer<br />
             <span className="bg-gradient-to-r from-[#F4A100]
               to-[#FFD166] bg-clip-text text-transparent">
-              Learning Module
+              Platform
             </span>
           </h1>
 
@@ -252,13 +251,13 @@ export default function LandingPage() {
               <div className="w-9 h-9 rounded-lg bg-[#1E3A5F]
                 flex items-center justify-center">
                 <span className="text-[#F4A100] font-bold
-                  font-sora">SS</span>
+                  font-sora">SD</span>
               </div>
               <div>
                 <p className="text-white font-sora font-bold
-                  text-sm">Smart Skill &</p>
-                <p className="text-white font-sora font-bold
-                  text-sm">Live Learning Module</p>
+                  text-sm uppercase tracking-wider">Skill Developer</p>
+                <p className="text-[#F4A100] font-sora font-bold
+                  text-xs">Platform</p>
               </div>
             </div>
             <p className="text-slate-400 text-sm leading-relaxed">
@@ -352,7 +351,7 @@ export default function LandingPage() {
             © 2026 Gous org — All rights reserved
           </p>
           <p className="text-slate-500 text-xs">
-            Smart Skill &amp; Live Learning Module v1.0.1
+            Skill Developer Platform v2.4.0
           </p>
           <p className="text-slate-500 text-xs">
             Made by <a href="https://github.com/Khangulamgousamjat/Skill-Developer" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">Gous Org</a>

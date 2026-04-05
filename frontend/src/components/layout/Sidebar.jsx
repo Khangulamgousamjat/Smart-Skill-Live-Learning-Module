@@ -143,10 +143,10 @@ export const Sidebar = () => {
              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7"></path></svg>
           </button>
           <span className={`${isDarkMode ? 'text-[var(--color-accent)]' : 'text-[var(--color-primary)]'} font-bold text-lg leading-tight text-center font-sora tracking-tight`}>
-            Smart Skill &
+            Skill Developer
           </span>
-          <span className={`${isDarkMode ? 'text-[var(--color-accent)]' : 'text-[var(--color-primary)]'} font-bold text-lg leading-tight text-center font-sora tracking-tight`}>
-            Live Learning
+          <span className={`${isDarkMode ? 'text-[var(--color-accent)]' : 'text-[var(--color-primary)]'} font-bold text-lg leading-tight text-center font-sora tracking-tight uppercase text-xs opacity-80`}>
+            Platform
           </span>
           <span className={`${isDarkMode ? 'text-white/40' : 'text-slate-400'} text-[10px] mt-2 text-center font-black uppercase tracking-[3px]`}>
             Gous org

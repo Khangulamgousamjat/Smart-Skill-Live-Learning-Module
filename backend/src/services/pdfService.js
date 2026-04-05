@@ -41,12 +41,12 @@ export const generateCertificatePDF = async (data, templateHtml) => {
         <body>
           <div class="certificate-wrapper">
             <h1>Certificate of Completion</h1>
-            <h2>Smart Skill & Live Learning Module</h2>
+            <h2>Skill Developer Platform</h2>
             <div class="certify">This is to certify that</div>
             <div class="intern-name">{{INTERN_NAME}}</div>
             <div class="description">
-              Has successfully mastered the <strong>{{CERTIFICATE_TYPE}}</strong> track and demonstrated expert-level competence 
-              in <strong>{{SKILL_NAME}}</strong>. Issued on {{ISSUE_DATE}} at [NRC INNOVATE-X].
+              Has successfully mastered the <strong>{{CERTIFICATE_TYPE}}</strong> track and demonstrated professional-level competence 
+              in <strong>{{SKILL_NAME}}</strong>. Issued on {{ISSUE_DATE}} at [Gous Org].
             </div>
             <div class="footer">
               <div class="qr-id-block">

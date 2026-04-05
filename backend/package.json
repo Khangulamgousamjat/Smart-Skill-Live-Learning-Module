@@ -1,7 +1,7 @@
 {
-  "name": "ssllm-backend",
+  "name": "skill-developer-backend",
   "version": "1.0.0",
-  "description": "Backend API for SSLLM",
+  "description": "Backend API for Skill Developer",
   "main": "server.js",
   "type": "module",
   "scripts": {

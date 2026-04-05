@@ -66,7 +66,7 @@ export const issueCertificate = async (req, res) => {
     });
 
     // 5. Upload to Cloudinary
-    const cloudinaryResult = await uploadToCloudinary(pdfBuffer, 'ssllm/certificates');
+    const cloudinaryResult = await uploadToCloudinary(pdfBuffer, 'skill-developer/certificates');
     const pdfUrl = cloudinaryResult.secure_url;
 
     // 6. Save to DB

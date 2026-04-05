@@ -13,7 +13,7 @@ const LANGUAGES = [
 
 export function LanguageProvider({ children }) {
   const [language, setLanguage] = useState(
-    localStorage.getItem('ssllm_language') || 'en'
+    localStorage.getItem('skill_developer_language') || 'en'
   );
 
   const t = useCallback((key) => {
@@ -24,7 +24,7 @@ export function LanguageProvider({ children }) {
 
   const changeLanguage = useCallback((langCode) => {
     setLanguage(langCode);
-    localStorage.setItem('ssllm_language', langCode);
+    localStorage.setItem('skill_developer_language', langCode);
   }, []);
 
   return (

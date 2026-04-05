@@ -30,7 +30,7 @@ export default function NotFoundPage() {
         </p>
         <p className="text-[var(--color-text-muted)]
                       text-sm mt-1 mb-6">
-          Smart Skill & Live Learning Module — Gous org
+          Skill Developer Platform — Gous org
         </p>
         <button
           onClick={() => navigate(getHome())}

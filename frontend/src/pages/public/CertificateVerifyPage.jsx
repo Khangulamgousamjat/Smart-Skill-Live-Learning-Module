@@ -36,7 +36,7 @@ const CertificateVerifyPage = () => {
       <div className={`${theme} min-h-screen bg-[var(--color-bg)] flex flex-col items-center justify-center p-6 text-center transition-colors duration-300`}>
         <Loader2 className="w-12 h-12 text-[var(--color-primary)] animate-spin mb-4" />
         <h1 className="text-[var(--color-text-primary)] text-xl font-bold">Verifying Credential...</h1>
-        <p className="text-[var(--color-text-muted)] mt-2 font-medium">Connecting to SSLLM Blockchain Registry</p>
+        <p className="text-[var(--color-text-muted)] mt-2 font-medium">Connecting to Skill Developer Blockchain Registry</p>
       </div>
     );
   }
@@ -103,7 +103,7 @@ const CertificateVerifyPage = () => {
       </div>
 
       <p className="text-[var(--color-text-muted)] mt-8 text-sm font-medium">
-        &copy; 2026 Smart Skill & Live Learning Module — Gous org
+        &copy; 2026 Skill Developer Platform — Gous org
       </p>
     </div>
   );

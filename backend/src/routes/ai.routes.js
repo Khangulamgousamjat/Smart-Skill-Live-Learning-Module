@@ -81,7 +81,7 @@ router.post('/chat', async (req, res) => {
     }
 
     // Build system prompt with student context
-    const systemPrompt = `You are an intelligent AI learning assistant for ${userData.full_name || 'a student'} on the Smart Skill & Live Learning Module platform by Gous org.
+    const systemPrompt = `You are an intelligent AI learning assistant for ${userData.full_name || 'a student'} on the Skill Developer Platform by Gous org.
 
 Student Context:
 - Name: ${userData.full_name || 'Student'}

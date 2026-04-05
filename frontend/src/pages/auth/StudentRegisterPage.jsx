@@ -96,10 +96,10 @@ export default function StudentRegisterPage() {
       <div className="w-full max-w-lg bg-[var(--color-surface)] border border-[var(--color-border)] rounded-2xl shadow-xl p-8">
         <div className="text-center mb-8">
           <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl mb-4 bg-[var(--color-primary)]">
-            <span className="text-[var(--color-accent)] font-bold text-xl font-sora">SS</span>
+            <span className="text-[var(--color-accent)] font-bold text-xl font-sora">SD</span>
           </div>
           <h1 className="text-xl font-bold font-sora text-[var(--color-primary)] leading-tight">Student Registration</h1>
-          <p className="text-[var(--color-text-muted)] text-sm mt-1">Smart Skill & Live Learning Module</p>
+          <p className="text-[var(--color-text-muted)] text-sm mt-1">Skill Developer Platform</p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">

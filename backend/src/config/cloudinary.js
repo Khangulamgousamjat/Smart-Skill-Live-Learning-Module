@@ -15,7 +15,7 @@ cloudinary.config({
  * @param {string} folder - Destination folder on Cloudinary.
  * @returns {Promise<Object>} - Cloudinary upload result.
  */
-export const uploadToCloudinary = async (file, folder = 'ssllm/certificates') => {
+export const uploadToCloudinary = async (file, folder = 'skill-developer/certificates') => {
   return new Promise((resolve, reject) => {
     const stream = cloudinary.uploader.upload_stream(
       { folder, resource_type: 'auto' },

@@ -1,4 +1,4 @@
--- SSLLM Migration 002: Teacher Role & Approval Chain Updates
+-- Skill Developer Migration 002: Teacher Role & Approval Chain Updates
 
 -- 1. Rename 'expert' to 'teacher' in user_role enum
 -- Note: PostgreSQL 10+ supports RENAME VALUE for enums

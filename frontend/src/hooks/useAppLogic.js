@@ -221,7 +221,7 @@ export const useAppLogic = () => {
     setProgressEmail({ isOpen: true, loading: true, text: '', copied: false });
     const stats = `${studentOverview.streak} day streak, ${studentOverview.activeProjectsCount} active projects, ${studentOverview.xp} XP earned.`;
     const skillsList = studentSkills.map(s => s.name).join(', ');
-    const prompt = `Act as a highly articulate software engineering intern (${user.full_name}). Draft a short, professional end-of-week update email to my manager summarizing my recent progress on the Smart Skill & Live Learning Module at Gous org. My current stats: ${stats}. Mention I've been focusing on ${skillsList}. Keep it concise, positive, and ready to send. Include a subject line.`;
+    const prompt = `Act as a highly articulate software engineering intern (${user.full_name}). Draft a short, professional end-of-week update email to my manager summarizing my recent progress on the Skill Developer Platform at Gous org. My current stats: ${stats}. Mention I've been focusing on ${skillsList}. Keep it concise, positive, and ready to send. Include a subject line.`;
     const result = await callGemini(prompt);
     setProgressEmail({ isOpen: true, loading: false, text: result, copied: false });
   };
@@ -266,7 +266,7 @@ export const useAppLogic = () => {
       Next Lecture: ${studentOverview.nextLecture?.title || 'None scheduled'}
     `.trim();
 
-    const prompt = `You are "SSLLM GPT", the hyper-intelligent AI Mentor for the Smart Skill & Live Learning Module at Gous org. 
+    const prompt = `You are "Skill Developer GPT", the hyper-intelligent AI Mentor for the Skill Developer Platform at Gous org. 
     You are mentoring an intern with the following current status:
     ${context}
 

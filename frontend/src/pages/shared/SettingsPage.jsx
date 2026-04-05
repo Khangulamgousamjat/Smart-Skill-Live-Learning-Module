@@ -23,7 +23,7 @@ export default function SettingsPage() {
   const handleThemeChange = (newTheme) => {
     dispatch(setTheme(newTheme));
     applyTheme(newTheme);
-    localStorage.setItem('ssllm_theme', newTheme);
+    localStorage.setItem('skill_developer_theme', newTheme);
     toast.success(t('preferencesUpdated'));
   };
 

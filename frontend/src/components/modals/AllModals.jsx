@@ -334,7 +334,7 @@ export const AllModals = () => {
               
               <Award className="w-16 h-16 text-yellow-500 mx-auto mb-4" />
               <h2 className="text-3xl font-serif font-bold tracking-wide uppercase">Certificate of Achievement</h2>
-              <p className="text-[var(--color-text-muted)] mt-2 uppercase tracking-widest text-sm">Smart Skill & Live Learning Module — Gous org</p>
+              <p className="text-[var(--color-text-muted)] mt-2 uppercase tracking-widest text-sm">Skill Developer Platform — Gous org</p>
               
               <div className="my-8">
                 <p className="text-[var(--color-text-secondary)] italic mb-2">This certifies that</p>

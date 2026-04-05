@@ -79,7 +79,7 @@ const LoginPage = () => {
             <ShieldCheck size={40} className="text-white" />
           </motion.div>
           <h1 className="text-4xl font-bold font-sora text-[var(--color-text-primary)] tracking-tight mb-2">
-            SSLLM <span className="text-[var(--color-primary)]">Platform</span>
+            Skill Developer <span className="text-[var(--color-primary)]">Platform</span>
           </h1>
           <p className="text-[var(--color-text-secondary)] font-semibold uppercase tracking-[0.1em] text-[11px]">
             Institutional Knowledge Retrieval Engine
@@ -170,7 +170,7 @@ const LoginPage = () => {
         </div>
         
         <p className="mt-8 text-center text-[var(--color-text-muted)] text-[10px] uppercase font-bold tracking-[0.2em] opacity-60">
-          SECURED BY SSLLM CORE INFRASTRUCTURE
+          SECURED BY SKILL DEVELOPER INFRASTRUCTURE
         </p>
       </motion.div>
     </div>

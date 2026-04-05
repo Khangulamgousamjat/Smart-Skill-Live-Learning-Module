@@ -36,7 +36,7 @@ export const sendEmailVerificationOTP = async (to, name, otp) => {
             Gous org
           </h1>
           <p style="color:#CBD5E1;margin:8px 0 0;font-size:14px;">
-            Smart Skill & Live Learning Module
+            Skill Developer Platform
           </p>
         </div>
         <div style="padding:40px 32px;">
@@ -67,7 +67,7 @@ export const sendEmailVerificationOTP = async (to, name, otp) => {
                     border-top:1px solid #E2E8F0;">
           <p style="color:#94A3B8;font-size:12px;
                     margin:0;text-align:center;">
-            © Gous org — Smart Skill & Live Learning Module
+            © Gous org — Skill Developer Platform
           </p>
         </div>
       </div>
@@ -115,7 +115,7 @@ export const sendRequestReceivedEmail = async (to, name, role) => {
                     border-top:1px solid #E2E8F0;">
           <p style="color:#94A3B8;font-size:12px;
                     margin:0;text-align:center;">
-            © Gous org — Smart Skill & Live Learning Module
+            © Gous org — Skill Developer Platform
           </p>
         </div>
       </div>
@@ -172,7 +172,7 @@ export const sendAccountApprovedEmail = async (to, name, role, loginUrl) => {
                     border-top:1px solid #E2E8F0;">
           <p style="color:#94A3B8;font-size:12px;
                     margin:0;text-align:center;">
-            © Gous org — Smart Skill & Live Learning Module
+            © Gous org — Skill Developer Platform
           </p>
         </div>
       </div>
@@ -220,7 +220,7 @@ export const sendAccountRejectedEmail = async (to, name, role, reason) => {
                     border-top:1px solid #E2E8F0;">
           <p style="color:#94A3B8;font-size:12px;
                     margin:0;text-align:center;">
-            © Gous org — Smart Skill & Live Learning Module
+            © Gous org — Skill Developer Platform
           </p>
         </div>
       </div>
@@ -240,7 +240,7 @@ export const sendPasswordResetOTP = async (to, name, otp) => {
         <div style="background:#1E3A5F;padding:32px;text-align:center;">
           <h1 style="color:#F4A100;margin:0;font-size:24px;
                      font-family:'Sora',Arial,sans-serif;">
-            NRC INNOVATE-X
+            Gous org
           </h1>
         </div>
         <div style="padding:40px 32px;">
@@ -272,7 +272,7 @@ export const sendPasswordResetOTP = async (to, name, otp) => {
                     border-top:1px solid #E2E8F0;">
           <p style="color:#94A3B8;font-size:12px;
                     margin:0;text-align:center;">
-            © Gous org — Smart Skill & Live Learning Module
+            © Gous org — Skill Developer Platform
           </p>
         </div>
       </div>
@@ -328,7 +328,7 @@ export const sendProjectDeadlineReminder = async (to, name, projectTitle, deadli
                     border-top:1px solid #E2E8F0;">
           <p style="color:#94A3B8;font-size:12px;
                     margin:0;text-align:center;">
-            © Gous org — Smart Skill & Live Learning Module
+            © Gous org — Skill Developer Platform
           </p>
         </div>
       </div>
@@ -377,7 +377,7 @@ export const sendCertificateIssuedEmail = async (to, name, certType, downloadUrl
                     border-top:1px solid #E2E8F0;">
           <p style="color:#94A3B8;font-size:12px;
                     margin:0;text-align:center;">
-            © Gous org — Smart Skill & Live Learning Module
+            © Gous org — Skill Developer Platform
           </p>
         </div>
       </div>
@@ -437,7 +437,7 @@ export const sendLectureReminderEmail = async (to, name, lectureTitle, time, lin
                     border-top:1px solid #E2E8F0;">
           <p style="color:#94A3B8;font-size:12px;
                     margin:0;text-align:center;">
-            © Gous org — Smart Skill & Live Learning Module
+            © Gous org — Skill Developer Platform
           </p>
         </div>
       </div>
@@ -535,7 +535,7 @@ export const sendManagerWeeklyDigest = async (to, managerName, stats) => {
                     border-top:1px solid #E2E8F0;">
           <p style="color:#94A3B8;font-size:12px;
                     margin:0;text-align:center;">
-            © Gous org — Smart Skill & Live Learning Module
+            © Gous org — Skill Developer Platform
           </p>
         </div>
       </div>

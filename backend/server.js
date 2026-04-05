@@ -7,7 +7,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 /**
- * SSLLM Backend Entry Point
+ * Skill Developer Backend Entry Point
  * ----------------------------
  * This module creates the HTTP server and initializes the Socket.io
  * engine for real-time messaging and notifications.
@@ -25,7 +25,7 @@ db.setupDatabase();
 
 server.listen(port, () => {
   console.log('---------------------------------------------------------');
-  console.log(`🚀 SSLLM Backend Authority online at PORT: ${port}`);
+  console.log(`🚀 Skill Developer Backend Authority online at PORT: ${port}`);
   console.log(`📡 WebSocket Gateway Pulse: Active`);
   console.log(`🌍 Environment: ${process.env.NODE_ENV || 'development'}`);
   console.log('---------------------------------------------------------');

@@ -71,7 +71,7 @@ export default function MyCertificates() {
                    <ShieldCheck className="text-[var(--color-primary)] opacity-10 absolute inset-0 m-auto w-32 h-32" />
                    <div className="text-center relative z-10">
                       <Award size={48} className="text-[var(--color-accent)] mx-auto mb-4" />
-                      <h3 className="font-bold text-[var(--color-text-primary)] font-sora leading-tight">{cert.title || 'SSLLM Certificate'}</h3>
+                      <h3 className="font-bold text-[var(--color-text-primary)] font-sora leading-tight">{cert.title || 'Skill Developer Certificate'}</h3>
                       <p className="text-[10px] text-[var(--color-text-muted)] mt-2 uppercase tracking-[0.2em]">{cert.certificate_type}</p>
                    </div>
                 </div>

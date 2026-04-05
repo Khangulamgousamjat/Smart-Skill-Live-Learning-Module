@@ -1,6 +1,6 @@
-# Complete SSLLM API Key & Services Guide
+# Complete Skill Developer API Key & Services Guide
 
-Please follow this guide to acquire all necessary credentials for your `backend/.env` file. Once you have them, paste them directly into `d:\final SSSLM\backend\.env`.
+Please follow this guide to acquire all necessary credentials for your `backend/.env` file. Once you have them, paste them directly into `d:\WORK\final Skill-Developer\backend\.env`.
 
 > [!TIP]
 > **Gemini 2.5 Flash** is highly recommended and fully supported! We've already added the placeholder for `GEMINI_API_KEY` in your `.env` file since your frontend codebase natively uses it for the AI Mentor.
@@ -12,7 +12,7 @@ Please follow this guide to acquire all necessary credentials for your `backend/
 
 1. Go to [Supabase](https://supabase.com/).
 2. Click **New Project** and select your organization.
-3. Enter `SSLLM Database`, create a strong Database Password, and click **Create New Project**.
+3. Enter `Skill Developer Database`, create a strong Database Password, and click **Create New Project**.
 4. In your project dashboard, navigate on the left to **Settings (Gear Icon) -> Database**.
 5. Scroll down to the **Connection String** panel and click the **URI** tab.
 6. Copy the URL. It looks like: 
@@ -27,7 +27,7 @@ Please follow this guide to acquire all necessary credentials for your `backend/
 
 1. Go to [Upstash](https://upstash.com/).
 2. Create an account and click **Create Database** under the Redis section.
-3. Name it `SSLLM-Redis`, select a region, and choose the Free tier.
+3. Name it `Skill-Developer-Redis`, select a region, and choose the Free tier.
 4. Once created, scroll down to the **Connect to your database** section.
 5. Select the **Node.js** tab. You'll see an `ioredis` string starting with `rediss://`.
 6. Copy just the URI string (e.g., `rediss://default:xxxxxx@region.upstash.io:32456`).
@@ -41,7 +41,7 @@ Please follow this guide to acquire all necessary credentials for your `backend/
 1. Go to [SendGrid](https://sendgrid.com/) and create a free account.
 2. In the left menu, select **Settings -> API Keys**.
 3. Click **Create API Key** in the top right corner.
-4. Name it `SSLLM Backend`, select **Full Access**, and click **Create & View**.
+4. Name it `Skill Developer Backend`, select **Full Access**, and click **Create & View**.
 5. Copy the generated key (it starts with `SG.`).
 6. Paste it into your `.env` file for **`SENDGRID_API_KEY`**.
 7. Navigate to **Settings -> Sender Authentication** and register your email address. Provide this same email in the `.env` file under **`FROM_EMAIL`**.
@@ -73,12 +73,12 @@ Please follow this guide to acquire all necessary credentials for your `backend/
 ### B. OpenAI (Fallback/Backend analysis)
 1. Go to the [OpenAI Platform](https://platform.openai.com/).
 2. Navigate to **API Keys** on the left menu.
-3. Click **Create new secret key**, name it `SSLLM`, and copy the key (starts with `sk-proj...`).
+3. Click **Create new secret key**, name it `Skill Developer`, and copy the key (starts with `sk-proj...`).
 4. Paste it into `.env` for **`OPENAI_API_KEY`**.
 
 ---
 
 ### Verification
-Once you have pasted everything into `d:\final SSSLM\backend\.env`, your file should be completely populated. 
+Once you have pasted everything into `d:\WORK\final Skill-Developer\backend\.env`, your file should be completely populated. 
 
 Let me know when you've finished providing the keys, and we can proceed with executing the **Phase 2 Implementation Plan**!

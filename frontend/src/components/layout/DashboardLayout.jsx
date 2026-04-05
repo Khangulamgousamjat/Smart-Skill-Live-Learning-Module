@@ -122,7 +122,7 @@ export default function DashboardLayout({ children }) {
     const next = theme === 'dark' ? 'light' : 'dark';
     dispatch(setTheme(next));
     applyTheme(next);
-    localStorage.setItem('ssllm_theme', next);
+    localStorage.setItem('skill_developer_theme', next);
   };
 
   const isActive = (path) => location.pathname === path;
@@ -133,15 +133,15 @@ export default function DashboardLayout({ children }) {
       <div className={`px-4 py-8 border-b ${theme === 'dark' ? 'border-white/10' : 'border-gray-100'}`}>
         {collapsed ? (
           <div className="flex justify-center">
-            <span className="text-[var(--color-accent)] font-bold text-xl font-sora">SS</span>
+            <span className="text-[var(--color-accent)] font-bold text-xl font-sora">SD</span>
           </div>
         ) : (
           <div className="flex flex-col items-center">
-            <span className={`${theme === 'dark' ? 'text-[var(--color-accent)]' : 'text-[var(--color-primary)]'} font-bold text-lg leading-tight text-center font-sora tracking-tight`}>
-              Smart Skill &
+            <span className={`${theme === 'dark' ? 'text-[var(--color-accent)]' : 'text-[var(--color-primary)]'} font-bold text-xl leading-tight text-center font-sora tracking-tight`}>
+              Skill
             </span>
-            <span className={`${theme === 'dark' ? 'text-[var(--color-accent)]' : 'text-[var(--color-primary)]'} font-bold text-lg leading-tight text-center font-sora tracking-tight`}>
-              Live Learning
+            <span className={`${theme === 'dark' ? 'text-[var(--color-accent)]' : 'text-[var(--color-primary)]'} font-bold text-xl leading-tight text-center font-sora tracking-tight`}>
+              Developer
             </span>
             <span className={`${theme === 'dark' ? 'text-white/40' : 'text-slate-400'} text-[10px] mt-2 text-center font-black uppercase tracking-[3px]`}>
               Gous org

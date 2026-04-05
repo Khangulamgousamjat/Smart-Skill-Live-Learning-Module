@@ -14,8 +14,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 export default function OrgSettings() {
   const { t } = useLanguage();
   const [settings, setSettings] = useState({
-    site_name: 'Smart Skill & Live Learning',
-    contact_email: 'admin@ssllm.com',
+    site_name: 'Skill Developer Platform',
+    contact_email: 'admin@skilldeveloper.com',
     maintenance_mode: false,
     registration_open: true,
     email_verification: true,
@@ -113,7 +113,7 @@ export default function OrgSettings() {
               <div className="mt-8 p-6 bg-gradient-to-br from-indigo-600/10 to-purple-600/10 border border-indigo-600/10 rounded-3xl">
                  <Server size={24} className="text-indigo-500 mb-3" />
                  <p className="text-[10px] font-black uppercase tracking-widest text-indigo-500">Instance Info</p>
-                 <p className="text-xs text-[var(--color-text-primary)] font-bold mt-2">SSLLM Core v2.4.0</p>
+                 <p className="text-xs text-[var(--color-text-primary)] font-bold mt-2">Skill Developer Core v2.4.0</p>
                  <p className="text-[10px] text-[var(--color-text-muted)] mt-1">Status: Operational</p>
               </div>
            </div>
@@ -213,7 +213,7 @@ export default function OrgSettings() {
                         <h3 className="text-lg font-bold font-sora text-[var(--color-text-primary)]">Platform Branding</h3>
                         <div className="flex items-center gap-8">
                            <div className="w-24 h-24 rounded-full border-4 border-white shadow-xl flex items-center justify-center bg-[var(--color-primary)] text-white text-3xl font-black">
-                              SS
+                              SD
                            </div>
                            <button className="px-6 py-2.5 bg-[var(--color-surface-2)] text-[var(--color-text-primary)] border border-[var(--color-border)] rounded-xl font-bold text-sm hover:bg-white transition-all">
                               Upload Platform Logo

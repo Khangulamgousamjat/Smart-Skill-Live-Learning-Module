@@ -8,7 +8,7 @@ export default function AIChatbot() {
   const { t } = useLanguage();
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState([
-    { role: 'bot', content: 'Hello! I am your SSLLM Assistant. How can I help you with your learning journey today?' }
+    { role: 'bot', content: 'Hello! I am your Skill Developer Assistant. How can I help you with your learning journey today?' }
   ]);
   const [isTyping, setIsTyping] = useState(false);
   const [input, setInput] = useState('');
@@ -57,7 +57,7 @@ export default function AIChatbot() {
                   <Sparkles size={20} />
                 </div>
                 <div>
-                  <h3 className="font-bold font-sora text-sm">SSLLM AI Assistant</h3>
+                  <h3 className="font-bold font-sora text-sm">Skill Developer AI Assistant</h3>
                   <p className="text-[10px] opacity-80">Always here to help</p>
                 </div>
               </div>
