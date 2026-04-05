@@ -1,7 +1,16 @@
+import { useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import { 
   BarChart, Bar, XAxis, YAxis, CartesianGrid, 
   Tooltip, ResponsiveContainer, Cell 
 } from 'recharts';
+import { 
+  Plus, Video, Users, BookOpen, MessageSquare, 
+  Calendar, Clock, TrendingUp, ArrowUpRight 
+} from 'lucide-react';
+import { useLanguage } from '../../contexts/LanguageContext';
+import axiosInstance from '../../api/axios';
+import DashboardLayout from '../../components/layout/DashboardLayout';
 import Skeleton from '../../components/ui/Skeleton';
 
 const engagementData = [

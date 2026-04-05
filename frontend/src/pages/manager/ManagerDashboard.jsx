@@ -8,7 +8,8 @@ import {
   Users, ClipboardCheck, TrendingUp, 
   Plus, CheckCircle, XCircle, Clock, 
   ExternalLink, Search, Filter, Loader2,
-  Briefcase, GraduationCap, Award, Play
+  Briefcase, GraduationCap, Award, Play,
+  Users2, ArrowRight
 } from 'lucide-react';
 import { 
   BarChart, Bar, XAxis, YAxis, 
