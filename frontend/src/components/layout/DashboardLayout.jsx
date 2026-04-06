@@ -72,7 +72,6 @@ const NAV_KEYS_ROLES = {
     { labelKey: 'announcements',  icon: Megaphone,       path: '/admin/announcements' },
     { labelKey: 'systemLogs',    icon: ClipboardList,   path: '/admin/logs' },
     { labelKey: 'orgSettings',   icon: Settings,        path: '/admin/settings' },
-    { labelKey: 'profile',        icon: User,            path: '/admin/profile' },
   ],
 };
 
@@ -274,10 +273,11 @@ export default function DashboardLayout({ children }) {
                 </span>
               )}
             </button>
-            <div className="w-9 h-9 ml-2 rounded-full bg-[var(--color-primary)] flex items-center justify-center cursor-pointer border-2 border-[var(--color-border)] shadow-sm"
+            <div className={`w-9 h-9 ml-2 rounded-full flex items-center justify-center border-2 shadow-sm ${user?.role === 'super_admin' ? 'bg-[var(--color-primary)] border-[var(--color-border)] cursor-default' : 'bg-[var(--color-primary)] border-[var(--color-border)] cursor-pointer'}`}
                  onClick={() => {
                     const role = user?.role || 'student';
-                    const base = role === 'super_admin' ? 'admin' : role.replace('_admin', '');
+                    if (role === 'super_admin') return;
+                    const base = role.replace('_admin', '');
                     navigate(`/${base}/profile`);
                  }}>
               <span className="text-white text-xs font-bold">
