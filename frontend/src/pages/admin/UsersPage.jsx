@@ -102,11 +102,6 @@ export default function UsersPage() {
   };
 
   const handleUserDelete = async () => {
-    if (deleteModal.confirmText.toLowerCase() !== 'confirm') {
-      toast.error('Please type "confirm" to proceed');
-      return;
-    }
-
     try {
       setIsDeleting(true);
       if (deleteModal.type === 'single') {
@@ -149,7 +144,7 @@ export default function UsersPage() {
           
           <div className="flex items-center gap-3">
               <button 
-                onClick={() => setDeleteModal({ isOpen: true, type: 'bulk', userId: null, userName: 'EVERYONE', confirmText: '' })}
+                onClick={() => setDeleteModal({ isOpen: true, type: 'bulk', userId: null, userName: 'EVERYONE' })}
                 className="flex items-center gap-2 px-5 py-3 rounded-2xl bg-red-500/10 text-red-500 border border-red-500/20 hover:bg-red-500 hover:text-white transition-all font-bold text-xs uppercase tracking-widest shadow-lg shadow-red-500/5 group"
               >
                  <Trash2 size={16} className="group-hover:scale-110 transition-transform" />
