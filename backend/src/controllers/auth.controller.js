@@ -63,7 +63,7 @@ export const registerStudent = async (req, res) => {
         department_id, phone, account_status,
         is_email_verified)
        VALUES ($1, $2, $3, 'student', $4, $5,
-               'pending_email', false)
+               'active', true)
        RETURNING id, full_name, email, role`,
       [
         full_name.trim(),
@@ -76,30 +76,9 @@ export const registerStudent = async (req, res) => {
 
     const newUser = result.rows[0];
 
-    // Generate 6-digit OTP
-    const otp = Math.floor(100000 + Math.random() * 900000).toString();
-    const expiresAt = new Date(Date.now() + 10 * 60 * 1000);
-
-    await db.query(
-      `INSERT INTO otp_verifications
-       (user_id, otp_code, purpose, expires_at)
-       VALUES ($1, $2, 'email_verify', $3)`,
-      [newUser.id, otp, expiresAt]
-    );
-
-    // Send OTP email
-    let emailFailed = false;
-    try {
-      await sendEmailVerificationOTP(newUser.email, newUser.full_name, otp);
-    } catch (emailErr) {
-      console.error('Email send failed:', emailErr.message);
-      emailFailed = true;
-    }
-
     return res.status(201).json({
       success: true,
-      // If email fails, immediately alert the user to use the universal fallback OTP.
-      message: emailFailed ? 'Email service offline. Use OTP: 000000 to verify.' : 'Registration successful. Check your email for OTP.',
+      message: 'Registration successful. You can now log in.',
       data: {
         userId: newUser.id,
         email: newUser.email,
@@ -323,11 +302,13 @@ export const login = async (req, res) => {
     }
 
     if (user.account_status === 'pending_email') {
-      return res.status(403).json({
-        success: false,
-        message: 'Please verify your email first',
-        status: 'pending_email'
-      });
+      // Auto-activate legacy users stuck in OTP phase since OTP is disabled
+      await db.query(
+        "UPDATE users SET account_status = 'active', is_email_verified = true WHERE id = $1", 
+        [user.id]
+      );
+      user.account_status = 'active';
+      user.is_email_verified = true;
     }
 
     if (user.account_status === 'rejected') {

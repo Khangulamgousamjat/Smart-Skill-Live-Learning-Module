@@ -47,8 +47,8 @@ export default function StaffRegisterPage() {
     setLoading(true);
     try {
       await axiosInstance.post('/auth/register/staff', formData);
-      toast.success("Request submitted successfully!");
-      navigate('/auth/pending');
+      toast.success("Request submitted successfully! You can now log in once approved. Let's redirect to login.");
+      navigate('/login');
     } catch (err) {
       toast.error(err.response?.data?.message || 'Registration failed');
     } finally {

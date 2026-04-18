@@ -48,8 +48,8 @@ export default function StudentRegisterPage() {
     setLoading(true);
     try {
       await axiosInstance.post('/auth/register/student', formData);
-      toast.success("Registration successful! Please verify your email.");
-      navigate('/auth/verify-email', { state: { email: formData.email } });
+      toast.success("Registration successful! You can now log in.");
+      navigate('/login');
     } catch (err) {
       const msg = err.response?.data?.message || 'Registration failed';
       toast.error(msg);
