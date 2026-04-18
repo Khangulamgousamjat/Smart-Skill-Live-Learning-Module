@@ -79,10 +79,10 @@ const LoginPage = () => {
             <ShieldCheck size={40} className="text-white" />
           </motion.div>
           <h1 className="text-4xl font-bold font-sora text-[var(--color-text-primary)] tracking-tight mb-2">
-            Skill Developer <span className="text-[var(--color-primary)]">Platform</span>
+            Skill Developer <span className="text-[var(--color-primary)]">{t('platform')}</span>
           </h1>
           <p className="text-[var(--color-text-secondary)] font-semibold uppercase tracking-[0.1em] text-[11px]">
-            Institutional Knowledge Retrieval Engine
+            {t('institutionalEngine')}
           </p>
         </div>
 
@@ -91,7 +91,7 @@ const LoginPage = () => {
             <Sparkles size={120} />
           </div>
 
-          <h2 className="text-2xl font-bold mb-8 font-sora text-[var(--color-text-primary)]">Authenticate Credentials</h2>
+          <h2 className="text-2xl font-bold mb-8 font-sora text-[var(--color-text-primary)]">{t('authenticateCredentials')}</h2>
           
           <form onSubmit={handleLogin} className="space-y-6 relative z-10">
             <div className="space-y-2">
@@ -149,11 +149,11 @@ const LoginPage = () => {
               {loading ? (
                 <>
                   <Loader2 className="w-5 h-5 animate-spin" />
-                  Signing in...
+                  {t('signingIn')}
                 </>
               ) : (
                 <>
-                  {t('signIn')} Identity
+                  {t('signIn')} {t('profile')}
                   <ArrowRight size={18} />
                 </>
               )}
@@ -162,20 +162,20 @@ const LoginPage = () => {
 
           <div className="mt-12 pt-8 border-t border-[var(--color-border)] space-y-4 text-center">
             <p className="text-[11px] font-semibold text-[var(--color-text-secondary)] uppercase tracking-wide leading-relaxed">
-              New to the ecosystem?{' '}
+              {t('newToEcosystem')}{' '}
               <Link to="/auth/register/student" className="text-[var(--color-primary)] font-bold hover:underline">
-                New Registration
+                {t('newRegistration')}
               </Link>
               <span className="mx-3 opacity-40">|</span>
               <Link to="/auth/register/staff" className="text-[var(--color-primary)] font-bold hover:underline">
-                Request Staff Auth
+                {t('requestStaffAuth')}
               </Link>
             </p>
           </div>
         </div>
         
         <p className="mt-8 text-center text-[var(--color-text-muted)] text-[10px] uppercase font-bold tracking-[0.2em] opacity-60">
-          SECURED BY SKILL DEVELOPER INFRASTRUCTURE
+          {t('securedBySD')}
         </p>
       </motion.div>
     </div>

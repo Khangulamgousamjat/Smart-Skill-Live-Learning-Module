@@ -96,7 +96,7 @@ export default function LandingPage() {
               <span className="text-[#F4A100] font-sora font-extrabold">SD</span>
             </div>
             <div>
-              <p className="font-sora font-bold text-base leading-tight">Skill Developer</p>
+              <p className="font-sora font-bold text-base leading-tight">{t('heroTitle')}</p>
               <p className="text-[#F4A100] text-[10px] font-bold tracking-widest uppercase">{t('orgName')}</p>
             </div>
           </div>
@@ -258,13 +258,13 @@ export default function LandingPage() {
                  <GraduationCap className="w-32 h-32 text-[#F4A100]/30 group-hover:scale-110 transition-transform duration-500" />
                  <div className="absolute top-10 left-10 p-4 rounded-2xl glass-premium shadow-2xl">
                     <CheckCircle2 className="text-[#F4A100] w-6 h-6 mb-2" />
-                    <p className="text-[10px] uppercase font-bold text-white/40 mb-1">Weekly Goal</p>
-                    <p className="text-sm font-bold text-white">Advanced React</p>
+                    <p className="text-[10px] uppercase font-bold text-white/40 mb-1">{t('weeklyGoal')}</p>
+                    <p className="text-sm font-bold text-white">{t('advancedReact')}</p>
                  </div>
                  <div className="absolute bottom-10 right-10 p-4 rounded-2xl glass-premium shadow-2xl">
                     <Users className="text-blue-400 w-6 h-6 mb-2" />
-                    <p className="text-[10px] uppercase font-bold text-white/40 mb-1">Live Study</p>
-                    <p className="text-sm font-bold text-white">1.2k active now</p>
+                    <p className="text-[10px] uppercase font-bold text-white/40 mb-1">{t('liveStudy')}</p>
+                    <p className="text-sm font-bold text-white">1.2k {t('activeNow')}</p>
                  </div>
               </div>
             </div>
@@ -316,7 +316,7 @@ export default function LandingPage() {
                 >
                   {t('ctaButton')}
                 </button>
-                <p className="text-white/40 text-sm">No credit card required. Cancel anytime.</p>
+                <p className="text-white/40 text-sm">{t('noCreditCard')}</p>
               </div>
             </motion.div>
           </div>
@@ -332,17 +332,17 @@ export default function LandingPage() {
                 <div className="w-8 h-8 rounded-lg bg-[#F4A100] flex items-center justify-center">
                   <span className="text-white font-bold text-xs uppercase">SD</span>
                 </div>
-                <span className="font-sora font-bold text-xl tracking-tight">Skill Developer</span>
+                <span className="font-sora font-bold text-xl tracking-tight">{t('heroTitle')}</span>
               </div>
               <p className="text-[var(--color-text-secondary)] text-sm leading-relaxed">
-                Empowering the next generation of creators through accessible, high-quality technical education and ERP systems.
+                {t('landingSlogan')}
               </p>
             </div>
 
             {[
               { title: t('platform'), links: [t('navFeatures'), t('lectures'), t('projects'), t('dashboard')] },
-              { title: 'Community', links: ['Success Stories', 'Expert Teachers', 'GitHub Connect', 'Mentorship'] },
-              { title: 'Organization', links: ['About Gous Org', 'Contact', 'Privacy Policy', 'Terms of Service'] }
+              { title: t('community'), links: [t('successStories'), t('expertTeachers'), t('githubConnect'), t('mentorship')] },
+              { title: t('legal'), links: [t('aboutGousOrg'), t('contact'), t('privacyPolicy'), t('termsOfService')] }
             ].map((section, idx) => (
               <div key={idx}>
                 <h4 className="font-sora font-bold mb-6 uppercase tracking-widest text-xs">{section.title}</h4>
@@ -358,10 +358,10 @@ export default function LandingPage() {
           </div>
 
           <div className="pt-8 border-t border-[var(--color-border)] flex flex-col md:flex-row items-center justify-between gap-6">
-            <p className="text-[var(--color-text-muted)] text-[10px] uppercase font-bold tracking-[0.2em]">© 2026 GOUS ORG. ALL RIGHTS RESERVED.</p>
+            <p className="text-[var(--color-text-muted)] text-[10px] uppercase font-bold tracking-[0.2em]">© 2026 {t('orgName')}. {t('allRightsReserved')}.</p>
             <div className="flex items-center gap-6">
                <Globe className="w-4 h-4 text-[var(--color-text-muted)] hover:text-[#F4A100] cursor-pointer transition-colors" />
-               <p className="text-[var(--color-text-muted)] text-xs">Built with precision in India</p>
+               <p className="text-[var(--color-text-muted)] text-xs">{t('builtInIndia')}</p>
             </div>
           </div>
         </div>
