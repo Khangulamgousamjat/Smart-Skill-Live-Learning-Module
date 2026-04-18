@@ -50,6 +50,12 @@ export const registerStudent = async (req, res) => {
     // Hash password
     const password_hash = await bcrypt.hash(password, 12);
 
+    // Safe fallback for frontend string IDs (e.g. 'cs') if API was asleep during load
+    let final_dept_id = department_id;
+    if (department_id && !/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/.test(department_id)) {
+      final_dept_id = null;
+    }
+
     // Create user
     const result = await db.query(
       `INSERT INTO users
@@ -63,7 +69,7 @@ export const registerStudent = async (req, res) => {
         full_name.trim(),
         email.toLowerCase().trim(),
         password_hash,
-        department_id || null,
+        final_dept_id,
         phone || null,
       ]
     );
@@ -153,6 +159,12 @@ export const registerStaff = async (req, res) => {
 
     const password_hash = await bcrypt.hash(password, 12);
 
+    // Safe fallback for frontend string IDs
+    let final_dept_id = department_id;
+    if (department_id && !/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/.test(department_id)) {
+      final_dept_id = null;
+    }
+
     // Create user with pending_approval status
     const result = await db.query(
       `INSERT INTO users
@@ -167,7 +179,7 @@ export const registerStaff = async (req, res) => {
         email.toLowerCase().trim(),
         password_hash,
         role,
-        department_id || null,
+        final_dept_id,
         employee_id.trim(),
         reason.trim(),
       ]
@@ -190,7 +202,7 @@ export const registerStaff = async (req, res) => {
       [
         newUser.id,
         role,
-        department_id || null,
+        final_dept_id,
         employee_id.trim(),
         reason.trim(),
         approverRole
