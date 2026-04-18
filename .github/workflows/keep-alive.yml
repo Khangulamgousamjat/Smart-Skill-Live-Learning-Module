@@ -1,0 +1,16 @@
+name: Keep Supabase and Backend Alive
+
+on:
+  schedule:
+    # Runs every 12 hours (e.g., midnight and noon UTC)
+    - cron: '0 */12 * * *'
+  workflow_dispatch: # Allows manual triggering from GitHub UI
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping Backend API
+        run: |
+          echo "Pinging the backend to prevent Render sleep and Supabase pause..."
+          curl -sS "https://skill-developer.onrender.com/api/health" || echo "Ping failed but workflow will continue"

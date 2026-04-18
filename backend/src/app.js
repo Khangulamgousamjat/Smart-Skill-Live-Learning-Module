@@ -9,6 +9,7 @@ dotenv.config();
 import authRoutes from './routes/auth.routes.js';
 import departmentRoutes from './routes/departments.routes.js';
 import roleRequestRoutes from './routes/roleRequests.routes.js';
+import { db } from './config/db.js';
 import studentRoutes from './routes/student.routes.js';
 import skillsRoutes from './routes/skills.routes.js';
 import projectsRoutes from './routes/projects.routes.js';
@@ -75,9 +76,14 @@ app.use('/api/manager', managerRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/teacher', teacherRoutes);
 
-// Health check
-app.get('/api/health', (req, res) => {
-  res.json({ success: true, message: 'Server is running' });
+// Health check and DB keep-alive
+app.get('/api/health', async (req, res) => {
+  try {
+    await db.query('SELECT 1'); // Keeps Supabase awake!
+    res.json({ success: true, message: 'Server & DB are running' });
+  } catch (error) {
+    res.status(500).json({ success: false, message: 'DB connection failed' });
+  }
 });
 
 // 404 handler
