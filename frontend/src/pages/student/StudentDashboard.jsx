@@ -7,7 +7,7 @@ import {
   Target, FolderOpen, Video, Award, 
   PlayCircle, Bot, ArrowRight, BookOpen, 
   Flame, TrendingUp, ChevronRight, Zap,
-  CheckCircle2, Clock, Calendar, Search, Loader2, User
+  CheckCircle2, Clock, Calendar, Search, Loader2, User, AlertCircle, Terminal, HelpCircle
 } from 'lucide-react';
 import { 
   AreaChart, Area, XAxis, YAxis, 
@@ -103,16 +103,33 @@ export default function StudentDashboard() {
     <DashboardLayout>
       <div className="space-y-8 pb-12 animate-in fade-in slide-in-from-bottom-4 duration-700">
         
+        {/* Offline Mode Alert */}
         {configMissing && (
-          <div className="bg-amber-500/10 border border-amber-500/20 rounded-2xl p-6 text-amber-500 flex items-center justify-between">
-            <div className="flex items-center gap-4 text-left">
-              <Zap className="shrink-0" />
-              <div>
-                <p className="font-bold text-sm uppercase tracking-widest">Configuration Required</p>
-                <p className="text-xs opacity-80">Supabase API keys are not set. The dashboard is running in Offline Mode with dummy data.</p>
+           <div className="relative group overflow-hidden bg-amber-500/5 hover:bg-amber-500/[0.08] border border-amber-500/20 rounded-[32px] p-8 transition-all duration-500">
+              <div className="absolute top-0 right-0 p-8 opacity-5 group-hover:rotate-12 transition-transform duration-1000 grayscale">
+                 <Terminal size={120} />
               </div>
-            </div>
-          </div>
+              <div className="relative z-10 flex flex-col md:flex-row items-center gap-8">
+                 <div className="w-16 h-16 rounded-2xl bg-amber-500/10 flex items-center justify-center text-amber-500 border border-amber-500/20 shadow-xl shadow-amber-500/5 group-hover:scale-110 transition-transform">
+                    <AlertCircle size={32} />
+                 </div>
+                 <div className="flex-1 text-center md:text-left">
+                    <h3 className="text-xl font-black font-sora text-amber-600 tracking-tight flex items-center justify-center md:justify-start gap-2">
+                       Simulated Operational Environment
+                       <span className="px-2 py-0.5 rounded-full bg-amber-500/10 text-[8px] font-black uppercase tracking-widest border border-amber-500/20">Offline Mode</span>
+                    </h3>
+                    <p className="text-amber-700/60 text-xs font-medium mt-2 leading-relaxed max-w-2xl">
+                       Environment telemetry indicates missing or placeholder configuration keys in your <code className="bg-amber-500/10 px-1.5 py-0.5 rounded font-black text-[10px]">.env</code> profile. Dashboard sync is currently utilizing cached simulation protocols instead of real-time database identifiers.
+                    </p>
+                 </div>
+                 <button 
+                  onClick={() => window.open('https://supabase.com', '_blank')}
+                  className="px-8 py-4 bg-amber-600 text-white rounded-2xl font-black text-[10px] uppercase tracking-[0.3em] flex items-center gap-3 hover:scale-105 active:scale-95 transition-all shadow-xl shadow-amber-600/20"
+                 >
+                    <HelpCircle size={16} /> Update Credentials
+                 </button>
+              </div>
+           </div>
         )}
         
         {/* SECTION 1: HERO & GAMIFICATION */}

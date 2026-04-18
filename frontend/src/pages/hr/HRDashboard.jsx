@@ -8,7 +8,7 @@ import {
    Users, Award, ClipboardCheck, BookOpen,
    TrendingUp, ShieldCheck,
    ArrowUpRight, Plus, Eye, Clock, Building2,
-   ChevronRight, UserCheck, Zap, Briefcase
+   ChevronRight, UserCheck, Zap, Briefcase, AlertCircle, HelpCircle, Terminal
 } from 'lucide-react';
 import { useLanguage } from '../../contexts/LanguageContext';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -26,12 +26,20 @@ export default function HRDashboard() {
    });
    const [interns, setInterns] = useState([]);
    const [attendance, setAttendance] = useState([]);
+   const [isOffline, setIsOffline] = useState(false);
 
    useEffect(() => {
       fetchData();
    }, []);
 
    const fetchData = async () => {
+      // Check for placeholder keys
+      if (import.meta.env.VITE_SUPABASE_URL?.includes('YOUR_SUPABASE_URL')) {
+         setIsOffline(true);
+         setLoading(false);
+         return;
+      }
+
       setLoading(true);
       try {
          // 1. Fetch Students (Intern Pool)
@@ -82,7 +90,36 @@ export default function HRDashboard() {
 
    return (
       <DashboardLayout>
-         <div className="space-y-12 pb-16 animate-in fade-in slide-in-from-bottom-6 duration-1000">
+         <div className="space-y-12 pb-16 animate-in fade-in slide-in-from-bottom-6 duration-1000 text-left">
+
+            {/* Offline Mode Alert */}
+            {isOffline && (
+               <div className="relative group overflow-hidden bg-amber-500/5 hover:bg-amber-500/[0.08] border border-amber-500/20 rounded-[32px] p-10 transition-all duration-500 mb-10">
+                  <div className="absolute top-0 right-0 p-10 opacity-5 group-hover:rotate-12 transition-transform duration-1000 grayscale text-amber-500">
+                     <Terminal size={140} />
+                  </div>
+                  <div className="relative z-10 flex flex-col md:flex-row items-center gap-10">
+                     <div className="w-20 h-20 rounded-[2rem] bg-amber-500/10 flex items-center justify-center text-amber-500 border border-amber-500/20 shadow-2xl shadow-amber-500/5 group-hover:scale-110 transition-transform">
+                        <AlertCircle size={40} />
+                     </div>
+                     <div className="flex-1 text-center md:text-left">
+                        <h3 className="text-2xl font-black font-sora text-amber-600 tracking-tight flex items-center justify-center md:justify-start gap-3">
+                           Simulated Operational Environment
+                           <span className="px-3 py-1 rounded-full bg-amber-500/10 text-[9px] font-black uppercase tracking-widest border border-amber-500/20">Offline Mode</span>
+                        </h3>
+                        <p className="text-amber-700/60 text-sm font-medium mt-3 leading-relaxed max-w-3xl">
+                           Personnel telemetry identifies missing or placeholder configuration keys in your <code className="bg-amber-500/10 px-2 py-0.5 rounded font-black text-[11px]">.env</code> profile. Global node sync is currently utilizing cached simulation protocols instead of real-time administrative identifiers.
+                        </p>
+                     </div>
+                     <button 
+                        onClick={() => window.open('https://supabase.com', '_blank')}
+                        className="px-10 py-5 bg-amber-600 text-white rounded-[1.5rem] font-black text-[10px] uppercase tracking-[0.3em] flex items-center gap-4 hover:scale-105 active:scale-95 transition-all shadow-2xl shadow-amber-600/20"
+                     >
+                        <HelpCircle size={20} /> Update Credentials
+                     </button>
+                  </div>
+               </div>
+            )}
 
             {/* HEADER: Recruitment Intelligence */}
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-10">
